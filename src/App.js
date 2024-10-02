@@ -6,6 +6,7 @@ function App() {
   return (
     <>
       <Global styles={reset} />
+        <div>test</div>
         <Routes>
           <Route/>
           <Route/>
