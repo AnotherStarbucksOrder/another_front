@@ -3,7 +3,9 @@
 
 export const COLORS = {
   main: "#036635",
-  background: "#ffffff",
-  lineColor: "#333333"
+  mainBackground: "#ffffff",
+  lineColor: "#333333",
+  buttonColor: "#459661",
+  buttonFontColor: "#fafafa"
 }
 

@@ -10,7 +10,7 @@ export const layout = css`
   padding: 20px 20px;
   width: 80vh;
   height: 80px;
-  border-bottom: 1px solid ${COLORS.lineColor};
+  border: 1px solid ${COLORS.lineColor};
 
   // icon이 svg임 
   svg {
