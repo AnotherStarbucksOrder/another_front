@@ -9,7 +9,7 @@ export const menuCategory = css`
   align-items: center;
   margin: 0 auto;
   padding: 10px;
-  height: 85px;
+  height: 90px;
   width: 80vh;
   background-color: ${COLORS.main};
 
@@ -21,14 +21,14 @@ export const menuCategory = css`
 // 각 메뉴 버튼들 
 export const menuButtons = css`
   display: flex;
-  gap: 10px; // gap을 사용하면 행과 열 사이의 간격 쉽게 조절 가능
+  gap: 15px; // gap을 사용하면 행과 열 사이의 간격 쉽게 조절 가능
 
   & button { 
     border: none;
     border-radius: 10px;
-    width: 130px;
+    width: 150px;
     height: 60px;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 600;
     color: ${COLORS.buttonFontColor};
     background-color: ${COLORS.buttonColor};
