@@ -8,5 +8,6 @@ export const COLORS = {
   buttonColor: "#459661",
   buttonFontColor: "#fafafa",
   mainLineColor: "#fafafa", 
+  hoverColor: "#0a3711"
 }
 
