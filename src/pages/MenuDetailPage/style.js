@@ -100,31 +100,88 @@ export const buttons = css`
     }
 `;
 
-export const optionLayout = css`
-    padding: 20px;
-`;
-
-export const sizeContainer = css`
+export const option = css`
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-`;
+    align-items: center;
 
-export const sizeOption = (isSelected) => css`
-    background-color: ${isSelected ? '#e0e0e0' : 'white'};
-    border: 1px solid ${isSelected ? '#999' : '#ccc'};
-    padding: 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s;
-    &:nth-of-type(1) {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
+    & > button {
+        border: none;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        width: 150px;
+        height: 45px;
+        color: ${COLORS.buttonFontColor};
+        background-color: ${COLORS.buttonColor};
+        cursor: pointer;
+
+        &:active {
+            background-color: ${COLORS.main};
+        }
     }
 
-    &:nth-last-of-type(1) {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
+`;
+
+export const optionContainer = css`
+    margin: 10px 0px 10px ;
+    overflow-y: auto;
+    width: 500px;
+    height: 210px;
+    
+    ::-webkit-scrollbar {
+        width: 15px;  
+        height: 20px;  
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: ${COLORS.menuBackgroundColor};
     }
 `;
+
+export const optionInfo = css`
+    display: flex;
+    align-items: center;
+
+    & p {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    & div:nth-of-type(1) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 150px;
+    }
+
+    & button {
+        border: none;
+        color: ${COLORS.mainBackground};
+        background-color: ${COLORS.optionButtonColor};
+        cursor: pointer;
+        width: 100px;
+        height: 45px;
+        border-right: 1px solid ${COLORS.mainBackground};
+
+        &:nth-of-type(1) {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        &:nth-last-of-type(1) {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border: none;
+        }
+
+        &:active {
+            background-color: ${COLORS.optionButtonActiveColor};
+        }
+    }
+`;
+
+
+
+
+

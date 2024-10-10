@@ -45,6 +45,7 @@ export const buttonContainer = css`
         height: 80px;
         font-size: 20px;
         font-weight: 600;
+        cursor: pointer;
 
         &:hover {
             background-color: #dbdbdb;
