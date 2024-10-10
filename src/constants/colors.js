@@ -10,5 +10,8 @@ export const COLORS = {
     mainLineColor: "#fafafa", 
     hoverColor: "#0a3711",
     menuBackgroundColor: "rgba(3, 102, 53, 0.15)",
+    optionButtonColor: "rgba(69, 150, 97, 0.65)",
+    optionButtonActiveColor: "#459661",
+    
 }
 

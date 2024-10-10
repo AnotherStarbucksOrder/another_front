@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import MainHomePage from "./pages/MainHomePage/MainHomePage";
 import TestPage from "./TestPage";
 import MenuDetailPage from "./pages/MenuDetailPage/MenuDetailPage";
+import IndexPage from "./pages/adminPage/IndexPage/IndexPage";
 
 function App() {
     return (
@@ -14,6 +15,9 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/main" element={<MainHomePage/>} />
             <Route path="/main/detail/1" element={<MenuDetailPage/>} />
+            <Route path="/admin" element={<IndexPage/>} />
+
+            {/* 나중에 지울 예정 */}
             <Route path="/test" element={<TestPage/>}/>
         </Routes>
         </>
