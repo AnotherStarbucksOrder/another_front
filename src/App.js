@@ -6,8 +6,7 @@ import MainHomePage from "./pages/MainHomePage/MainHomePage";
 import TestPage from "./TestPage";
 import MenuDetailPage from "./pages/MenuDetailPage/MenuDetailPage";
 import IndexPage from "./pages/adminPage/IndexPage/IndexPage";
-import MenuPage from "./pages/adminPage/MenuPage/MenuPage";
-import AdminMenuDatailPage from "./pages/adminPage/AdminMenuDetailPage/AdminMenuDatailPage";
+
 
 function App() {
     return (

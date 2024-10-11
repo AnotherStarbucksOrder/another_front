@@ -6,36 +6,28 @@ import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
 import { IoRemoveSharp } from "react-icons/io5";
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
+import { useNavigate } from 'react-router-dom';
 
 // 메뉴 디테일 페이지
 function MenuDetailPage() {
 
-    
+    const navigate = useNavigate();
+
+    const [ optionList, setOptionList ] = useState([
+        {"ICE/HOT": ["hot", "ice"]},
+        {"얼음량": ["less", "more", "default"]},
+        {"당도": ["less", "more", "default"]},
+        {"시럽": ["헤이즐넛", "바닐라", "카라멜"]},
+        {"사이즈": ["tall", "grande", "venti"]},
+        {"사이즈": ["tall", "grande", "venti"]},
+        {"시럽추가": ["tall", "grande", "venti"]}
+    ]);
+
     const [ totalCount, setTotalCount ] = useState(1);
-    const [selectedTemperature, setSelectedTemperature] = useState('hot');
-    const [selectedSize, setSelectedSize] = useState('Tall');
-    const [sweetness, setSweetness] = useState('더 달게');
-    const [iceAmount, setIceAmount] = useState('얼음 많이');
-
-    const handleTemperatureChange = (temp) => {
-        setSelectedTemperature(temp);
-    };
-
-    const handleSizeChange = (size) => {
-        setSelectedSize(size);
-    };
-
-    const handleSweetnessChange = (sweet) => {
-        setSweetness(sweet);
-    };
-
-    const handleIceChange = (ice) => {
-        setIceAmount(ice);
-    };
 
     // 상단에 - 버튼 클릭 시
     const handleOrderCancleOnClick = () => {
-        window.history.back();
+        navigate("/main");
     }
 
     // 수량 + 버튼 클릭했을 때
@@ -74,64 +66,31 @@ function MenuDetailPage() {
                         </div>
                     </div>
                 </div>
-                <div css={s.optionLayout}>
-                    <div>
-                        <p>ice/hot</p>
-                        <p>사이즈</p>
-                        <p>당도</p>
-                        <p>얼음</p>
+                <div css={s.option}>
+                    <div css={s.optionContainer}>
+                        {
+                            optionList.map((option, optionIndex) => {
+                                const optionEntries = Object.entries(option);
+                                const optionName = optionEntries[0][0];   // 얼음량, 당도
+                                const optionValues = optionEntries[0][1]; // 얼음적게, 달게 덜달게 
+                                return (
+                                    <div key={optionIndex} css={s.optionInfo}>
+                                        <div><p>{optionName}</p></div>
+                                        <div>
+                                            {
+                                                optionValues.map((optionValue, idx) => {
+                                                    return <button key={idx}>
+                                                        {optionValue}
+                                                    </button>
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
-                    <div>
-                        {/* 온도 선택 */}
-                        <div css={s.sizeContainer}>
-                            {['hot', 'ice'].map(temp => (
-                                <div
-                                    key={temp}
-                                    css={s.sizeOption(selectedTemperature === temp)}
-                                    onClick={() => handleTemperatureChange(temp)}
-                                >
-                                    {temp === 'hot' ? 'HOT' : 'ICE'}
-                                </div>
-                            ))}
-                        </div>
-                        {/* 사이즈 선택 */}
-                        <div css={s.sizeContainer}>
-                            {['Tall', 'Grande', 'Venti', 'Trenta'].map(size => (
-                                <div
-                                    key={size}
-                                    css={s.sizeOption(selectedSize === size)}
-                                    onClick={() => handleSizeChange(size)}
-                                >
-                                    {size}
-                                </div>
-                            ))}
-                        </div>
-                        {/* 당도 선택 */}
-                        <div css={s.sizeContainer}>
-                            {['더 달게', '덜 달게'].map(sweet => (
-                                <div
-                                    key={sweet}
-                                    css={s.sizeOption(sweetness === sweet)}
-                                    onClick={() => handleSweetnessChange(sweet)}
-                                >
-                                    {sweet}
-                                </div>
-                            ))}
-                        </div>
-                        {/* 얼음 선택 */}
-                        <div css={s.sizeContainer}>
-                            {['얼음 많이', '얼음 적게'].map(ice => (
-                                <div
-                                    key={ice}
-                                    css={s.sizeOption(iceAmount === ice)}
-                                    onClick={() => handleIceChange(ice)}
-                                >
-                                    {ice}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div><button>선택 완료</button></div>
+                    <button>선택 완료</button>
                 </div>
             </div>
         </div>
@@ -140,4 +99,4 @@ function MenuDetailPage() {
     )
 }
 
-export default MenuDetailPage
+export default MenuDetailPage;

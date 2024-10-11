@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaHome, FaStar } from "react-icons/fa";
 
 function MainTop() {
@@ -16,7 +16,7 @@ function MainTop() {
                 </div>
                 <p>ANOTHER STARBUCKS</p>
             </div>
-            <Link><FaStar/></Link>
+            <Link to={"/admin"}><FaStar/></Link>
         </div>
         </>
     )
