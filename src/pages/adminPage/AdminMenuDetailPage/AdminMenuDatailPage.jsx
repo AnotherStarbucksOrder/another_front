@@ -1,27 +1,60 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
+import { useParams } from "react-router-dom"; // useParams 임포트
 import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import * as s from "./style";
 import ReactSelect from "react-select";
 
 function AdminMenuDatailPage(props) {
-    const [selectedOptions, setSelectedOptions] = useState([]);
+    const { menuId } = useParams(); // URL에서 menuId 가져오기
+    const [isEditing, setIsEditing] = useState(false);
+    const [ isCheck, setIsCheck ] = useState(false)
 
     const [menus, setMenus] = useState([
-        { menuId: 1, menuName: "불고기 비빔밥", price: 8000, category: "한식", option: "계란 추가", comment:"221ddq" },
-        { menuId: 2, menuName: "치킨 너겟", price: 6000, category: "패스트푸드", option: "소스 선택", comment:"221ddq" },
-        { menuId: 3, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가", comment:"221ddq" },
+        { menuId: 1, menuName: "불고기 비빔밥", price: 8000, category: "한식", option: "계란 추가", comment: "221ddq" },
+        { menuId: 2, menuName: "치킨 너겟", price: 6000, category: "패스트푸드", option: "소스 선택", comment: "221ddq" },
+        { menuId: 3, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가", comment: "221ddq" },
     ]);
 
-    const options = [
-        { value: '한식', label: '한식' },
-        { value: '패스트푸드', label: '패스트푸드' },
-        { value: '음료', label: '음료' }
-    ]
+    const menu = menus.find(menu => menu.menuId === parseInt(menuId)); // menuId에 해당하는 메뉴 찾기
 
-    const handleSelectChange = (options) => {
-        setSelectedOptions(options); // 선택한 값을 상태에 저장
+    const handleBackOnClick = () => {
+        window.history.back();
+    }
+
+    const handleEditOnClick = () => {
+        setIsEditing(true);
+    }
+    const handleConfirmOnClick = () => {
+        setIsEditing(false); // 수정 모드 해제
+    }
+
+    const handleSelectCategoryChange = (selectedOptions) => {
+        // 선택한 값을 상태에 저장 (여기서는 카테고리를 업데이트하는 로직)
+        if (menu) {
+            const updatedMenu = { ...menu, category: selectedOptions.map(option => option.value) };
+            setMenus(menus => menus.map(m => (m.menuId === menu.menuId ? updatedMenu : m)));
+        }
     };
+    const handleSelectOptionChange = (selectedOptions) => {
+        // 선택한 값을 상태에 저장 (여기서는 카테고리를 업데이트하는 로직)
+        if (menu) {
+            const updatedMenu = { ...menu, option: selectedOptions.map(option => option.value) };
+            setMenus(menus => menus.map(m => (m.menuId === menu.menuId ? updatedMenu : m)));
+        }
+    };
+
+    // 카테고리 옵션 배열
+    const categoryOptions = [
+        { value: "한식", label: "한식" },
+        { value: "패스트푸드", label: "패스트푸드" },
+        { value: "음료", label: "음료" },
+    ];
+    const optionOptions = [
+        { value: "계란 추가", label: "계란 추가" },
+        { value: "소스 선택", label: "소스 선택" },
+        { value: "샷 추가", label: "샷 추가" },
+    ];
 
     return (
         <>
@@ -30,72 +63,80 @@ function AdminMenuDatailPage(props) {
                 <div css={s.titleBox}>
                     <p>메뉴 관리</p>
                 </div>
-                <div css={s.imgContainer}>
-                    <div css={s.imgBox}>
-                        <div css={s.img}>
-                            <img src="https://flexible.img.hani.co.kr/flexible/normal/640/512/imgdb/original/2024/0403/20240403501300.jpg" alt="" />
+                <div>
+                    <div css={s.imgContainer}>
+                        <div css={s.imgBox}>
+                            <div css={s.img}>
+                                <img src="https://flexible.img.hani.co.kr/flexible/normal/640/512/imgdb/original/2024/0403/20240403501300.jpg" alt="" />
+                            </div>
+                            <p>이미지</p>
                         </div>
-                        <p>이미지</p>
-                    </div>
-                    <div css={s.infoContainer}>
-                        <div css={s.infoBox}>
-                            <div>
-                                <div css={s.option}>
-                                    <p>카테고리 : </p>
-                                    <div css={s.selectContainer}>
+                        <div css={s.infoContainer}>
+                            <div css={s.infoBox}>
+                                <div>
+                                    <div css={s.option}>
+                                        <p>카테고리 : </p>
                                         <ReactSelect
                                             isMulti
-                                            name="colors"
-                                            onChange={handleSelectChange}
-                                            options={options}
+                                            isDisabled={!isEditing}
+                                            css={s.selectContainer}
+                                            name="categories"
+                                            onChange={handleSelectCategoryChange}
+                                            options={categoryOptions}
                                             className="basic-multi-select"
                                             classNamePrefix="select"
+                                            defaultValue={menu ? [{ value: menu.category, label: menu.category }] : []}
                                         />
                                     </div>
                                 </div>
                             </div>
-                            <div css={s.selectedOption}>
-                                {selectedOptions && selectedOptions.map(option => (
-                                    <span key={option.value}>{option.label}</span>
-                                ))}
+                            <div css={s.infoBox}>
+                                <div css={s.option}>
+                                    <p>메뉴 이름 : </p>
+                                    <input type="text" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.menuName : ""} />
+                                </div>
                             </div>
-                        </div>
-                        <div css={s.infoBox}>
-                            <div css={s.option}>
-                                <p>메뉴 이름 : </p>
-                                {
-                                    menus.filter(menu => menu.menuId === 1).map(menu => (
-                                        <input type="text" key={menu.menuId} css={s.selectContainer} disabled value={menu.menuName} />
-                                    ))
-                                }
+                            <div css={s.infoBox}>
+                                <div css={s.option}>
+                                    <p>메뉴 가격 : </p>
+                                    <input type="text" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.price : ""} />
+                                </div>
                             </div>
-                        </div>
-                        <div css={s.infoBox}>
-                            <div css={s.option}>
-                                <p>메뉴 가격 : </p>
-                                {menus.filter(menu => menu.menuId === 1).map(menu => (
-                                    <input key={menu.menuId} type="text" css={s.selectContainer} disabled value={menu.price} />
-                                ))}
+                            <div css={s.infoBox}>
+                                <div css={s.option}>
+                                    <p>메뉴 옵션 : </p>
+                                    <ReactSelect
+                                        isMulti
+                                        isDisabled={!isEditing}
+                                        css={s.selectContainer}
+                                        name="categories"
+                                        onChange={handleSelectOptionChange}
+                                        options={optionOptions}
+                                        className="basic-multi-select"
+                                        classNamePrefix="select"
+                                        defaultValue={menu ? [{ value: menu.option, label: menu.option }] : []}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div css={s.infoBox}>
-                            <div css={s.option}>
-                                <p>메뉴 옵션 : </p>
-                                {menus.filter(menu => menu.menuId === 1).map(menu => (
-                                    <input key={menu.menuId} type="text" css={s.selectContainer} disabled value={menu.option} />
-                                ))}
-                            </div>
-
-                        </div>
-                        <div css={s.infoBox}>
-                            <div css={s.option}>
-                                <p>메뉴 설명 : </p>
-                                {menus.filter(menu => menu.menuId === 1).map(menu => (
-                                <textarea name="" id={menu.menuId} css={s.selectContainer} disabled value={menu.comment}></textarea>
-                            ))}
+                            <div css={s.infoBox}>
+                                <div css={s.option}>
+                                    <p>메뉴 설명 : </p>
+                                    <textarea name="" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.comment : ""}></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div css={s.buttonBox}>
+                    {!isEditing ? (
+                        <>
+                            <button onClick={handleBackOnClick}>확인</button>
+                            <button onClick={handleEditOnClick}>수정</button>
+                            <button onClick={() => alert("아무것도 없음")}>삭제</button>
+                        </>
+                    ) : (
+                        <button onClick={handleConfirmOnClick}>확인</button>
+                    )}
                 </div>
             </div>
         </>

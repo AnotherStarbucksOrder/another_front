@@ -40,6 +40,7 @@ export const imgBox = css`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 10px;
     width:400px;
 `;
 
@@ -64,7 +65,7 @@ export const infoBox = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 10px;
     width: 100%;
     height: 100px;
@@ -82,16 +83,35 @@ export const selectContainer = css`
     margin-left: 10px; /* p 태그와의 간격 설정 */
 `;
 
-export const selectedOption = css`
-    box-sizing: border-box;
-    border: 1px solid ${COLORS.lineColor};
-    margin-left: 80px;
-    padding-top: 5px;
-    width: 400px;
-    height: 36px;
-    & span {
-        margin: 0 10px;
-        background-color: #f0f0f0;
-    }
 
+export const buttonBox = css`
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    & button {
+        margin-top: 20px;
+        background-color: #fff;
+        border-radius: 4px;
+        width: 60px;
+        height: 35px;
+        font-size: 17px;
+        font-weight: 600;
+
+        &:hover {
+            background-color: #f0f0f0;
+        }
+        &:active{
+            background-color: #c0c0c0;
+        }
+
+        &:nth-of-type(1) {
+            margin-right: 30px;
+        }
+        &:nth-of-type(2) {
+            margin-right: 30px;
+        }
+    }
 `;

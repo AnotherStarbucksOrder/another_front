@@ -14,15 +14,13 @@ function App() {
         <>
         <Global styles={reset} />
         <Routes>
-            <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
             <Route path="/main" element={<MainHomePage/>} />
             <Route path="/main/detail/1" element={<MenuDetailPage/>} />
+            <Route path="/admin" element={<IndexPage/>} />
+
+            {/* 나중에 지울 예정 */}
             <Route path="/test" element={<TestPage/>}/>
-
-
-            <Route path="/admin" element={<IndexPage />}/>
-            <Route path="/admin/menu" element={<MenuPage />}/>
-            <Route path="/admin/menu/detail/:menuId" element={<AdminMenuDatailPage />}/>
         </Routes>
         </>
     );
