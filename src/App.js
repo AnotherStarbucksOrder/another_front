@@ -7,12 +7,13 @@ import TestPage from "./TestPage";
 import MenuDetailPage from "./pages/MenuDetailPage/MenuDetailPage";
 import IndexPage from "./pages/adminPage/IndexPage/IndexPage";
 
+
 function App() {
     return (
         <>
         <Global styles={reset} />
         <Routes>
-            <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
             <Route path="/main" element={<MainHomePage/>} />
             <Route path="/main/detail/1" element={<MenuDetailPage/>} />
             <Route path="/admin" element={<IndexPage/>} />
