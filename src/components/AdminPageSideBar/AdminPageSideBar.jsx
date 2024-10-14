@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as s from "./style";
 import Swal from "sweetalert2";
 
@@ -29,7 +29,7 @@ function AdminPageSideBar(props) {
             cancelButtonColor: "#d33"
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/test");
+                navigate("/");
             }
         })
 
@@ -38,13 +38,13 @@ function AdminPageSideBar(props) {
     return (
         <div css={s.layout}>
             <div css={s.titleBox}>
-                <p>관리자 모드</p>
+                <Link to={"/admin"}><p>관리자 모드</p></Link>
             </div>
             <div css={s.buttonContainer}>
-                <button>메뉴 관리</button>
+                <button onClick={handleMenuClick}>메뉴 관리</button>
                 <button>매출 관리</button>
                 <button>주문 관리</button>
-                <button>회원 관리</button>
+                <button onClick={handleUserClick}>회원 관리</button>
                 <button>카테 고리 관리</button>
                 <button onClick={handleLogOutClick}>로그아웃</button>
             </div>

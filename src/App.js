@@ -8,6 +8,8 @@ import MenuDetailPage from "./pages/MenuDetailPage/MenuDetailPage";
 import IndexPage from "./pages/adminPage/IndexPage/IndexPage";
 import PayMentPage from "./pages/PayMentPage/PayMentPage";
 
+
+
 function App() {
     return (
         <>
