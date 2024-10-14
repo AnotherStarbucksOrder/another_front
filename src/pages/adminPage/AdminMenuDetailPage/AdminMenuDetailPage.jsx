@@ -1,20 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
-import { useParams } from "react-router-dom"; // useParams 임포트
+import { useParams, useSearchParams } from "react-router-dom"; // useParams 임포트
 import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import * as s from "./style";
 import ReactSelect from "react-select";
 
-function AdminMenuDatailPage(props) {
+function AdminMenuDetailPage(props) {
     const { menuId } = useParams(); // URL에서 menuId 가져오기
     const [isEditing, setIsEditing] = useState(false);
-    const [ isCheck, setIsCheck ] = useState(false)
+
 
     const [menus, setMenus] = useState([
         { menuId: 1, menuName: "불고기 비빔밥", price: 8000, category: "한식", option: "계란 추가", comment: "221ddq" },
         { menuId: 2, menuName: "치킨 너겟", price: 6000, category: "패스트푸드", option: "소스 선택", comment: "221ddq" },
         { menuId: 3, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가", comment: "221ddq" },
     ]);
+
+
 
     const menu = menus.find(menu => menu.menuId === parseInt(menuId)); // menuId에 해당하는 메뉴 찾기
 
@@ -75,52 +77,75 @@ function AdminMenuDatailPage(props) {
                             <div css={s.infoBox}>
                                 <div>
                                     <div css={s.option}>
-                                        <p>카테고리 : </p>
-                                        <ReactSelect
-                                            isMulti
-                                            isDisabled={!isEditing}
-                                            css={s.selectContainer}
-                                            name="categories"
-                                            onChange={handleSelectCategoryChange}
-                                            options={categoryOptions}
-                                            className="basic-multi-select"
-                                            classNamePrefix="select"
-                                            defaultValue={menu ? [{ value: menu.category, label: menu.category }] : []}
-                                        />
+                                        <div css={s.optionTitle}>
+                                            <p>카테고리 : </p>
+                                        </div>
+                                        {
+                                            !isEditing ?
+                                                <>
+                                                    <input type="text" css={s.selectContainer} disabled value={menu ? menu.category : ''} />
+                                                </>
+                                                :
+                                                <ReactSelect
+                                                    isMulti
+                                                    css={s.selectContainer}
+                                                    name="categories"
+                                                    onChange={handleSelectCategoryChange}
+                                                    options={categoryOptions}
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    defaultValue={menu ? [{ value: menu.category, label: menu.category }] : []}
+                                                />
+                                        }
                                     </div>
                                 </div>
                             </div>
                             <div css={s.infoBox}>
                                 <div css={s.option}>
-                                    <p>메뉴 이름 : </p>
+                                    <div css={s.optionTitle}>
+                                        <p>메뉴 이름 : </p>
+                                    </div>
                                     <input type="text" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.menuName : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
                                 <div css={s.option}>
-                                    <p>메뉴 가격 : </p>
+                                    <div css={s.optionTitle}>
+                                        <p>메뉴 가격 : </p>
+                                    </div>
                                     <input type="text" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.price : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
                                 <div css={s.option}>
-                                    <p>메뉴 옵션 : </p>
-                                    <ReactSelect
-                                        isMulti
-                                        isDisabled={!isEditing}
-                                        css={s.selectContainer}
-                                        name="categories"
-                                        onChange={handleSelectOptionChange}
-                                        options={optionOptions}
-                                        className="basic-multi-select"
-                                        classNamePrefix="select"
-                                        defaultValue={menu ? [{ value: menu.option, label: menu.option }] : []}
-                                    />
+                                    <div css={s.optionTitle}>
+                                        <p>메뉴 옵션 : </p>
+                                    </div>
+                                    {
+                                        !isEditing ?
+                                            <>
+                                                <input type="text" css={s.selectContainer} disabled value={menu ? menu.option : ''} />
+                                            </>
+                                            :
+                                            <ReactSelect
+                                                isMulti
+                                                isDisabled={!isEditing}
+                                                css={s.selectContainer}
+                                                name="categories"
+                                                onChange={handleSelectOptionChange}
+                                                options={optionOptions}
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                                defaultValue={menu ? [{ value: menu.option, label: menu.option }] : []}
+                                            />
+                                    }
                                 </div>
                             </div>
                             <div css={s.infoBox}>
                                 <div css={s.option}>
-                                    <p>메뉴 설명 : </p>
+                                    <div css={s.optionTitle}>
+                                        <p>메뉴 설명 : </p>
+                                    </div>
                                     <textarea name="" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.comment : ""}></textarea>
                                 </div>
                             </div>
@@ -143,4 +168,4 @@ function AdminMenuDatailPage(props) {
     );
 }
 
-export default AdminMenuDatailPage;
+export default AdminMenuDetailPage;

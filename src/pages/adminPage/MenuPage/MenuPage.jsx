@@ -1,20 +1,65 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
 import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
 
 function MenuPage(props) {
-    const [totalPageCount, setTotalPageCount] = useState(1);
+    const [ checkedAll, setCheckedAll ] = useState(false);
+    const navigate = useNavigate();
     const limit = 12;
-
     const [menus, setMenus] = useState([
         { menuId:1, menuName: "불고기 비빔밥", price: 8000, category: "한식", option: "계란 추가" },
         { menuId:2, menuName: "치킨 너겟", price: 6000, category: "패스트푸드", option: "소스 선택" },
         { menuId:3, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:4, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:5, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:6, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:7, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:8, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:9, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:10, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:11, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:12, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
+        { menuId:13, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
     ]);
+
+
+    useEffect(() => {
+        const checkStates = menus.map(menu => menu.isChecked);
+        if(checkStates.includes(false)) {
+            setCheckedAll(false);
+        }
+    },[menus])
+
+    const handleCheckedChange = (e) => {
+        setMenus(menus => [...menus.map(menu => {
+            if(menu.menuId === parseInt(e.target.value)){
+                return {
+                    ...menu,
+                    isChecked: !menu.isChecked
+                }
+            }
+            return menu;
+        })])
+    }
+
+    const handleCheckedAllChange = (e) => {
+        setCheckedAll(checked => {
+            if(!checked) {
+                setMenus([...menus.map(menu => ({...menu, isChecked: true}))]);
+            } else {
+                resetViewMenus();
+            }
+            return !checked
+        })
+    }
+
+    const resetViewMenus = () => {
+        setMenus([...menus.map(menu => ({...menu, isChecked: false}))])
+    }
 
     return (
         <>
@@ -38,7 +83,7 @@ function MenuPage(props) {
                     <table>
                         <thead>
                             <tr>
-                                <th><input type="checkbox" name="" id="" /></th>
+                                <th><input type="checkbox" onChange={handleCheckedAllChange} checked={checkedAll} /></th>
                                 <th>상품명</th>
                                 <th>가격</th>
                                 <th>카테고리</th>
@@ -50,7 +95,7 @@ function MenuPage(props) {
                             {
                                 menus.map(menu => 
                                     <tr key={menu.menuId}>
-                                        <td><input type="checkbox" name="" id="" /></td>
+                                        <td><input type="checkbox" onChange={handleCheckedChange} checked={menu.isChecked} value={menu.menuId} /></td>
                                         <td>{menu.menuName}</td>
                                         <td>{menu.price}</td>
                                         <td>{menu.category}</td>
@@ -64,16 +109,16 @@ function MenuPage(props) {
                 </div>
                 <div css={s.paginateContainer}>
                 <ReactPaginate
-                    breakLabel="..."
-                    previousLabel={<><IoMdArrowDropleft /></>}
-                    nextLabel={<><IoMdArrowDropright /></>}
-                    pageCount={totalPageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    activeClassName='active'
-                    // onPageChange={handlePageOnChange}
-                    // forcePage={parseInt(searchParams.get("page")) - 1} 
-                />
+                        breakLabel="..."
+                        previousLabel={<><IoMdArrowDropleft /></>}
+                        nextLabel={<><IoMdArrowDropright /></>}
+                        // pageCount={totalPageCount}  // 총 페이지 수
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        activeClassName='active'
+                        // onPageChange={handlePageOnChange}
+                        // forcePage={parseInt(searchParams.get("page")) - 1 || 0}  // 페이지가 없으면 0으로 설정
+                    />
             </div>
             </div>
         </>
