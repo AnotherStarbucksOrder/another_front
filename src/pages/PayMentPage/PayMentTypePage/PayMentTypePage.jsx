@@ -1,21 +1,20 @@
 import React from 'react';
-import MainFooter from '../../components/MainFooter/MainFooter';
-import MainTop from '../../components/MainTop/MainTop';
-import MainTopBar from '../../components/MainTopBar/MainTopBar';
-/** @jsxImportSource @emotion/react */
+import MainFooter from '../../../components/MainFooter/MainFooter';
+import MainTop from '../../../components/MainTop/MainTop';
+import MainTopBar from '../../../components/MainTopBar/MainTopBar';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import Swal from 'sweetalert2';
+/** @jsxImportSource @emotion/react */
 import * as s from './style';
-import { ordersAtom } from '../../atoms/ordersAtom';
 
-function PayMentPage() {
+function PayMentTypePage() {
 
     const navigate = useNavigate();
 
-    const orders = useRecoilValue(ordersAtom);
+    // const orders = useRecoilValue(ordersAtom);
+    // console.log(orders);
 
     // 상단에 - 버튼 클릭 시
     const handleCancleOnClick = () => {
@@ -24,7 +23,7 @@ function PayMentPage() {
 
     // 포인트 결제
     const handlePointOnClick = () => {
-        navigate("/point");
+        navigate("/reward");
     };
 
     // 카드 결제
@@ -37,14 +36,17 @@ function PayMentPage() {
             cancelButtonText: "아니요",
             confirmButtonColor: "#3EA270",
             cancelButtonColor: "#3EA270",
-            reverseButtons: true
+            reverseButtons: true,
+            customClass: {
+                popup: "sweetalert-layout",
+            }
+
         }).then(result => {
             if(result.isConfirmed) {
-                // 카드 결제 페이지로 이동
+                navigate("/reward");
             }
             else if(result.dismiss === Swal.DismissReason.cancel) {
-                // 뒤로가기
-                window.history.back();
+                navigate("/payment/card");
             }
         })
     };
@@ -158,4 +160,4 @@ function PayMentPage() {
     )
 }
 
-export default PayMentPage;
+export default PayMentTypePage;

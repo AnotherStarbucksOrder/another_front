@@ -25,7 +25,7 @@ function MenuDetailPage() {
 
     const [ totalCount, setTotalCount ] = useState(100);
 
-    // 상단에 - 버튼 클릭 시
+    // 상단에 x 버튼 클릭 시
     const handleOrderCancleOnClick = () => {
         navigate("/menus");
     }
