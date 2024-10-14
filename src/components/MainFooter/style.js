@@ -1,95 +1,135 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../constants/colors";
+import { COLORS, SIZE } from "../../constants/colors";
 
 export const layout = css`
-    box-sizing: border-box; 
+    box-sizing: border-box;
     display: flex;
     align-items: center;
+    justify-content: space-around;
     margin: 0 auto;
-    padding-left: 10px;
-    width: 80vh;
-    height: 260px;
+    padding: 0px 12px;
+    width: ${SIZE.width};
+    height: calc(${SIZE.height}* 0.25);
     background-color: ${COLORS.main};
-`;
-
-export const orderBox = css`
-    border-radius: 10px;
-    width: 70%;
-    height: 95%;
-    background-color: ${COLORS.mainBackground};
-
-    & div:nth-of-type(1) {
-        margin: 0 auto;
-        padding: 10px 20px;
-        width: 90%;
-        font-size: 20px;
-        font-weight: 600;
-        border-bottom: 1px solid ${COLORS.lineColor};
-    }
-
-    & div:nth-last-of-type(1) {
-        padding: 10px;
-    }
-`;
-
-export const orderValue = css`
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    margin-left: 15px;
-    height: 95%;
-`;
-
-export const totalCount = css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 80%;
-    margin-top: 10px;
-    color: ${COLORS.buttonFontColor};
 
     & div {
-        font-size: 20px;
-        font-weight: 600;
+        display: flex;
     }
 
-    & div:nth-of-type(1) {
-        padding-bottom: 10px;
-        border-bottom: 1px solid ${COLORS.mainLineColor};
-        width: 200px;
-        text-align: center;
-    }
-
-    & div:nth-last-of-type(1) {
-        padding-top: 10px;
-    }
-`;
-
-export const orderMenu = css`
-    button {
-        border: none;
-        font-size: 20px;
-        font-weight: 600;
-        background-color: inherit;
+    & button {
         cursor: pointer;
     }
 `;
 
-export const buttons = css`
-    display: flex;
+export const orderContainer = css`
     flex-direction: column;
-    gap: 15px;
-    align-items: center;
+    border-radius: 8px;
+    width: 75%;
+    height: 95%; 
+    background-color: ${COLORS.mainBackground};
 
-    button {
-    border: none;
-    border-radius: 10px;
-    width: 200px;
-    height: 60px;
-    font-weight: 600; 
-    font-size: 22px;
-    color: ${COLORS.buttonFontColor};
-    background-color: ${COLORS.buttonColor};
-    cursor: pointer;
+    & p {
+        margin: 0;
+    }
+
+    & > p {
+        margin: 10px 30px;
+        font-size: 30px;
+        font-weight: 600;
     }
 `;
+
+export const orderDetailContainer = css`
+    flex-direction: column;
+    height: 100%;
+`;
+
+export const orderDetail = css`
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 15px 0px;
+    border-bottom: 1px solid #00000055;
+    width: 93%;
+
+    & p {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 600;
+    }
+`;
+
+export const orderProduct = css`
+    & > button {
+        border: none;
+        background-color: inherit;
+
+        & > svg {
+        margin-right: 20px;
+        font-size: 30px;
+        }   
+    }
+`;
+
+export const countButtons = css`
+    justify-content: space-between;
+    align-items: center;
+    width: 350px;
+
+    & > button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        background-color: inherit;
+
+        & > svg {
+            font-size: 25px;
+        }
+    }
+`;
+
+export const totalContainer = css`
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 15px;
+    width: 250px;
+    height: 90%;
+
+    & p {
+        font-size: 26px;
+        font-weight: 600;
+    }
+`;
+
+export const totalCount = css`
+    flex-direction: column;
+    justify-content: space-around;
+    height: 170px;
+
+    & > p {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+        color: ${COLORS.mainFontColor};
+    }
+`;
+
+
+
+export const buttons = css`
+    flex-direction: column;
+    justify-content: space-between;
+    height: 220px;
+
+    & > button {
+        border: none;
+        border-radius: 8px;
+        height: 85px;
+        font-size: 30px;
+        font-weight: 600;
+        color: ${COLORS.buttonFontColor};
+        background-color: ${COLORS.buttonColor};
+    }
+`;
+

@@ -1,11 +1,11 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../constants/colors";
+import { COLORS, SIZE } from "../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box; 
     margin: 0 auto;
     border-right: 1px solid ${COLORS.lineColor};
     border-left: 1px solid ${COLORS.lineColor};
-    width: 80vh;
-    height: 558px;
+    width: ${SIZE.width};
+    height: calc(${SIZE.height}* 0.60);
 `;

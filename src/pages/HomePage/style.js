@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../constants/colors";
+import { COLORS, SIZE } from "../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;
@@ -8,22 +8,22 @@ export const layout = css`
     justify-content: space-around;
     align-items: center;
     margin: 0 auto;
-    width: 80vh;
-    height: 100%;
+    width: ${SIZE.width};
+    height: ${SIZE.height};
     background-color: ${COLORS.main};
 `;
 
 export const logo = css`
     text-align: center;
 
-    img {
-        width: 450px;
-        height: 450px;
+    & > img {
+        width: 750px;
+        height: 750px;
     }
 
-    div {
-        margin-top: 30px;
-        font-size: 50px;
+    & > div {
+        margin-top: 60px;
+        font-size: 85px;
         font-weight: 900;
     }
 `;
@@ -32,10 +32,9 @@ export const buttons = css`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 70px;
-    width: 100%;
+    gap: 80px;
 
-    button {
+    & > button {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -43,9 +42,11 @@ export const buttons = css`
         gap: 40px;
         border: none;
         border-radius: 10px;
-        width: 250px;
-        height: 200px;
-        font-size: 24px;
+        width: 400px;
+        height: 300px;
+        font-size: 50px;
+        font-weight: 600;
+        background-color: ${COLORS.mainBackground};
         cursor: pointer;
 
         &:hover {
@@ -57,7 +58,7 @@ export const buttons = css`
         }
 
         & > svg {
-        font-size: 40px;
+        font-size: 60px;
         }
     }
 `;
