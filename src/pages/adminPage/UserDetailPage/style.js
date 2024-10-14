@@ -29,31 +29,13 @@ export const titleBox = css`
 export const imgContainer = css`
     box-sizing: border-box;
     display: flex;
-    padding-left: 200px;
+    justify-content: center;
+    align-items: center;
     padding-top: 100px;
     width: 100%;
     height: 100%;
 `;
 
-export const imgBox = css`
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 10px;
-    width:400px;
-`;
-
-export const img = css`
-    box-sizing: border-box;
-    width: 250px;
-    height: 250px;
-
-    & img {
-        width: 100%;
-        height: 100%;
-    }
-`;
 
 export const infoContainer = css`
     box-sizing: border-box;
@@ -77,6 +59,7 @@ export const option = css`
     align-items: center;
     width: 100%; /* 부모의 너비를 모두 사용 */
 `;
+
 export const optionTitle = css`
     box-sizing: border-box;
     width: 75px;
