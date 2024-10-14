@@ -25,13 +25,13 @@ function MainTopBar() {
     return (
         <div>
             <div css={s.menuCategory}>
-                <button css={s.rightButton} onClick={handlePrevOnClick}><IoIosArrowBack/></button>
+                <button css={s.button("right")} onClick={handlePrevOnClick}><IoIosArrowBack/></button>
                 <div css={s.menuButtons}>
                     {menus.slice(currentMenuIndex, currentMenuIndex + 4).map((menu, index) => (
                     <button key={index}>{menu}</button>))
                     }
                 </div>
-                <button css={s.leftButton} onClick={handleNextOnClick}><IoIosArrowForward/></button>
+                <button css={s.button("left")} onClick={handleNextOnClick}><IoIosArrowForward/></button>
             </div>
         </div>
     )

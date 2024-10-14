@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../constants/colors";
+import { COLORS, SIZE } from "../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box; 
@@ -8,14 +8,14 @@ export const layout = css`
     align-items: center;
     margin: 0 auto;
     padding: 20px 20px;
-    width: 80vh;
-    height: 70px;
+    width: ${SIZE.width};
+    height: calc(${SIZE.height}* 0.075);
     border-left: 1px solid ${COLORS.lineColor};
     border-right: 1px solid ${COLORS.lineColor};
 
     // icon이 svg임 
-    svg {
-        font-size: 40px;
+    & svg {
+        font-size: 60px;
         color: ${COLORS.main};
     }
 `;
@@ -25,19 +25,19 @@ export const titleBox = css`
     justify-content: center;
     align-content: center;
 
-    p {
+    & > p {
         margin: 0;
         padding-top: 8px;
-        font-size: 30px;
+        font-size: 40px;
         font-weight: 900;
     }
 `;
 
 export const imgBox = css`
-    width: 90px;
-    height: 60px;
+    width: 100px;
+    height: 70px;
     
-    img {
+    & img {
         width: 100%;
         height: 100%;
     }

@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../constants/colors";
+import { COLORS, SIZE } from "../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;
@@ -7,162 +7,150 @@ export const layout = css`
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    border-right: 1px solid ${COLORS.lineColor};
+    width: ${SIZE.width};
+    height: calc(${SIZE.height}* 0.60);
     border-left: 1px solid ${COLORS.lineColor};
-    width: 80vh;
-    height: 558px;
-`;
+    border-right: 1px solid ${COLORS.lineColor};
 
-export const container = css`
-    border-radius: 5px;
-    width: 740px;
-    height: 530px;
-    background-color: ${COLORS.menuBackgroundColor};
-`;
+    & div {
+        display: flex;
+    }
 
-export const remove = css`
-    display: flex;
-    justify-content: flex-end;
-    
-    button {
+    & button {
         border: none;
-        background-color: inherit;
         cursor: pointer;
-        & svg {
-            font-size: 30px;
-        }
     }
 `;
 
-export const menuContainer = css`
-    display: flex;
-    justify-content: space-around;
-
-    & img {
-        width: 200px;
-        height: 200px;
-    }
-`;
-
-export const menuInfo = css`
-    display: flex;
+export const container = css`   
     flex-direction: column;
-    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+
+    & > button {
+        align-self: flex-end;
+        margin: 15px 15px 15px 0px;
+        background-color: inherit;
+
+        & > svg {
+            color: ${COLORS.main};
+            font-size: 60px;
+        }
+    }
+`;
+
+export const menuInfoContainer = css`
+    justify-content: space-around;
+    margin: 0 auto;
+    width: 95%;
+
+    & > img {
+        border: 1px solid #00000055;
+        border-radius: 10px;
+        width: 450px;
+        height: 350px;
+    }
+`;
+
+export const menuInfoDetail = css`
+    flex-direction: column;
+    justify-content: space-around;
+    margin-left: 40px;
+
+    & p {
+        margin: 0;
+        font-size: 35px;
+        font-weight: 600;
+    }
+`;
+
+export const productNameInfo = css`
+    flex-direction: column;
     align-items: center;
-    width: 350px;
-    text-align: center;
+    height: 240px;
 
-    & div:nth-of-type(1) {
-        & p:nth-of-type(1) {
-            font-size: 24px;
-            font-weight: 600;
-            margin-top: 0;
-        }
+    & > p:nth-last-of-type(1) {
+        margin-top: 25px;
+        font-size: 22px;
+        font-weight: 400;
+    }
+`;
 
-        & p:nth-last-of-type(1) {
-            display: block;
-            font-size: 14px; 
-            width: 350px;
-            margin-bottom: 0;
+export const productPriceInfo = css`
+    justify-content: space-around;
+    align-items: center;
+    height: 90px;
+`;
+
+export const productCount = css`
+    justify-content: space-between;
+    width: 200px;
+    
+    & > button {
+        display: flex;
+        align-items: center;
+        background-color: inherit;
+
+        & > svg {
+            font-size: 35px;
         }
+    }
+`;
+
+export const optionInfoContainer = css`
+    flex-direction: column;
+    height: 100%;
+
+    & > button {
+        align-self: center;
+        margin-top: 10px;
+        border-radius: 8px;
+        width: 250px;
+        height: 75px;
+        font-size: 35px;
+        font-weight: 600;
+        color: ${COLORS.buttonFontColor};
+        background-color: ${COLORS.main};
+    }
+`;
+
+export const optionDetail = css`
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 22px;
+    height: 80%;
+
+    & p {
+        margin: 0;
+    }
+`;
+
+export const options = css`
+    align-items: center;
+    margin-left: 20px;
+    width: 800px;
+    height: 70px;
+
+    & > p {
+        width: 240px;
+        font-size: 30px;
+        font-weight: 600;
     }
 `;
 
 export const buttons = css`
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-
-    & p {
-        font-size: 24px;
-        font-weight: 600;
-    }
-
-    & button {
-        border: none;
-        background-color: inherit;
-        align-self: center;
-        cursor: pointer;
-        
-        & svg {
-            font-size: 24px;
-            vertical-align: middle;
-        }
-    }
-
-    & span {
-        display: inline-block;
-        text-align: center; 
-        font-size: 20px;
-        min-width: 40px; 
-        vertical-align: bottom;
-    }
-`;
-
-export const option = css`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 600px;
+    height: 100%;
 
     & > button {
-        border: none;
-        border-radius: 8px;
-        font-size: 18px;
-        font-weight: 600;
-        width: 150px;
-        height: 45px;
-        color: ${COLORS.buttonFontColor};
-        background-color: ${COLORS.buttonColor};
-        cursor: pointer;
-
-        &:active {
-            background-color: ${COLORS.main};
-        }
-    }
-
-`;
-
-export const optionContainer = css`
-    margin: 10px 0px 10px ;
-    overflow-y: auto;
-    width: 500px;
-    height: 210px;
-    
-    ::-webkit-scrollbar {
-        width: 15px;  
-        height: 20px;  
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: ${COLORS.menuBackgroundColor};
-    }
-`;
-
-export const optionInfo = css`
-    display: flex;
-    align-items: center;
-
-    & p {
-        font-size: 20px;
-        font-weight: 600;
-    }
-
-    & div:nth-of-type(1) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 150px;
-    }
-
-    & button {
-        border: none;
-        color: ${COLORS.mainBackground};
-        background-color: ${COLORS.optionButtonColor};
-        cursor: pointer;
-        width: 100px;
-        height: 45px;
-        border-right: 1px solid ${COLORS.mainBackground};
+        width: 170px;
+        border: 1px solid ${COLORS.main};
+        border-right: none;
+        font-size: 24px;
+        font-weight: 500;
+        background-color: ${COLORS.mainBackground};
 
         &:nth-of-type(1) {
             border-top-left-radius: 8px;
@@ -170,18 +158,14 @@ export const optionInfo = css`
         }
 
         &:nth-last-of-type(1) {
+            border-right: 1px solid ${COLORS.main};
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
-            border: none;
         }
 
         &:active {
-            background-color: ${COLORS.optionButtonActiveColor};
+            color: ${COLORS.buttonFontColor};
+            background-color: ${COLORS.main};
         }
     }
 `;
-
-
-
-
-

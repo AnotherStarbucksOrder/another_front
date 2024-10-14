@@ -3,27 +3,43 @@ import React from 'react'
 import * as s from './style';
 import { FaCoffee } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoePrints } from '@fortawesome/free-solid-svg-icons';
+import { ordersAtom } from '../../atoms/ordersAtom';
+import { useSetRecoilState } from 'recoil';
 
 function HomePage() {
 
     const navigate = useNavigate();
 
+    const setOrdersAtom = useSetRecoilState(ordersAtom);
 
-    // 메인화면으로 이동
-    const handleOnClick = () => {
-        navigate('/main');
-    }
+    const handleTakeOutClick = () => {
+        setOrdersAtom(orders => ({
+            ...orders,
+            orderType: "takeout"
+        }))
+        navigate('/menus');
+    };
+    
+    const handleEatInClick = () => {
+        setOrdersAtom(orders => ({
+            ...orders,
+            orderType: "eatIn"
+        }))
+        navigate('/menus');
+    };
 
     return (
         <div css={s.layout}>
-        <div css={s.logo}>
-            <img src="https://i.namu.wiki/i/9p8OVxJTce_f2HnuZF1QOU6qMSHqXBHdkcx3q_hlGxvhcyaOXKxBVyoDkeg-Cb4Nx2p60W0AUh6RzjAH59vHwQ.svg" alt="" />
-            <div>ANOTHER STARBUCKS</div>
-        </div>
-        <div css={s.buttons}>
-            <button onClick={handleOnClick}><FaCoffee/>가져 갈게요</button>
-            <button onClick={handleOnClick}><FaCoffee/>먹고 갈게요</button>
-        </div>
+            <div css={s.logo}>
+                <img src="https://i.namu.wiki/i/9p8OVxJTce_f2HnuZF1QOU6qMSHqXBHdkcx3q_hlGxvhcyaOXKxBVyoDkeg-Cb4Nx2p60W0AUh6RzjAH59vHwQ.svg" alt="" />
+                <div>ANOTHER STARBUCKS</div>
+            </div>
+            <div css={s.buttons}>
+                <button onClick={handleTakeOutClick}><FontAwesomeIcon icon={faShoePrints} />가져 갈게요</button>
+                <button onClick={handleEatInClick}><FaCoffee/>먹고 갈게요</button>
+            </div>
         </div>
     )
 }

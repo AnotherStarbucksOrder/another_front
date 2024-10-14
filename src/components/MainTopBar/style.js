@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../constants/colors";
+import { COLORS, SIZE } from "../../constants/colors";
 
 // 메뉴 카테고리 
 export const menuCategory = css`
@@ -9,53 +9,40 @@ export const menuCategory = css`
     align-items: center;
     margin: 0 auto;
     padding: 10px;
-    height: 80px;
-    width: 80vh;
+    width: ${SIZE.width};
+    height: calc(${SIZE.height}* 0.075);
     background-color: ${COLORS.main};
 
-    & > button {
+    & button {
         cursor: pointer;
+    }
+
+    & svg {
+        font-size: 70px;
+        color: ${COLORS.buttonFontColor};
     }
 `;
 
 // 각 메뉴 버튼들 
 export const menuButtons = css`
     display: flex;
-    gap: 15px; // gap을 사용하면 행과 열 사이의 간격 쉽게 조절 가능
+    gap: 32px; // gap을 사용하면 행과 열 사이의 간격 쉽게 조절 가능
 
-    & button { 
+    & > button { 
         border: none;
-        border-radius: 8px;
-        width: 150px;
-        height: 55px;
-        font-size: 20px;
+        border-radius: 10px;
+        width: 200px;
+        height: 100px;
+        font-size: 30px;
         font-weight: 600;
         color: ${COLORS.buttonFontColor};
         background-color: ${COLORS.buttonColor};
-        cursor: pointer;
     }
 `;
 
-// > 오른쪽 버튼 
-export const rightButton = css`
-    margin-right: 10px;
+// 오른쪽 or 왼쪽 버튼
+export const button = (direction) => css`
     border: none;
     background-color: inherit;
-
-    svg {
-        font-size: 40px;
-        color: ${COLORS.buttonFontColor};
-    }
-`;
-
-// > 왼쪽 버튼 
-export const leftButton = css`
-    margin-left: 10px;
-    border: none;
-    background-color: inherit;
-
-    svg {
-        font-size: 40px;
-        color: ${COLORS.buttonFontColor};
-    }
+    ${direction === 'left' ? 'margin-left: 10px' : 'margin-right: 10px'}
 `;

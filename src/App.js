@@ -6,6 +6,7 @@ import MainHomePage from "./pages/MainHomePage/MainHomePage";
 import TestPage from "./TestPage";
 import MenuDetailPage from "./pages/MenuDetailPage/MenuDetailPage";
 import IndexPage from "./pages/adminPage/IndexPage/IndexPage";
+import PayMentPage from "./pages/PayMentPage/PayMentPage";
 
 function App() {
     return (
@@ -13,8 +14,11 @@ function App() {
         <Global styles={reset} />
         <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/main" element={<MainHomePage/>} />
-            <Route path="/main/detail/1" element={<MenuDetailPage/>} />
+            <Route path="/menus" element={<MainHomePage/>} />
+            <Route path="/menu/detail/1" element={<MenuDetailPage/>} />
+            <Route path="/payment" element={<PayMentPage/>} />
+            
+            {/* admin 페이지 */}
             <Route path="/admin" element={<IndexPage/>} />
 
             {/* 나중에 지울 예정 */}
