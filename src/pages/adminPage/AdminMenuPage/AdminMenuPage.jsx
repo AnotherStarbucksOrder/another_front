@@ -2,7 +2,7 @@
 import * as s from "./style";
 import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
 
