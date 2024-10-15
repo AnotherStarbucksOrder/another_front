@@ -42,10 +42,10 @@ function AdminPageSideBar(props) {
             </div>
             <div css={s.buttonContainer}>
                 <button onClick={handleMenuClick}>메뉴 관리</button>
-                <button>매출 관리</button>
-                <button>주문 관리</button>
+                <button onClick={handleSalesClick}>매출 관리</button>
+                <button onClick={handleOrderClick}>주문 관리</button>
                 <button onClick={handleUserClick}>회원 관리</button>
-                <button>카테 고리 관리</button>
+                <button onClick={handleCategoryClick}>카테 고리 관리</button>
                 <button onClick={handleLogOutClick}>로그아웃</button>
             </div>
         </div>
