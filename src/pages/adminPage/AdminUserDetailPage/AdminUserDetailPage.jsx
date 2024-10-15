@@ -3,13 +3,12 @@ import { useState } from "react";
 import { useParams } from "react-router-dom"; // useParams 임포트
 import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import * as s from "./style";
-import ReactSelect from "react-select";
 
-function UserDetailPage(props) {
+function AdminUserDetailPage(props) {
     const { userId } = useParams(); // URL에서 menuId 가져오기
     const [isEditing, setIsEditing] = useState(false);
 
-    const [users, setUsers] = useState([
+    const [users ] = useState([
         { userId: 1, phoneNum: "010-1111-1111", name: "김하나", point: 10, registerDate: "2024-01-01", memo: "sadsadsa" },
         { userId: 2, phoneNum: "010-2222-2222", name: "김둘", point: 0, registerDate: "2024-01-01", memo: "dasdsada" },
         { userId: 3, phoneNum: "010-3333-3333", name: "김셋", point: 20, registerDate: "2024-01-01", memo: "dasdsa" },
@@ -26,6 +25,9 @@ function UserDetailPage(props) {
     }
     const handleConfirmOnClick = () => {
         setIsEditing(false); // 수정 모드 해제
+    }
+    const handleCancleOnClick = () => {
+        setIsEditing(false);
     }
 
     return (
@@ -97,7 +99,10 @@ function UserDetailPage(props) {
                             <button onClick={() => alert("아무것도 없음")}>삭제</button>
                         </>
                     ) : (
-                        <button onClick={handleConfirmOnClick}>확인</button>
+                        <>
+                            <button onClick={handleCancleOnClick}>취소</button>
+                            <button onClick={handleConfirmOnClick}>수정</button>
+                        </>
                     )}
                 </div>
             </div>
@@ -105,4 +110,4 @@ function UserDetailPage(props) {
     );
 }
 
-export default UserDetailPage;
+export default AdminUserDetailPage;

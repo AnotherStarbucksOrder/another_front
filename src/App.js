@@ -14,6 +14,7 @@ import PointPaymentPage from "./pages/PayMentPage/PointPaymentPage/PointPaymentP
 
 
 
+
 function App() {
     return (
         <>
@@ -31,6 +32,10 @@ function App() {
 
             {/* 나중에 지울 예정 */}
             <Route path="/test" element={<TestPage/>}/>
+
+
+
+            
         </Routes>
         </>
     );

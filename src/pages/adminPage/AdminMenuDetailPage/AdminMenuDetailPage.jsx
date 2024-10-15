@@ -8,6 +8,18 @@ import ReactSelect from "react-select";
 function AdminMenuDetailPage(props) {
     const { menuId } = useParams(); // URL에서 menuId 가져오기
     const [isEditing, setIsEditing] = useState(false);
+    const [image, setImage] = useState("https://flexible.img.hani.co.kr/flexible/normal/640/512/imgdb/original/2024/0403/20240403501300.jpg");
+
+    const handleChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setImage(imageUrl);
+        }
+    };
+    const handleImageClick = () => {
+        document.getElementById('fileInput').click();
+    };
 
 
     const [menus, setMenus] = useState([
@@ -30,6 +42,10 @@ function AdminMenuDetailPage(props) {
     const handleConfirmOnClick = () => {
         setIsEditing(false); // 수정 모드 해제
     }
+    const handleCancleOnClick = () => {
+        setIsEditing(false);
+    }
+
 
     const handleSelectCategoryChange = (selectedOptions) => {
         // 선택한 값을 상태에 저장 (여기서는 카테고리를 업데이트하는 로직)
@@ -68,10 +84,21 @@ function AdminMenuDetailPage(props) {
                 <div>
                     <div css={s.imgContainer}>
                         <div css={s.imgBox}>
-                            <div css={s.img}>
-                                <img src="https://flexible.img.hani.co.kr/flexible/normal/640/512/imgdb/original/2024/0403/20240403501300.jpg" alt="" />
-                            </div>
-                            <p>이미지</p>
+                            {
+                                !isEditing ?
+                                    <>
+                                        <div css={s.img}>
+                                            <img src={image} alt="" />
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div css={s.img}>
+                                            <img src={image} alt="" onClick={handleImageClick} />
+                                        </div>
+                                        <input type="file" accept="image/*" onChange={handleChange} id="fileInput" />
+                                    </>
+                            }
                         </div>
                         <div css={s.infoContainer}>
                             <div css={s.infoBox}>
@@ -83,12 +110,12 @@ function AdminMenuDetailPage(props) {
                                         {
                                             !isEditing ?
                                                 <>
-                                                    <input type="text" css={s.selectContainer} disabled value={menu ? menu.category : ''} />
+                                                    <input type="text" css={s.input} disabled value={menu ? menu.category : ''} />
                                                 </>
                                                 :
                                                 <ReactSelect
                                                     isMulti
-                                                    css={s.selectContainer}
+                                                    css={s.select}
                                                     name="categories"
                                                     onChange={handleSelectCategoryChange}
                                                     options={categoryOptions}
@@ -105,7 +132,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.menuName : ""} />
+                                    <input type="text" css={s.input} disabled={!isEditing} value={menu ? menu.menuName : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -113,7 +140,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.price : ""} />
+                                    <input type="text" css={s.input} disabled={!isEditing} value={menu ? menu.price : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -124,13 +151,13 @@ function AdminMenuDetailPage(props) {
                                     {
                                         !isEditing ?
                                             <>
-                                                <input type="text" css={s.selectContainer} disabled value={menu ? menu.option : ''} />
+                                                <input type="text" css={s.input} disabled value={menu ? menu.option : ''} />
                                             </>
                                             :
                                             <ReactSelect
                                                 isMulti
                                                 isDisabled={!isEditing}
-                                                css={s.selectContainer}
+                                                css={s.select}
                                                 name="categories"
                                                 onChange={handleSelectOptionChange}
                                                 options={optionOptions}
@@ -146,7 +173,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="" css={s.selectContainer} disabled={!isEditing} value={menu ? menu.comment : ""}></textarea>
+                                    <textarea name="" css={s.input} disabled={!isEditing} value={menu ? menu.comment : ""}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +187,10 @@ function AdminMenuDetailPage(props) {
                             <button onClick={() => alert("아무것도 없음")}>삭제</button>
                         </>
                     ) : (
-                        <button onClick={handleConfirmOnClick}>확인</button>
+                        <>
+                            <button onClick={handleCancleOnClick}>취소</button>
+                            <button onClick={handleConfirmOnClick}>수정</button>
+                        </>
                     )}
                 </div>
             </div>

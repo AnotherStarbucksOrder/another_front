@@ -6,9 +6,8 @@ export const layout = css`
     padding-left: 300px;
     width: 100%;
     height: 100%;
+
 `;
-
-
 
 export const titleBox = css`
     box-sizing: border-box;
@@ -17,84 +16,76 @@ export const titleBox = css`
     align-items: center;
     height: 150px;
     border-bottom: 1px solid ${COLORS.lineColor};
+    background-color: white;
 
     & p {
         padding-left: 100px;
         font-size: 40px;
         font-weight: 600;
-
     }
 `;
 
-export const imgContainer = css`
-    box-sizing: border-box;
-    display: flex;
-    padding-left: 200px;
-    padding-top: 100px;
-    width: 100%;
-    height: 100%;
-`;
-
-export const imgBox = css`
+export const Container = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 10px;
-    width:400px;
-
-    & input {
-        display: none;
-    }
-`;
-
-export const img = css`
-    box-sizing: border-box;
-    width: 250px;
-    height: 250px;
-
-    & img {
-        width: 100%;
-        height: 100%;
-    }
+    padding-top: 60px;
+    width: 100%;
 `;
 
 export const infoContainer = css`
     box-sizing: border-box;
-    width: 800px;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 500px;
 `;
 
 export const infoBox = css`
     box-sizing: border-box;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0 0 80px;
     width: 100%;
     height: 100px;
+
+    &:nth-last-of-type(1) {
+        margin-top: 50px;
+    }
 `;
 
 export const option = css`
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
     width: 100%; /* 부모의 너비를 모두 사용 */
 `;
+
 export const optionTitle = css`
     box-sizing: border-box;
     width: 75px;
 `;
 
-export const select = css`
-    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
-    padding-left: 10px;
-`;
-
-export const input = css`
+export const selectContainer = css`
     flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
     margin-left: 10px; /* p 태그와의 간격 설정 */
     padding-left: 10px;
+`;
+
+export const orderTitle = css`
+    box-sizing: border-box;
+    width: 75px;
+`;
+
+export const orderList = css`
+    box-sizing: border-box;
+    border: 1px solid ${COLORS.lineColor}; /* 내용에 대한 테두리 색상 */
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    margin: 75px 0 0 10px; /* p 태그와의 간격 설정 */
+    padding-left: 10px;
+    border-radius: 4px; /* 모서리 둥글게 */
+    width: 300px; /* 부모의 너비를 모두 차지하도록 설정 */
+    height: 100px;
 `;
 
 
@@ -124,8 +115,6 @@ export const buttonBox = css`
         &:nth-of-type(1) {
             margin-right: 30px;
         }
-        &:nth-of-type(2) {
-            margin-right: 30px;
-        }
+
     }
 `;
