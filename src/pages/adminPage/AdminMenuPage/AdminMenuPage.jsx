@@ -6,7 +6,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
 
-function MenuPage(props) {
+function AdminMenuPage(props) {
     const [ checkedAll, setCheckedAll ] = useState(false);
     const navigate = useNavigate();
     const limit = 12;
@@ -14,16 +14,6 @@ function MenuPage(props) {
         { menuId:1, menuName: "불고기 비빔밥", price: 8000, category: "한식", option: "계란 추가" },
         { menuId:2, menuName: "치킨 너겟", price: 6000, category: "패스트푸드", option: "소스 선택" },
         { menuId:3, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:4, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:5, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:6, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:7, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:8, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:9, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:10, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:11, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:12, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
-        { menuId:13, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가" },
     ]);
 
 
@@ -61,6 +51,10 @@ function MenuPage(props) {
         setMenus([...menus.map(menu => ({...menu, isChecked: false}))])
     }
 
+    const handleMenuAddOnClick = () => {
+        navigate("/admin/menu/add")
+    }
+
     return (
         <>
             <AdminPageSideBar />    
@@ -74,7 +68,7 @@ function MenuPage(props) {
                         <button>🔍</button>
                     </div>
                     <div css={s.buttonBox}>
-                        <button>등록</button>
+                        <button onClick={handleMenuAddOnClick}>등록</button>
                         <div />
                         <button>삭제</button>
                     </div>
@@ -125,4 +119,4 @@ function MenuPage(props) {
     );
 }
 
-export default MenuPage;
+export default AdminMenuPage;

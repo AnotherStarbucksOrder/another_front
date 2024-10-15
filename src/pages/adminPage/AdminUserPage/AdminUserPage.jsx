@@ -2,14 +2,15 @@
 import * as s from "./style";
 import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
 
-function Userpage(props) {
+function AdminUserPage(props) {
     const [totalPageCount, setTotalPageCount] = useState(1);
     const limit = 12;
     const [ checkedAll, setCheckedAll ] = useState(false);
+    const navigate = useNavigate();
 
     const [users, setUsers] = useState([
         { userId:1, phoneNum: "010-1111-1111", name: "김하나", point: 10, registerDate:"2024-01-01", memo: "sadsadsa" },
@@ -51,6 +52,10 @@ function Userpage(props) {
         setUsers([...users.map(user => ({...user, isChecked: false}))])
     }
 
+    const handleUserAddOnClick = () => {
+        navigate("/admin/user/add")
+    }
+
     return (
         <>
             <AdminPageSideBar />    
@@ -64,7 +69,7 @@ function Userpage(props) {
                         <button>🔍</button>
                     </div>
                     <div css={s.buttonBox}>
-                        <button>등록</button>
+                        <button onClick={handleUserAddOnClick}>등록</button>
                         <div />
                         <button>삭제</button>
                     </div>
@@ -117,4 +122,4 @@ function Userpage(props) {
     );
 }
 
-export default Userpage;
+export default AdminUserPage;

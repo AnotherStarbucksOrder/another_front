@@ -8,8 +8,6 @@ export const layout = css`
     height: 100%;
 `;
 
-
-
 export const titleBox = css`
     box-sizing: border-box;
     display: flex;
@@ -29,34 +27,11 @@ export const titleBox = css`
 export const imgContainer = css`
     box-sizing: border-box;
     display: flex;
-    padding-left: 200px;
+    justify-content: center;
+    align-items: center;
     padding-top: 100px;
     width: 100%;
     height: 100%;
-`;
-
-export const imgBox = css`
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 10px;
-    width:400px;
-
-    & input {
-        display: none;
-    }
-`;
-
-export const img = css`
-    box-sizing: border-box;
-    width: 250px;
-    height: 250px;
-
-    & img {
-        width: 100%;
-        height: 100%;
-    }
 `;
 
 export const infoContainer = css`
@@ -81,14 +56,10 @@ export const option = css`
     align-items: center;
     width: 100%; /* 부모의 너비를 모두 사용 */
 `;
+
 export const optionTitle = css`
     box-sizing: border-box;
     width: 75px;
-`;
-
-export const select = css`
-    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
-    padding-left: 10px;
 `;
 
 export const input = css`
@@ -96,7 +67,6 @@ export const input = css`
     margin-left: 10px; /* p 태그와의 간격 설정 */
     padding-left: 10px;
 `;
-
 
 export const buttonBox = css`
     box-sizing: border-box;
@@ -117,14 +87,12 @@ export const buttonBox = css`
         &:hover {
             background-color: #f0f0f0;
         }
+
         &:active{
             background-color: #c0c0c0;
         }
 
         &:nth-of-type(1) {
-            margin-right: 30px;
-        }
-        &:nth-of-type(2) {
             margin-right: 30px;
         }
     }

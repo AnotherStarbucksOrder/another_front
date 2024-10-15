@@ -13,6 +13,7 @@ import RewardPage from "./pages/PayMentPage/RewardPage/RewardPage";
 
 
 
+
 function App() {
     return (
         <>
@@ -30,6 +31,10 @@ function App() {
 
             {/* 나중에 지울 예정 */}
             <Route path="/test" element={<TestPage/>}/>
+
+
+
+            
         </Routes>
         </>
     );
