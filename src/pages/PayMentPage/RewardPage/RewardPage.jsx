@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import MainTop from '../../../components/MainTop/MainTop';
 import MainTopBar from '../../../components/MainTopBar/MainTopBar';
 /** @jsxImportSource @emotion/react */
@@ -6,17 +6,27 @@ import * as s from './style';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import Swal from 'sweetalert2';
+import ConfirmButton from '../../../components/ConfirmButton/ConfirmButton';
+import { useRecoilState } from 'recoil';
+import { ordersAtom } from '../../../atoms/ordersAtom';
 
+// 포인트 적립 페이지
 function RewardPage() {
 
     const navigate = useNavigate();
 
-
-    const [ inputValue, setInputValue ] = useState("010-");
+    const [ orders, setOrders ] = useRecoilState(ordersAtom);
+    const inputValue = orders?.user?.phoneNumber;
 
     // 상단에 x 버튼 클릭 시
     const handleOrderCancleOnClick = () => {
+        setOrders(orders => ({
+            ...orders,
+            paymentType: "",
+            user: {
+                phoneNumber: "010-"
+            }
+        }))
         navigate("/payment");
     }
 
@@ -29,40 +39,38 @@ function RewardPage() {
         }
     };
 
+    // Atom안에 번호만 업데이트 (객체 안에 객체)
+    const updateNewPhoneNumber = (newPhoneNumber) => {
+        setOrders(orders => ({
+            ...orders,
+            user: {
+                ...orders.user,
+                phoneNumber: newPhoneNumber
+            }
+        }))
+    };
+    
+
     // 키패드 onChange
     const handleInputOnChange = (e) => {
-        const value = e.target.value.replace(/[^0-9]/g, "");
-        setInputValue(formatPhoneNumber(value));
+        const value = e.target.value;
+        updateNewPhoneNumber(formatPhoneNumber(value));
     }
-
 
     const handleKeyPadOnClick = (value) => {
         if(value === "backspace") {
-            if(inputValue.length === 4) {
+            if(inputValue.length > 4) { 
+                const newValue = inputValue.slice(0, -1); 
+                updateNewPhoneNumber(newValue);
                 return;
             }
-            setInputValue(inputValue => inputValue.slice(0, -1));
             return;
         }
-        if(value === "confirm") {
-            if(inputValue.length !== 13) {
-                Swal.fire({
-                    title: "올바르지않은 전화번호입니다.\n다시입력해주세요",
-                    showConfirmButton: true,
-                    confirmButtonText: "네",
-                    confirmButtonColor: "#036635"
-                }).then(result => {
-                    setInputValue("010-");
-                })
-                return;
-            }
-            navigate("/payment/card");
-            return;
-        }
+
         const onlyNumbers = inputValue.replace(/[^0-9]/g, ""); // 숫자만 남기기
         const newValue = onlyNumbers + value; // 숫자만 추가
-        setInputValue(formatPhoneNumber(newValue)); // 포맷된 값으로 업데이트
-    } 
+        updateNewPhoneNumber(formatPhoneNumber(newValue)); // 포맷된 값으로 업데이트
+    }
 
 
     
@@ -82,14 +90,15 @@ function RewardPage() {
                     />
                 </div>
                 <div css={s.numberPad}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, "backspace", 0, "confirm"].map((key) => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, "backspace", 0].map((key) => (
                     <button 
                         key={key} 
                         onClick={() => handleKeyPadOnClick(key)}
                     >
-                        {key === "backspace" ? "⌫" : key === "confirm" ? "확인" : key}
+                        {key === "backspace" ? "⌫" : key}
                     </button>
                     ))}
+                    <ConfirmButton inputValue={inputValue} updateNewPhoneNumber={updateNewPhoneNumber} />
                 </div>
             </div>
         </div>

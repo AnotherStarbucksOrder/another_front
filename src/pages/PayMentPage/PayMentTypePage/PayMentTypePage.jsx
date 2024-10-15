@@ -8,25 +8,31 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
+import { useSetRecoilState } from 'recoil';
+import { ordersAtom } from '../../../atoms/ordersAtom';
+
 
 function PayMentTypePage() {
 
     const navigate = useNavigate();
 
-    // const orders = useRecoilValue(ordersAtom);
-    // console.log(orders);
+    const setOrdersAtom = useSetRecoilState(ordersAtom);
 
     // 상단에 - 버튼 클릭 시
     const handleCancleOnClick = () => {
         navigate("/menus");
     };
 
-    // 포인트 결제
-    const handlePointOnClick = () => {
+    // 포인트 결제 클릭
+    const handlePointOnClick = () => {  
+        setOrdersAtom(orders => ({
+            ...orders,
+            paymentType: "point",
+        }))
         navigate("/reward");
     };
 
-    // 카드 결제
+    // 카드 결제 클릭 
     const handleCardOnClick = () => {
         Swal.fire({
             title: "포인트 적립 하시겠습니까?",
@@ -43,9 +49,17 @@ function PayMentTypePage() {
 
         }).then(result => {
             if(result.isConfirmed) {
+                setOrdersAtom(orders => ({
+                    ...orders,
+                    paymentType: "card"
+                }))
                 navigate("/reward");
             }
             else if(result.dismiss === Swal.DismissReason.cancel) {
+                setOrdersAtom(orders => ({
+                    ...orders,
+                    paymentType: "card"
+                }))
                 navigate("/payment/card");
             }
         })

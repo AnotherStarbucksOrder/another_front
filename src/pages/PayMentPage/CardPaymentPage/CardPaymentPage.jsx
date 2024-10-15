@@ -5,20 +5,36 @@ import MainTopBar from '../../../components/MainTopBar/MainTopBar';
 import * as s from './style';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { ordersAtom } from '../../../atoms/ordersAtom';
+import { useRecoilState } from 'recoil';
 
 function CardPaymentPage() {
 
     const navigate = useNavigate();
 
+    const [ orders, setOrders ] = useRecoilState(ordersAtom);
+    const phoneNumber = orders.user.phoneNumber;
+    
+    
     const beforeOnClick = () => {
+        setOrders(orders => ({
+            ...orders,
+            paymentType: "",
+            user: {
+                phoneNumber: "010-"
+            }
+        }))
         navigate("/payment");
     }
+    
+    const completedMessage = phoneNumber === "010-" ? "결제가 완료되었습니다."
+                        : `${phoneNumber.slice(-4)}님, 주문이 완료되었습니다.\n포인트 개수: 5개` 
 
-    const payMentCompletedOnClick = () => {
+
+    const payMentCompletedOnClick = () => { 
         let timerInterval;
-
         Swal.fire({
-            title: "결제가 완료되었습니다.",
+            title: completedMessage,
             color: "#036635",
             html: "<b>5</b>초 뒤 자동으로 홈화면으로 이동합니다",
             timer: 5000,
@@ -34,9 +50,18 @@ function CardPaymentPage() {
                 clearInterval(timerInterval);  
             }
         }).then(result => {
+            setOrders(orders => ({
+                orderType: "",
+                paymentType: "",
+                user: {
+                    phoneNumber: "010-"
+                }
+            }))
             navigate("/")
         })
     }
+
+    console.log(orders);
 
     return (
     <>

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom"; // useParams 임포트
+import { useParams } from "react-router-dom"; // useParams 임포트
 import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import * as s from "./style";
 import ReactSelect from "react-select";
