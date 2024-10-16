@@ -16,10 +16,13 @@ function AdminPageSideBar(props) {
         navigate("/admin/order");
     }
     const handleUserClick = () => {
-        navigate("/admin/users");
+        navigate("/admin/user");
     }
     const handleCategoryClick = () => {
         navigate("/admin/category");
+    }
+    const handleOptionClick = () => {
+        navigate("/admin/option");
     }
     const handleLogOutClick = () => {
         Swal.fire({
@@ -46,6 +49,7 @@ function AdminPageSideBar(props) {
                 <button onClick={handleOrderClick}>주문 관리</button>
                 <button onClick={handleUserClick}>회원 관리</button>
                 <button onClick={handleCategoryClick}>카테 고리 관리</button>
+                <button onClick={handleOptionClick}>옵션 관리</button>
                 <button onClick={handleLogOutClick}>로그아웃</button>
             </div>
         </div>
