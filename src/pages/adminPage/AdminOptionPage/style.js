@@ -49,7 +49,6 @@ export const searchBox = css`
 
 export const tableButton = css`
     box-sizing: border-box;
-    padding: 10px;
     border: none;
     cursor: pointer;
     width: 100%;
@@ -102,7 +101,7 @@ export const buttonBox = css`
 export const tableLatout = css`
     box-sizing: border-box;
     padding: 0 20px;
-    height: 800px; 
+    height: 694px; 
     width: 100%;
     
 

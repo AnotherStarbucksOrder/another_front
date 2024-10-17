@@ -151,9 +151,15 @@ export const inputBox = css`
             margin-right: 60px;
         }
     }
-
 `;
 
+export const inputText = css`
+    position: absolute; /* 절대 위치 설정 */
+    right: 10px; /* 인풋창 오른쪽에서의 거리 조정 */
+    top: 50%; /* 세로 중앙 정렬 */
+    transform: translateY(-50%); /* 중앙 정렬을 위한 변환 */
+    pointer-events: none; /* 클릭 이벤트 방지 */
+`;
 
 export const buttonBox = css`
     box-sizing: border-box;

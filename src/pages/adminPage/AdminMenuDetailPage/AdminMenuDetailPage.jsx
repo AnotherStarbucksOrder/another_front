@@ -110,7 +110,7 @@ function AdminMenuDetailPage(props) {
                                         {
                                             !isEditing ?
                                                 <>
-                                                    <input type="text" css={s.input} disabled value={menu ? menu.category : ''} />
+                                                    <input type="text" css={s.input} readOnly value={menu ? menu.category : ''} />
                                                 </>
                                                 :
                                                 <ReactSelect
@@ -132,7 +132,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" css={s.input} disabled={!isEditing} value={menu ? menu.menuName : ""} />
+                                    <input type="text" css={s.input} readOnly={!isEditing} value={menu ? menu.menuName : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -140,7 +140,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" css={s.input} disabled={!isEditing} value={menu ? menu.price : ""} />
+                                    <input type="text" css={s.input} readOnly={!isEditing} value={menu ? menu.price : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -151,7 +151,7 @@ function AdminMenuDetailPage(props) {
                                     {
                                         !isEditing ?
                                             <>
-                                                <input type="text" css={s.input} disabled value={menu ? menu.option : ''} />
+                                                <input type="text" css={s.input} readOnly value={menu ? menu.option : ''} />
                                             </>
                                             :
                                             <ReactSelect
@@ -173,7 +173,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="" css={s.input} disabled={!isEditing} value={menu ? menu.comment : ""}></textarea>
+                                    <textarea name="" css={s.input} readOnly={!isEditing} value={menu ? menu.comment : ""}></textarea>
                                 </div>
                             </div>
                         </div>

@@ -17,39 +17,57 @@ function AdminMenuPage(props) {
     ]);
 
 
+    // useEffect(() => {
+    //     const checkStates = menus.map(menu => menu.isChecked);
+    //     if(checkStates.includes(false)) {
+    //         setCheckedAll(false);
+    //     }
+    // },[menus])
+
+    // const handleCheckedChange = (e) => {
+    //     setMenus(menus => [...menus.map(menu => {
+    //         if(menu.menuId === parseInt(e.target.value)){
+    //             return {
+    //                 ...menu,
+    //                 isChecked: !menu.isChecked
+    //             }
+    //         }
+    //         return menu;
+    //     })])
+    // }
+
+    // const handleCheckedAllChange = (e) => {
+    //     setCheckedAll(checked => {
+    //         if(!checked) {
+    //             setMenus([...menus.map(menu => ({...menu, isChecked: true}))]);
+    //         } else {
+    //             resetViewMenus();
+    //         }
+    //         return !checked
+    //     })
+    // }
+
+    // const resetViewMenus = () => {
+    //     setMenus([...menus.map(menu => ({...menu, isChecked: false}))])
+    // }
     useEffect(() => {
-        const checkStates = menus.map(menu => menu.isChecked);
-        if(checkStates.includes(false)) {
-            setCheckedAll(false);
-        }
-    },[menus])
+        const allChecked = menus.every(menu => menu.isChecked);
+        setCheckedAll(allChecked);
+    }, [menus]);
 
-    const handleCheckedChange = (e) => {
-        setMenus(menus => [...menus.map(menu => {
-            if(menu.menuId === parseInt(e.target.value)){
-                return {
-                    ...menu,
-                    isChecked: !menu.isChecked
-                }
-            }
-            return menu;
-        })])
-    }
+    const toggleMenuChecked = (menuId) => {
+        setMenus(menus =>
+            menus.map(menu =>
+                menu.menuId === menuId ? { ...menu, isChecked: !menu.isChecked } : menu
+            )
+        );
+    };
 
-    const handleCheckedAllChange = (e) => {
-        setCheckedAll(checked => {
-            if(!checked) {
-                setMenus([...menus.map(menu => ({...menu, isChecked: true}))]);
-            } else {
-                resetViewMenus();
-            }
-            return !checked
-        })
-    }
-
-    const resetViewMenus = () => {
-        setMenus([...menus.map(menu => ({...menu, isChecked: false}))])
-    }
+    const handleCheckedAllChange = () => {
+        const newCheckedState = !checkedAll;
+        setMenus(menus.map(menu => ({ ...menu, isChecked: newCheckedState })));
+        setCheckedAll(newCheckedState);
+    };
 
     const handleMenuAddOnClick = () => {
         navigate("/admin/menu/add")
@@ -89,7 +107,7 @@ function AdminMenuPage(props) {
                             {
                                 menus.map(menu => 
                                     <tr key={menu.menuId}>
-                                        <td><input type="checkbox" onChange={handleCheckedChange} checked={menu.isChecked} value={menu.menuId} /></td>
+                                        <td><input type="checkbox" onChange={() => toggleMenuChecked(menu.menuId)} checked={menu.isChecked} value={menu.menuId} /></td>
                                         <td>{menu.menuName}</td>
                                         <td>{menu.price}</td>
                                         <td>{menu.category}</td>

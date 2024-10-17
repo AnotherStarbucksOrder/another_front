@@ -29,7 +29,7 @@ function AdminCategoryPage(props) {
             <AdminPageSideBar />
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>카테고리 관리</p>
+                    <p>카테고리 관리( 무한 스크롤 react-beautiful-dnd 사용? )</p>
                 </div>
                 <div css={s.functionBox}>
                     <div css={s.buttonBox}>

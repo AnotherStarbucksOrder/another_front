@@ -56,7 +56,7 @@ function AdminOptionUpdatePage(props) {
                                     <div css={s.inputBox}>
                                         <input type="text" />
                                         <input type="text" />
-                                        <p>원</p>
+                                        <p >원</p>
                                     </div>
                                     <button>x</button>
                                 </div>
