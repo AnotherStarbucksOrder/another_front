@@ -7,6 +7,7 @@ export const COLORS = {
     mainFontColor: "#ffffff",
     lineColor: "#333333",
     buttonColor: "#459661",
+    categoryActiveColor: "#45966199",
     buttonFontColor: "#fafafa",
     mainLineColor: "#fafafa", 
     hoverColor: "#0a3711",
@@ -16,6 +17,7 @@ export const COLORS = {
     payMentTotalBoxColor: "#eeeeee",
     buttonHoverColor: "#048f4d",
     buttonActiverColor: "#025030",
+
 }
 
 // 전체 레이아웃

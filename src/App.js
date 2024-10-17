@@ -21,8 +21,8 @@ function App() {
         <Global styles={reset} />
         <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/menus" element={<MainHomePage/>} />
-            <Route path="/menu/detail/1" element={<MenuDetailPage/>} />
+            <Route path="/home" element={<MainHomePage/>} />
+            <Route path="/menu/detail/:menuId" element={<MenuDetailPage/>} />
             <Route path="/payment" element={<PayMentTypePage/>} />
             <Route path="/payment/card" element={<CardPaymentPage/>} />
             <Route path="/payment/point" element={<PointPaymentPage/>} />

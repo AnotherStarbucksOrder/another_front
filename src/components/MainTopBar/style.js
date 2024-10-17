@@ -37,6 +37,10 @@ export const menuButtons = css`
         font-weight: 600;
         color: ${COLORS.buttonFontColor};
         background-color: ${COLORS.buttonColor};
+
+        &:hover {
+            background-color: ${COLORS.categoryActiveColor};
+        }
     }
 `;
 

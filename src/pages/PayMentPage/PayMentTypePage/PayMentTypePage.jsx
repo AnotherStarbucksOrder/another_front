@@ -20,7 +20,7 @@ function PayMentTypePage() {
 
     // 상단에 - 버튼 클릭 시
     const handleCancleOnClick = () => {
-        navigate("/menus");
+        navigate("/home");
     };
 
     // 포인트 결제 클릭
