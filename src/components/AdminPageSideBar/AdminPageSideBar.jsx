@@ -32,6 +32,7 @@ function AdminPageSideBar(props) {
             cancelButtonColor: "#d33"
         }).then((result) => {
             if (result.isConfirmed) {
+                localStorage.removeItem("accessToken");
                 navigate("/");
             }
         })

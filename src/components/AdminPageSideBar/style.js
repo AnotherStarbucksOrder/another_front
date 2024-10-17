@@ -41,6 +41,7 @@ export const buttonContainer = css`
     & button {
         box-sizing: border-box;
         border: 1px solid ${COLORS.main};
+        border-radius: 8px;
         width: 260px;
         height: 80px;
         font-size: 20px;

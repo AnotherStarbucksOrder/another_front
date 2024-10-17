@@ -7,7 +7,7 @@ function IndexPage(props) {
         <>
             <AdminPageSideBar />
             <div css={s.layout}>
-                <img src="https://flexible.img.hani.co.kr/flexible/normal/640/512/imgdb/original/2024/0403/20240403501300.jpg" alt="" />
+                <img src="/KakaoTalk_Photo_2024-10-17-16-40-07.jpg" alt="" />
             </div>
         </>
     );

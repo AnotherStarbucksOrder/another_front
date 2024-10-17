@@ -47,19 +47,7 @@ export const searchBox = css`
     }
 `;
 
-export const tableButton = css`
-    box-sizing: border-box;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    background-color: white;
 
-        &:active {
-            background-color: #f0f0f0;
-        }
-
-`;
 
 export const buttonBox = css`
     display: flex;
@@ -102,9 +90,8 @@ export const buttonBox = css`
 export const tableLatout = css`
     box-sizing: border-box;
     padding: 0 20px;
-    height: 800px; 
     width: 100%;
-    
+    height: 694px;
 
     & table {
         width: 100%;
@@ -141,6 +128,19 @@ export const tableLatout = css`
             width: 5%;
         }
     }
+`;
+// 992-234-64
+export const tableButton = css`
+    box-sizing: border-box;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    background-color: white;
+
+        &:active {
+            background-color: #f0f0f0;
+        }
+
 `;
 
 export const paginateContainer = css`

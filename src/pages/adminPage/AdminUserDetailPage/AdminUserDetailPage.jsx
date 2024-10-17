@@ -44,7 +44,7 @@ function AdminUserDetailPage(props) {
                                 <div>
                                     <div css={s.option}>
                                         <p css={s.optionTitle}>고유 번호 : </p>
-                                        <input type="text" css={s.selectContainer} disabled value={user ? user.userId : ''} />
+                                        <input type="text" css={s.selectContainer} readOnly value={user ? user.userId : ''} />
                                     </div>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>이름 : </p>
                                     </div>
-                                    <input type="text" css={s.selectContainer} disabled={!isEditing} value={user ? user.name : ""} />
+                                    <input type="text" css={s.selectContainer} readOnly={!isEditing} value={user ? user.name : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -61,7 +61,7 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>전화번호 : </p>
                                     </div>
-                                    <input type="text" css={s.selectContainer} disabled={!isEditing} value={user ? user.phoneNum : ""} />
+                                    <input type="text" css={s.selectContainer} readOnly={!isEditing} value={user ? user.phoneNum : ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -69,7 +69,7 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>포인트 : </p>
                                     </div>
-                                    <input type="text" css={s.selectContainer} disabled value={user ? user.point : ''} />
+                                    <input type="text" css={s.selectContainer} readOnly value={user ? user.point : ''} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -77,7 +77,7 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>가입일 : </p>
                                     </div>
-                                    <input type="text" css={s.selectContainer} disabled={!isEditing} value={user ? user.registerDate : ''} />
+                                    <input type="text" css={s.selectContainer} readOnly={!isEditing} value={user ? user.registerDate : ''} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -85,7 +85,7 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메모 : </p>
                                     </div>
-                                    <textarea name="" css={s.selectContainer} disabled={!isEditing} value={user ? user.memo : ""}></textarea>
+                                    <textarea name="" css={s.selectContainer} readOnly={!isEditing} value={user ? user.memo : ""}></textarea>
                                 </div>
                             </div>
                         </div>
