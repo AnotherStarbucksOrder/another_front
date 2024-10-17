@@ -10,14 +10,15 @@ export const layout = css`
     width: ${SIZE.width};
     height: calc(${SIZE.height}* 0.85);
 
-    & div {
-        display: flex;
-    }
-
     & button {
         border: none;
         cursor: pointer;
     }
+
+    & div {
+        display: flex;
+    }
+
 
     & > button {
         align-self: flex-end;
@@ -25,63 +26,67 @@ export const layout = css`
         background-color: inherit;
 
         & > svg {
-            color: ${COLORS.main};
-            font-size: 60px;
+        color: ${COLORS.main};
+        font-size: 60px;
         }
     }
 `;
 
 
+export const container = css`
+    flex-direction: column;
+    margin-top: 40px;
+    height: 100%;
+
+    & > button {
+        align-self: center;
+        width: 400px;
+        height: 100px;
+        font-size: 50px;
+        font-weight: 600;
+        border-radius: 10px;
+        color: ${COLORS.buttonFontColor};
+        background-color: ${COLORS.buttonColor};
+    }
+`;  
+
 export const point = css`
     flex-direction: column;
     align-items: center;
-    margin-top: 40px;
-    width: 100%;
-    height: 60%;
+    height: 1000px;
 
+    & > p {
+        font-size: 60px;
+        font-weight: 600;
+        color: ${COLORS.main};
+    }
+
+    & > p:nth-last-of-type(1) {
+        font-size: 40px;
+        font-weight: 400;
+        color: ${COLORS.lineColor};
+    }
+`;
+
+export const buttons = css`
+    justify-content: space-around;
+    width: 100%;
 
     & > p {
         font-size: 50px;
         font-weight: 600;
     }
 
-    & > p:nth-last-of-type(1) {
-        font-size: 35px;
-        font-weight: 400;
-    }
-
-    & > div {
-        justify-content: space-between;
-        align-items: center;
-        width: 800px;
-        height: 200px;
-
-        & > p {
-            margin: 0;
-            font-size: 50px;
-            font-weight: 600;
-        }
-
-        & > button {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: inherit;
-
-            & > svg {
-                font-size: 45px;
-            }
+    & > button {
+        background-color: inherit;
+        & > svg {
+            font-size: 60px;
         }
     }
 `;
 
-
 export const totalCount = css`
-    flex-direction: column;
-    align-items: center;
-    background-color: aqua;
-
-    & > div {
-        border: 1px solid black;
-    }
+    height: 300px;
+    background-color: bisque;
+    
 `;

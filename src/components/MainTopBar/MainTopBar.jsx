@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 import { IoIosArrowForward, IoIosArrowBack} from "react-icons/io";
+import { useQuery } from 'react-query';
+import { instance } from '../../apis/util/instance';
 
-function MainTopBar() {
+function MainTopBar({ setSelectedCategoryId }) {
 
-    // 메뉴 목록을 상태로 관리, 나중에 백엔드에 요청보내서 뿌려줘야함
-    const menus = ['Best Menu', 'Coffee', 'ColdBrew', 'Latte', 'Tea', 'Ade', 'Smoothie', 'Bakery'];
+    const [ categories, setCategories] = useState([]);
+    const [ currentMenuIndex, setCurrentMenuIndex ] = useState(0); 
 
-    const [currentMenuIndex, setCurrentMenuIndex] = useState(0); 
 
     const handlePrevOnClick = () => {
         if (currentMenuIndex > 0) {
@@ -17,19 +18,38 @@ function MainTopBar() {
     };
 
     const handleNextOnClick = () => {
-        if (currentMenuIndex < menus.length - 4) {
+        if (currentMenuIndex < categories.length - 4) {
         setCurrentMenuIndex(currentMenuIndex + 1);
         }
     };
+
+    const categoryList = useQuery(
+        ["categoryList"],
+        async () => {
+            const response = await instance.get("/category")
+            return response.data
+        },
+        {
+            onSuccess: data => {
+                setCategories(data.categories)
+            },
+            refetchOnWindowFocus: false,
+            retry: 0
+        }
+    )
+
 
     return (
         <div>
             <div css={s.menuCategory}>
                 <button css={s.button("right")} onClick={handlePrevOnClick}><IoIosArrowBack/></button>
                 <div css={s.menuButtons}>
-                    {menus.slice(currentMenuIndex, currentMenuIndex + 4).map((menu, index) => (
-                    <button key={index}>{menu}</button>))
-                    }
+                    {
+                        categories.slice(currentMenuIndex, currentMenuIndex + 4).map((category) => (
+                        <button key={category.categoryId} onClick={() => 
+                            setSelectedCategoryId(category.categoryId)
+                        }>{category.categoryName}</button>
+                    ))}
                 </div>
                 <button css={s.button("left")} onClick={handleNextOnClick}><IoIosArrowForward/></button>
             </div>

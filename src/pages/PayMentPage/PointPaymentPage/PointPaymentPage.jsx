@@ -41,6 +41,14 @@ function PointPaymentPage() {
         }
     }
 
+    // <div>
+    // <p>사용할 스탬프: </p>
+    // <button onClick={handleMinusButtonOnClick}><FaCircleMinus/></button>
+    // <p>{totalCount}</p>
+    // <button onClick={handlePlusButtonOnClick}><FaCirclePlus/></button>
+    // </div>
+
+
 
     return (
         <>
@@ -48,22 +56,22 @@ function PointPaymentPage() {
             <MainTopBar/>
             <div css={s.layout}>
                 <button onClick={handleCancleOnClick}><FontAwesomeIcon icon={faXmark} /></button>
-                <div css={s.point}>
-                    <p>보유 포인트 개수: 16개</p>
-                    <p>포인트 개수 10개 당 스탬프 1개 사용 가능합니다</p>
-                    <div>
-                        <p>사용할 스탬프: </p>
-                        <button onClick={handleMinusButtonOnClick}><FaCircleMinus/></button>
-                        <p>{totalCount}</p>
-                        <button onClick={handlePlusButtonOnClick}><FaCirclePlus/></button>
+                <div css={s.container}>
+                    <div css={s.point}>
+                        <p>보유포인트 개수: 16개</p>
+                        <p>포인트 개수 10개 당 스탬프 1개 사용가능합니다.</p>
+                        <div css={s.buttons}>
+                            <p>사용 할 스탬프 </p>
+                            <button onClick={handleMinusButtonOnClick}><FaCircleMinus/></button>
+                            <p>{totalCount}</p>
+                            <button onClick={handlePlusButtonOnClick}><FaCirclePlus/></button>
+                        </div>
                     </div>
-                </div>
-                <div css={s.totalCount}> 
-                    <div>
+                    <div css={s.totalCount}>
                         <p>남은잔액</p>
-                        <p>8,500원</p>
+                        <p>0원</p>
                     </div>
-                    <button>카드결제</button>
+                        <button>0원 결제</button>
                 </div>
             </div>
         </>

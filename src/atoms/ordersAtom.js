@@ -7,6 +7,13 @@ export const ordersAtom = atom({
         paymentType: "",
         user: {
             phoneNumber: "010-"
+        },
+        menuCart: {
+            menuId: "",
+            options: [
+                // 당도: 덜달게(optionDetailId)
+                {menuDetailId: ""},
+            ]
         }
     }
 })

@@ -19,7 +19,7 @@ function HomePage() {
             ...orders,
             orderType: "takeout"
         }))
-        navigate('/menus');
+        navigate('/home');
     };
     
     const handleEatInClick = () => {
@@ -27,7 +27,7 @@ function HomePage() {
             ...orders,
             orderType: "eatIn"
         }))
-        navigate('/menus');
+        navigate('/home');
     };
 
     return (
@@ -37,8 +37,8 @@ function HomePage() {
                 <div>ANOTHER STARBUCKS</div>
             </div>
             <div css={s.buttons}>
-                <button onClick={handleTakeOutClick}><FontAwesomeIcon icon={faShoePrints} />가져 갈게요</button>
-                <button onClick={handleEatInClick}><FaCoffee/>먹고 갈게요</button>
+                <button onClick={handleTakeOutClick}><FontAwesomeIcon icon={faShoePrints} />포장</button>
+                <button onClick={handleEatInClick}><FaCoffee/>매장</button>
             </div>
         </div>
     )

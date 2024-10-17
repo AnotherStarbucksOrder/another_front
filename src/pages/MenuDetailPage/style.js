@@ -68,6 +68,7 @@ export const productNameInfo = css`
     flex-direction: column;
     align-items: center;
     height: 240px;
+    text-align: center;
 
     & > p:nth-last-of-type(1) {
         margin-top: 25px;
@@ -116,11 +117,11 @@ export const optionInfoContainer = css`
 
 export const optionDetail = css`
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
     margin: 0 auto;
-    margin-top: 22px;
-    height: 80%;
+    margin-top: 40px;
+    height: 75%;
 
     & p {
         margin: 0;
@@ -130,6 +131,7 @@ export const optionDetail = css`
 export const options = css`
     align-items: center;
     margin-left: 20px;
+    margin-bottom: 40px;
     width: 800px;
     height: 70px;
 
