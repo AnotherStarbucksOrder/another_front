@@ -19,52 +19,68 @@ import AdminOrderDetailPage from "../../pages/adminPage/AdminOrderDetailPage/Adm
 import AdminUserAddPage from "../../pages/adminPage/AdminUserAddPage/AdminUserAddPage";
 import AdminUserDetailPage from "../../pages/adminPage/AdminUserDetailPage/AdminUserDetailPage";
 import SignInPage from "../../pages/adminPage/SignInPage/SignInPage";
+import AdminPageSideBar from '../../components/AdminPageSideBar/AdminPageSideBar';
 
 function AdminRoutes(props) {
     const navigate = useNavigate();
     const location = useLocation();
 
-
-    const authenticated = useQuery(
-        ["authenticated", location.pathname],
-        async () => await instance.get("/admin/authenticated"),
+    const accessTokenValid = useQuery(
+        ["accessTokenValidQuery", location.pathname],
+        async () => {
+            return await instance.get("/admin/auth/access", {
+                params: {
+                    accessToken: localStorage.getItem("accessToken")
+                }
+            });
+        },
         {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response)
+                if(location.pathname === "/admin/auth/signin") {
+                    navigate("/admin");
+                }
             },
-            onError: error => {
+            onError: e => {
                 if(location.pathname !== "/admin/auth/signin") {
                     navigate("/admin/auth/signin");
                 }
             }
         }
-    )
-
-
+    );
 
     return (
-        <Routes>
-            <Route path="/" element={<IndexPage />} />
-            <Route path="/auth/signin" element={<SignInPage />} />
-            <Route path="/menu" element={<AdminMenuPage />} />
-            <Route path="/menu/add" element={<AdminMenuAddPage />} />
-            <Route path="/menu/detail/:menuId" element={<AdminMenuDetailPage />} />
-            <Route path="/sales" element={<AdminSalespage />} />
-            <Route path="/sale/detail/:orderId" element={<AdminSaleDetailPage />} />
-            <Route path="/order" element={<AdminOrderpage />} />
-            <Route path="/order/detail/:orderId" element={<AdminOrderDetailPage />} />
-            <Route path="/user" element={<AdminUserPage />} />
-            <Route path="/user/detail/:userId" element={<AdminUserDetailPage />} />
-            <Route path="/user/add" element={<AdminUserAddPage />} />
-            <Route path="/category" element={<AdminCategoryPage />} />
-            <Route path="/category/update/:orderId" element={<AdminCategoryUpdatePage />} />
-            <Route path="/category/add" element={<AdminCategoryAddPage />} />
-            <Route path="/option" element={<AdminOptionPage />} />
-            <Route path="/option/update/:orderId" element={<AdminOptionUpdatePage />} />
-            <Route path="/option/add" element={<AdminOptionAddPage />} />
-        </Routes>
+        <>
+            {
+                accessTokenValid.isLoading ? <></> : 
+                <Routes>
+                    <Route path="/auth/signin" element={<SignInPage />} />
+                    <Route path="/*" element={<>
+                        <AdminPageSideBar />    
+                        <Routes>
+                            <Route path="/" element={<IndexPage />} />
+                            <Route path="/menu" element={<AdminMenuPage />} />
+                            <Route path="/menu/add" element={<AdminMenuAddPage />} />
+                            <Route path="/menu/detail/:menuId" element={<AdminMenuDetailPage />} />
+                            <Route path="/sales" element={<AdminSalespage />} />
+                            <Route path="/sale/detail/:orderId" element={<AdminSaleDetailPage />} />
+                            <Route path="/order" element={<AdminOrderpage />} />
+                            <Route path="/order/detail/:orderId" element={<AdminOrderDetailPage />} />
+                            <Route path="/user" element={<AdminUserPage />} />
+                            <Route path="/user/detail/:userId" element={<AdminUserDetailPage />} />
+                            <Route path="/user/add" element={<AdminUserAddPage />} />
+                            <Route path="/category" element={<AdminCategoryPage />} />
+                            <Route path="/category/update/:orderId" element={<AdminCategoryUpdatePage />} />
+                            <Route path="/category/add" element={<AdminCategoryAddPage />} />
+                            <Route path="/option" element={<AdminOptionPage />} />
+                            <Route path="/option/update/:orderId" element={<AdminOptionUpdatePage />} />
+                            <Route path="/option/add" element={<AdminOptionAddPage />} />
+                        </Routes>
+                    </>} />
+                </Routes>
+            }
+        </>
     );
 }
 

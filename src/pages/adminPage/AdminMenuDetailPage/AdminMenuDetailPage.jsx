@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import { useParams } from "react-router-dom"; // useParams 임포트
-import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import * as s from "./style";
 import ReactSelect from "react-select";
 
@@ -76,7 +75,6 @@ function AdminMenuDetailPage(props) {
 
     return (
         <>
-            <AdminPageSideBar />
             <div css={s.layout}>
                 <div css={s.titleBox}>
                     <p>메뉴 관리</p>

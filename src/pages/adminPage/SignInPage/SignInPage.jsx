@@ -40,8 +40,7 @@ function SignInPage(props) {
     }
 
     const handleLoginSubmitOnClick = async () => {
-        const data = {username: "0000", password:"1234"}
-        const signinData = await signinApi(data);
+        const signinData = await signinApi(inputUser);
         console.log(signinData);
         if(!signinData.isSucess) {
             if(signinData.errorStatus === "fieldError") {
