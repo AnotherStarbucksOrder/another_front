@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import * as s from "./style";
 
 function AdminUserAddPage(props) {
@@ -11,7 +10,6 @@ function AdminUserAddPage(props) {
 
     return (
         <>
-            <AdminPageSideBar />
             <div css={s.layout}>
                 <div css={s.titleBox}>
                     <p>메뉴 관리</p>

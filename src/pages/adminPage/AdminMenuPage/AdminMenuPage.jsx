@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
@@ -75,7 +74,6 @@ function AdminMenuPage(props) {
 
     return (
         <>
-            <AdminPageSideBar />    
             <div css={s.layout}>
                 <div css={s.titleBox}>
                     <p>메뉴 관리</p>

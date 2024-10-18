@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import { useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
@@ -26,7 +25,6 @@ function AdminCategoryPage(props) {
 
     return (
         <>
-            <AdminPageSideBar />
             <div css={s.layout}>
                 <div css={s.titleBox}>
                     <p>카테고리 관리( 무한 스크롤 react-beautiful-dnd 사용? )</p>

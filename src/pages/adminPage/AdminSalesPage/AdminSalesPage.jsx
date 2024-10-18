@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import AdminPageSideBar from "../../../components/AdminPageSideBar/AdminPageSideBar";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
@@ -23,7 +22,6 @@ function AdminSalespage(props) {
 
     return (
         <>
-            <AdminPageSideBar />
             <div css={s.layout}>
                 <div css={s.titleBox}>
                     <p>매출 관리</p>
