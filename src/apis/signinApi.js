@@ -13,7 +13,7 @@ export const signinApi = async (user) => {
     }
 
     try {
-        const response = await instance.post("/auth/signin", user);
+        const response = await instance.post("/admin/auth/signin", user);
         console.log(response);
         signinData = {
             isSucess: true,
@@ -22,6 +22,10 @@ export const signinApi = async (user) => {
     }catch (error) {
         const response = error;
         console.error(response);
+
+        signinData = {
+            isSucess: false
+        }
 
         if (response.data === 'string') {
             signinData['errorStatus'] = "loginError";
