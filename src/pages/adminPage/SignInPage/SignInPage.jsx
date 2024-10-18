@@ -40,13 +40,14 @@ function SignInPage(props) {
     }
 
     const handleLoginSubmitOnClick = async () => {
-        const signinData = await signinApi(inputUser);
+        const data = {username: "0000", password:"1234"}
+        const signinData = await signinApi(data);
         console.log(signinData);
         if(!signinData.isSucess) {
-            if(signinData.errorStatus === 'fieldError') {
+            if(signinData.errorStatus === "fieldError") {
                 showFieldErrorMessage(signinData.error);
             }
-            if(signinData.errorStatus === 'loginError') {
+            if(signinData.errorStatus === "loginError") {
                 let EmptyFieldErrors = {
                     username: <></>,
                     password: <></>
@@ -57,7 +58,7 @@ function SignInPage(props) {
         }
         
         localStorage.setItem("accessToken", "bearer " + signinData.token);
-
+        
         instance.interceptors.request.use(config => {
             config.headers["Authorization"] = localStorage.getItem("accessToken");
             return config;

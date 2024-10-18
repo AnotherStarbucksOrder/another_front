@@ -16,7 +16,7 @@ function MainTop() {
                 </div>
                 <p>ANOTHER STARBUCKS</p>
             </div>
-            <Link to={"/auth/signin"}><FaStar/></Link>
+            <Link to={"/admin/auth/signin"}><FaStar/></Link>
         </div>
         </>
     )
