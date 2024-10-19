@@ -70,9 +70,7 @@ export const paginateContainer = css`
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid #dbdbdb;
         padding: 0px 5px;
-        border-radius: 35px;
         min-width: 50px;
         height: 50px;
         line-height: 10px;

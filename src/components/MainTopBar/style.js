@@ -50,3 +50,8 @@ export const button = (direction) => css`
     background-color: inherit;
     ${direction === 'left' ? 'margin-left: 10px' : 'margin-right: 10px'}
 `;
+
+// export const activeButton = css`
+//     background-color: black;
+//     color: white;
+// `;

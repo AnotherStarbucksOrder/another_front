@@ -1,28 +1,84 @@
-import React, { useState } from 'react'
+import React from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
+import { useRecoilState } from 'recoil';
+import { ordersAtom } from '../../atoms/ordersAtom';
+import Swal from 'sweetalert2';
 
 function MainFooter() {
 
     const navigate = useNavigate();
-
-    const [ totalCount, setTotalCount ] = useState(1);
-    // const [ orderCart, setOrderCart ] = useState([]);
+    const [ orders, setOrders ] = useRecoilState(ordersAtom);
 
     // 수량 + 버튼 클릭했을 때
-    const handlePlusButtonOnClick = () => {
-        setTotalCount(totalCount => totalCount + 1);
+    const handlePlusButtonOnClick = (menuId) => {
+        setOrders(order => ({
+            ...order,
+            menuCart: order.menuCart.map(menu => 
+                menu.menuId === menuId
+                ? 
+                { 
+                    ...menu, 
+                    count: menu.count + 1,
+                }
+                : menu
+            )
+        }));
     }
 
     // 수량 - 버튼 클릭했을 때 
-    const handleMinusButtonOnClick = () => {    
-        if(totalCount > 1) {
-            setTotalCount(totalCount => totalCount - 1);
-        }
+    const handleMinusButtonOnClick = (menuId) => {    
+        setOrders(order => ({
+            ...order,
+            menuCart: order.menuCart.map(menu => 
+                menu.menuId === menuId && menu.count > 1
+                ? { 
+                    ...menu, 
+                    count: menu.count - 1
+                }
+                : menu
+            )
+        }));
+    }
+
+    // 장바구니 개별 삭제 버튼 클릭 
+    const handleDeleteButtonOnClick = (menuId, menuName) => {
+
+        Swal.fire({
+            title: `${menuName}을 삭제하시겠습니까?`,
+            color: "#036635",
+            showConfirmButton: true,
+            confirmButtonText: "네",
+            confirmButtonColor: "#3EA270",
+            showCancelButton: true,
+            cancelButtonText: "아니오",
+            cancelButtonColor: "#3EA270"
+        }).then(result => {
+            if(result.isConfirmed) {
+                // 내가 버튼을 누른 해당 menuId랑 일치하지 않은것들만 남겨두기 
+                setOrders(order => ({
+                    ...order,
+                    menuCart: order.menuCart.filter(menu => menu.menuId !== menuId) 
+                }));
+            } else if(result.dismiss === Swal.DismissReason.cancel) {
+                return;
+            }
+        })
+    
+    }
+
+
+    // 장바구니 전체 삭제 버튼 클릭 
+    const hanldeAlldeleteButtonOnClick = () => {
+        
+        setOrders(order => ({
+            ...order,
+            menuCart: []
+        }))
     }
 
     // 결제하기 버튼 클릭했을 때
@@ -36,30 +92,24 @@ function MainFooter() {
             <div css={s.orderContainer}>
                 <p>Order</p>
                 <div css={s.orderDetailContainer}>
-                    <div css={s.orderDetail}>
-                        <div css={s.orderProduct}>
-                            <button><FontAwesomeIcon icon={faXmark} /></button>
-                            <p>자몽허니블랙티</p>
-                        </div>
-                        <div css={s.countButtons}>
-                            <button onClick={handleMinusButtonOnClick}><FaCircleMinus/></button>
-                            <p>{totalCount}</p>
-                            <button onClick={handlePlusButtonOnClick}><FaCirclePlus/></button>
-                            <p>100,000원</p>
-                        </div>
-                    </div>
-                    <div css={s.orderDetail}>
-                        <div css={s.orderProduct}>
-                            <button><FontAwesomeIcon icon={faXmark} /></button>
-                            <p>아메리카노</p>
-                        </div>
-                        <div css={s.countButtons}>
-                            <button onClick={handleMinusButtonOnClick}><FaCircleMinus/></button>
-                            <p>{totalCount}</p>
-                            <button onClick={handlePlusButtonOnClick}><FaCirclePlus/></button>
-                            <p>100,000원</p>
-                        </div>
-                    </div>
+                        {
+                            orders.menuCart.map(menu => (
+                                <div css={s.orderDetail} key={menu.menuId}>
+                                    <div css={s.orderProduct}>
+                                        <button onClick={() => handleDeleteButtonOnClick(menu.menuId, menu.menuName)}><FontAwesomeIcon icon={faXmark} /></button>
+                                        <p>{menu.menuName}</p>
+                                    </div>
+                                    <div css={s.countButtons}>
+                                        <div>
+                                            <button onClick={() => handleMinusButtonOnClick(menu.menuId)}><FaCircleMinus/></button>
+                                            <p>{menu.count}</p>
+                                            <button onClick={() => handlePlusButtonOnClick(menu.menuId)}><FaCirclePlus/></button>
+                                        </div>
+                                        <p>{menu.price}</p>
+                                    </div >
+                                </div>
+                            ))
+                        }
                 </div>
             </div>
             <div css={s.totalContainer}>
@@ -68,7 +118,7 @@ function MainFooter() {
                     <p>총 가격: 100,000원</p>
                 </div>
                 <div css={s.buttons}>
-                    <button>전체 삭제</button>
+                    <button onClick={hanldeAlldeleteButtonOnClick}>전체 삭제</button>
                     <button onClick={handlePaymentOnClick}>결제 하기</button>
                 </div>
             </div>

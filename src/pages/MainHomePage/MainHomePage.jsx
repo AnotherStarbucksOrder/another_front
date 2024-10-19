@@ -35,7 +35,6 @@ function MainHomePage() {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: data => {
-                console.log(data)
                 setTotalPageCount(
                     data.totalCount % limit === 0
                     ? data.totalCount / limit
@@ -63,7 +62,7 @@ function MainHomePage() {
     return (
         <>
             <MainTop />
-            <MainTopBar setSelectedCategoryId={handleCategoryOnChange} />
+            <MainTopBar setSelectedCategoryId={handleCategoryOnChange} selectedCategoryId={selectedCategoryId} />
                 <div css={s.layout}>
                     {
                         menuList.isLoading

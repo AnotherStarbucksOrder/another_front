@@ -27,6 +27,10 @@ export const orderContainer = css`
     width: 75%;
     height: 95%; 
     background-color: ${COLORS.mainBackground};
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     & p {
         margin: 0;
@@ -72,21 +76,35 @@ export const orderProduct = css`
 `;
 
 export const countButtons = css`
-    justify-content: space-between;
     align-items: center;
-    width: 350px;
+    width: 250px;
 
-    & > button {
-        display: flex;
+    & > p {
+        width: 100px;
+    }
+
+    & > div {
         justify-content: center;
         align-items: center;
-        border: none;
-        background-color: inherit;
+        width: 200px;
 
-        & > svg {
-            font-size: 25px;
+        & > p {
+            text-align: center;
+            width: 60px;
         }
+
+        & > button {
+            display: flex;
+            border: none;
+            background-color: inherit;
+
+            & > svg {
+            font-size: 25px;
+            }
+        }
+
     }
+
 `;
 
 export const totalContainer = css`

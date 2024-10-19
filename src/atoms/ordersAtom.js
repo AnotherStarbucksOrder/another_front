@@ -5,15 +5,10 @@ export const ordersAtom = atom({
     default: {
         orderType: "",
         paymentType: "",
+        orderAmount: "",
         user: {
             phoneNumber: "010-"
         },
-        menuCart: {
-            menuId: "",
-            options: [
-                // 당도: 덜달게(optionDetailId)
-                {menuDetailId: ""},
-            ]
-        }
+        menuCart: []
     }
 })

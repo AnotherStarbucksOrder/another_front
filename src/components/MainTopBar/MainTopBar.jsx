@@ -5,7 +5,7 @@ import { IoIosArrowForward, IoIosArrowBack} from "react-icons/io";
 import { useQuery } from 'react-query';
 import { instance } from '../../apis/util/instance';
 
-function MainTopBar({ setSelectedCategoryId }) {
+function MainTopBar({ selectedCategoryId, setSelectedCategoryId }) {
 
     const [ categories, setCategories] = useState([]);
     const [ currentMenuIndex, setCurrentMenuIndex ] = useState(0); 
@@ -46,9 +46,12 @@ function MainTopBar({ setSelectedCategoryId }) {
                 <div css={s.menuButtons}>
                     {
                         categories.slice(currentMenuIndex, currentMenuIndex + 4).map((category) => (
-                        <button key={category.categoryId} onClick={() => 
-                            setSelectedCategoryId(category.categoryId)
-                        }>{category.categoryName}</button>
+                        <button key={category.categoryId} 
+                            onClick={() => setSelectedCategoryId(category.categoryId)}
+                            
+                        >
+                            {category.categoryName}
+                        </button>
                     ))}
                 </div>
                 <button css={s.button("left")} onClick={handleNextOnClick}><IoIosArrowForward/></button>
