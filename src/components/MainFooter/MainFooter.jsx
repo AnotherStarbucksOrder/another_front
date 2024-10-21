@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 import { useNavigate } from 'react-router-dom';
@@ -14,31 +14,52 @@ function MainFooter() {
     const navigate = useNavigate();
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
 
+    useEffect(() => {
+        let totalAmount = 0;
+        let totalQuantity = 0;
+        
+        for (let i = 0; i < orders.menuCart.length; i++) {
+            totalAmount += orders.menuCart[i].count;
+            totalQuantity += orders.menuCart[i].price;
+        }
+        
+        setOrders(order => ({
+            ...order,
+            orderAmount: totalAmount,
+            orderQuantity: totalQuantity
+        }));
+
+    }, [orders.menuCart]); 
+
     // 수량 + 버튼 클릭했을 때
-    const handlePlusButtonOnClick = (menuId) => {
+    const handlePlusButtonOnClick = (menuId, options) => {
+        
         setOrders(order => ({
             ...order,
             menuCart: order.menuCart.map(menu => 
-                menu.menuId === menuId
+                menu.menuId === menuId && JSON.stringify(menu.options) === JSON.stringify(options)
                 ? 
                 { 
                     ...menu, 
                     count: menu.count + 1,
+                    price: menu.price +  menu.unitPrice
                 }
                 : menu
-            )
+            ),
         }));
     }
 
     // 수량 - 버튼 클릭했을 때 
-    const handleMinusButtonOnClick = (menuId) => {    
+    const handleMinusButtonOnClick = (menuId, options) => {
+
         setOrders(order => ({
             ...order,
             menuCart: order.menuCart.map(menu => 
-                menu.menuId === menuId && menu.count > 1
+                menu.menuId === menuId && menu.count > 1 && JSON.stringify(menu.options) === JSON.stringify(options) 
                 ? { 
                     ...menu, 
-                    count: menu.count - 1
+                    count: menu.count - 1,
+                    price: menu.price - menu.unitPrice
                 }
                 : menu
             )
@@ -68,24 +89,37 @@ function MainFooter() {
                 return;
             }
         })
-    
     }
-
 
     // 장바구니 전체 삭제 버튼 클릭 
     const hanldeAlldeleteButtonOnClick = () => {
-        
-        setOrders(order => ({
-            ...order,
-            menuCart: []
-        }))
+        Swal.fire({
+            title: "전체메뉴를 삭제하시겠습니까?",
+            color: "#036635",
+            showConfirmButton: true,
+            confirmButtonText: "네",            
+            confirmButtonColor: "#3EA270",
+            showCancelButton: true,
+            cancelButtonText: "아니오",
+            cancelButtonColor: "#3EA270"
+        }).then(result => {
+            if(result.isConfirmed) {
+                setOrders(order => ({
+                    ...order,
+                    orderAmount: "",
+                    orderQuantity: "",
+                    menuCart: []
+                }))
+            } else if(result.dismiss === Swal.DismissReason.cancel) {
+                return;
+            }
+        })
     }
-
+    
     // 결제하기 버튼 클릭했을 때
     const handlePaymentOnClick = () => {
         navigate("/payment");
     };
-
 
     return (
         <div css={s.layout}>
@@ -93,19 +127,19 @@ function MainFooter() {
                 <p>Order</p>
                 <div css={s.orderDetailContainer}>
                         {
-                            orders.menuCart.map(menu => (
-                                <div css={s.orderDetail} key={menu.menuId}>
+                            orders.menuCart.map((menu, index) => (
+                                <div css={s.orderDetail} key={index}>
                                     <div css={s.orderProduct}>
                                         <button onClick={() => handleDeleteButtonOnClick(menu.menuId, menu.menuName)}><FontAwesomeIcon icon={faXmark} /></button>
                                         <p>{menu.menuName}</p>
                                     </div>
                                     <div css={s.countButtons}>
                                         <div>
-                                            <button onClick={() => handleMinusButtonOnClick(menu.menuId)}><FaCircleMinus/></button>
+                                            <button onClick={() => handleMinusButtonOnClick(menu.menuId, menu.options)}><FaCircleMinus/></button>
                                             <p>{menu.count}</p>
-                                            <button onClick={() => handlePlusButtonOnClick(menu.menuId)}><FaCirclePlus/></button>
+                                            <button onClick={() => handlePlusButtonOnClick(menu.menuId, menu.options)}><FaCirclePlus/></button>
                                         </div>
-                                        <p>{menu.price}</p>
+                                        <p>{parseInt(menu.price).toLocaleString('Ko-KR')}원</p>
                                     </div >
                                 </div>
                             ))
@@ -114,8 +148,8 @@ function MainFooter() {
             </div>
             <div css={s.totalContainer}>
                 <div css={s.totalCount}>
-                    <p>총 수량: 10개</p>
-                    <p>총 가격: 100,000원</p>
+                    <p>총 수량: {orders.orderAmount} 개</p>
+                    <p>총 가격: {parseInt(orders.orderQuantity).toLocaleString('ko-KR')} 원</p>
                 </div>
                 <div css={s.buttons}>
                     <button onClick={hanldeAlldeleteButtonOnClick}>전체 삭제</button>

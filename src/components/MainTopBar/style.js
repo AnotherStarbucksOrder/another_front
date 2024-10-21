@@ -37,10 +37,6 @@ export const menuButtons = css`
         font-weight: 600;
         color: ${COLORS.buttonFontColor};
         background-color: ${COLORS.buttonColor};
-
-        &:hover {
-            background-color: ${COLORS.categoryActiveColor};
-        }
     }
 `;
 
@@ -49,4 +45,8 @@ export const button = (direction) => css`
     border: none;
     background-color: inherit;
     ${direction === 'left' ? 'margin-left: 10px' : 'margin-right: 10px'}
+`;
+
+export const activeButton = css`
+    background-color: ${COLORS.categoryActiveColor} !important;
 `;

@@ -6,6 +6,7 @@ export const ordersAtom = atom({
         orderType: "",
         paymentType: "",
         orderAmount: "",
+        orderQuantity: "",
         user: {
             phoneNumber: "010-"
         },

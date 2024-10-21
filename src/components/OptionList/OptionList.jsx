@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 
 function OptionList({ menuInfo, handleOptionOnClick }) {
+
+    const [ isActiveOptions, setIsActiveOptions] = useState({}); // {"당도": "달게"}
+
+    const handleClick = (optionDetailId, optionName) => {
+        setIsActiveOptions(options => ({
+            ...options,
+            [optionName]: optionDetailId
+        }))
+    }
 
     return (
         <div css={s.optionDetail}>
@@ -17,8 +26,13 @@ function OptionList({ menuInfo, handleOptionOnClick }) {
                                     <button 
                                         key={option.optionDetailId} 
                                         value={option.optionDetailId}
-                                        onClick={() => {handleOptionOnClick(menuDetail.option.optionName, option.optionDetailValue, option.optionDetailPrice)}}
-                                    >
+                                        onClick={() => {
+                                            handleOptionOnClick(menuDetail.option.optionName, option.optionDetailValue, option.optionDetailPrice)
+                                            handleClick(option.optionDetailId, menuDetail.option.optionName)
+                                        }}
+                                        css={isActiveOptions[menuDetail.option.optionName] === option.optionDetailId 
+                                            ? s.activeButton : ''}
+                                        >
                                         {option.optionDetailValue}
                                     </button>
                                 )
