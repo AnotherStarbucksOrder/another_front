@@ -50,10 +50,10 @@ export const buttons = css`
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
         }
-
-        &:active {
-            color: ${COLORS.buttonFontColor};
-            background-color: ${COLORS.main};
-        }
     }
+`;
+
+export const activeButton = css`
+    color: ${COLORS.buttonFontColor};
+    background-color: ${COLORS.main} !important
 `;

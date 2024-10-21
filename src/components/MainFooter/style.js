@@ -77,16 +77,17 @@ export const orderProduct = css`
 
 export const countButtons = css`
     align-items: center;
-    width: 250px;
+    justify-content: space-between;
+    width: 300px;
 
     & > p {
-        width: 100px;
+        width: 130px;
     }
 
     & > div {
         justify-content: center;
         align-items: center;
-        width: 200px;
+        width: 230px;
 
         & > p {
             text-align: center;

@@ -17,11 +17,9 @@ function MainHomePage() {
 
     const [ searchParams, setSearchParams ] = useSearchParams();
     const [ totalPageCount, setTotalPageCount ] = useState(1);
-    const [ selectedCategoryId, setSelectedCategoryId ] = useState(1);
+    const [ selectedCategoryId, setSelectedCategoryId ] = useState(11);
     const limit = 9;
     const currentPage = searchParams.get("page") || 1;
-
-    
 
 
     // 카테고리별 menuList 받아오는 Query
@@ -57,12 +55,11 @@ function MainHomePage() {
         }
     }
 
-
-
+    
     return (
         <>
             <MainTop />
-            <MainTopBar setSelectedCategoryId={handleCategoryOnChange} selectedCategoryId={selectedCategoryId} />
+            <MainTopBar handleCategoryOnChange={handleCategoryOnChange}  />
                 <div css={s.layout}>
                     {
                         menuList.isLoading

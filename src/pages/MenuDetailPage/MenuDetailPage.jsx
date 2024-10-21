@@ -100,6 +100,7 @@ function MenuDetailPage() {
             menuId: menuId,
             menuName: menuInfo.data.menuName,
             options: selectedOptions.map(option => ({ [option.name]: option.value })),
+            unitPrice: menuBasePrice + totalOptionPrice,
             price: (menuBasePrice + totalOptionPrice) * totalCount,
             count: totalCount,
         };
@@ -119,9 +120,11 @@ function MenuDetailPage() {
                     menuCart: order.menuCart.map(item =>
                         item === existMenu
                             ? 
-                            { ...item, 
+                            { 
+                                ...item,
+                                unitPrice: item.price,
                                 count: item.count + newCartMenu.count, 
-                                price: (item.price + newCartMenu.price) 
+                                price: (item.price + newCartMenu.price)
                             }
                             : item
                     ),
@@ -140,7 +143,6 @@ function MenuDetailPage() {
                 return updatMenuCart;
             }
         });
-
         navigate("/home");
     };
 
@@ -161,7 +163,7 @@ function MenuDetailPage() {
                                 <p>{menuInfo.data?.comment}</p>
                             </div>
                             <div css={s.productPriceInfo}>
-                                <p>{menuInfo.data?.menuPrice} 원</p>
+                                <p>{parseInt(menuInfo?.data?.menuPrice).toLocaleString('ko-KR')} 원</p>
                                 <div css={s.productCount}>
                                     <button onClick={handleMinusButtonOnClick}><FaCircleMinus/></button>
                                     <p>{totalCount}</p>
