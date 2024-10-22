@@ -73,6 +73,16 @@ export const orderProduct = css`
         font-size: 30px;
         }   
     }
+
+    & > div {
+        flex-direction: column;
+        
+        & > p:nth-last-of-type(1) {
+            font-size: 20px;
+            font-weight: 400;
+            color: #595959;
+        }
+    }
 `;
 
 export const countButtons = css`
