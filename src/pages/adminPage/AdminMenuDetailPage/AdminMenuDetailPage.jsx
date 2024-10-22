@@ -1,35 +1,67 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom"; // useParams 임포트
 import * as s from "./style";
 import ReactSelect from "react-select";
+import { useQuery } from "react-query";
+import { instance } from "../../../apis/util/instance";
+import { storage } from "../../../firebase/firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 function AdminMenuDetailPage(props) {
     const { menuId } = useParams(); // URL에서 menuId 가져오기
     const [isEditing, setIsEditing] = useState(false);
-    const [image, setImage] = useState("https://flexible.img.hani.co.kr/flexible/normal/640/512/imgdb/original/2024/0403/20240403501300.jpg");
+    const [image, setImage] = useState("");
+    const [ initialMenuData, setInitialMenuData ] = useState(null)
+    const [ modifyMenuData, setModifyMenuData ] = useState({
+        menuId: 0,
+        menuName: "",
+        menuPrice: 0,
+        imgUrl: "",
+        comment: "",
+        option: [{
+            optionId: 0,
+            optionName: ""
+        }],
+        category:[{
+            categoryId: 0,
+            categoryName: ""
+        }]
+    })
 
-    const handleChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
+    const menu = useQuery(
+        ["menuQuery", menuId],
+        async () => await instance.get(`/menu/${menuId}`),
+        {
+            retry: 0,
+            refetchOnWindowFocus: false,
+            onSuccess: (response) => {
+                const menuData = response?.data
+                setInitialMenuData(menuData);
+                setModifyMenuData(menuData);
+                console.log(menuData);
+            }
         }
-    };
+    )
+    console.log(menu);
+
+    const optionList = useQuery(
+        ["optionsListQuery"],
+        async () => await instance.get("/admin/menu/add"),
+        {
+            retry: 0,
+            refetchOnWindowFocus: false
+        }
+    )
+    console.log(optionList)
+
+    const categories = optionList?.data?.data.categories || [];
+    const options = optionList?.data?.data.options || [];
+
     const handleImageClick = () => {
         document.getElementById('fileInput').click();
     };
 
-
-    const [menus, setMenus] = useState([
-        { menuId: 1, menuName: "불고기 비빔밥", price: 8000, category: "한식", option: "계란 추가", comment: "221ddq" },
-        { menuId: 2, menuName: "치킨 너겟", price: 6000, category: "패스트푸드", option: "소스 선택", comment: "221ddq" },
-        { menuId: 3, menuName: "카페라떼", price: 4500, category: "음료", option: "샷 추가", comment: "221ddq" },
-    ]);
-
-
-
-    const menu = menus.find(menu => menu.menuId === parseInt(menuId)); // menuId에 해당하는 메뉴 찾기
 
     const handleBackOnClick = () => {
         window.history.back();
@@ -40,38 +72,72 @@ function AdminMenuDetailPage(props) {
     }
     const handleConfirmOnClick = () => {
         setIsEditing(false); // 수정 모드 해제
+        console.log(modifyMenuData);
     }
     const handleCancleOnClick = () => {
         setIsEditing(false);
+        if(initialMenuData) {
+            setModifyMenuData(initialMenuData);
+        }
     }
 
+    const handleImgLoad = useCallback(() => {
+        const input = document.getElementById("fileInput");
+        const imgFile = input.files[0];
+
+        if(!imgFile) return;
+
+        if(!modifyMenuData.imgUrl || modifyMenuData.imgUrl !== imgFile.name) {
+            const storgeRef = ref(storage, `product/drink/${imgFile.name}`);
+            const task = uploadBytesResumable(storgeRef, imgFile);
+            task.on(
+                "state_changed",
+                () => { },
+                () => { },
+                async () => {
+                    const url = await getDownloadURL(storgeRef);
+                    setImage(url);
+                    setModifyMenuData(modifyMenuData => ({
+                        ...modifyMenuData,
+                        imgUrl: url
+                    }));
+                }
+            );
+        } else {
+            alert("이미지가 이미 존재합니다.")
+        }
+    }, [modifyMenuData])
 
     const handleSelectCategoryChange = (selectedOptions) => {
-        // 선택한 값을 상태에 저장 (여기서는 카테고리를 업데이트하는 로직)
-        if (menu) {
-            const updatedMenu = { ...menu, category: selectedOptions.map(option => option.value) };
-            setMenus(menus => menus.map(m => (m.menuId === menu.menuId ? updatedMenu : m)));
-        }
-    };
-    const handleSelectOptionChange = (selectedOptions) => {
-        // 선택한 값을 상태에 저장 (여기서는 카테고리를 업데이트하는 로직)
-        if (menu) {
-            const updatedMenu = { ...menu, option: selectedOptions.map(option => option.value) };
-            setMenus(menus => menus.map(m => (m.menuId === menu.menuId ? updatedMenu : m)));
-        }
+        const newCategories = selectedOptions.map(option => ({
+            categoryId: option.value,
+            categoryName: option.label
+        }));
+        setModifyMenuData({
+            ...modifyMenuData,
+            category: newCategories
+        });
     };
 
-    // 카테고리 옵션 배열
-    const categoryOptions = [
-        { value: "한식", label: "한식" },
-        { value: "패스트푸드", label: "패스트푸드" },
-        { value: "음료", label: "음료" },
-    ];
-    const optionOptions = [
-        { value: "계란 추가", label: "계란 추가" },
-        { value: "소스 선택", label: "소스 선택" },
-        { value: "샷 추가", label: "샷 추가" },
-    ];
+    const handleSelectOptionChange = (selectedOptions) => {
+        const newOptions = selectedOptions.map(option => ({
+            optionId: option.value,
+            optionName: option.label
+        }));
+        setModifyMenuData({
+            ...modifyMenuData,
+            option: newOptions
+        });
+    };
+
+    const handleModifyInputOnChange = (e) => {
+        setModifyMenuData(modifyMenuData => ({
+            ...modifyMenuData,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    
 
     return (
         <>
@@ -86,15 +152,16 @@ function AdminMenuDetailPage(props) {
                                 !isEditing ?
                                     <>
                                         <div css={s.img}>
-                                            <img src={image} alt="" />
+                                            <img src={modifyMenuData.imgUrl} alt="" />
                                         </div>
                                     </>
                                     :
                                     <>
                                         <div css={s.img}>
-                                            <img src={image} alt="" onClick={handleImageClick} />
+                                            <img src={modifyMenuData.imgUrl} alt="" onClick={handleImageClick} />
                                         </div>
-                                        <input type="file" accept="image/*" onChange={handleChange} id="fileInput" />
+                                        <input type="file" accept="image/*"  id="fileInput" onChange={handleImgLoad} />
+                                        <input type="text" value={modifyMenuData.imgUrl} readOnly />
                                     </>
                             }
                         </div>
@@ -116,10 +183,19 @@ function AdminMenuDetailPage(props) {
                                                     css={s.select}
                                                     name="categories"
                                                     onChange={handleSelectCategoryChange}
-                                                    options={categoryOptions}
+                                                    options={categories.map(category => ({
+                                                        value: category.categoryId,
+                                                        label: category.categoryName // 오타 수정
+                                                    })) || []} // options에도 변환된 데이터 사용
                                                     className="basic-multi-select"
                                                     classNamePrefix="select"
-                                                    defaultValue={menu ? [{ value: menu.category, label: menu.category }] : []}
+                                                    // defaultValue={menu ? 
+                                                    //     categotyList?.data?.data.categories
+                                                    //         .filter(category => menu.categories.includes(category.categoryId)) // menu에 있는 카테고리만 필터링
+                                                    //         .map(category => ({
+                                                    //             value: category.categoryId,
+                                                    //             label: category.categoryName // 오타 수정
+                                                    //         })) : []}
                                                 />
                                         }
                                     </div>
@@ -130,7 +206,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" css={s.input} readOnly={!isEditing} value={menu ? menu.menuName : ""} />
+                                    <input type="text" name="menuName" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuName || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -138,7 +214,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" css={s.input} readOnly={!isEditing} value={menu ? menu.price : ""} />
+                                    <input type="text" name="menuPrice" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuPrice || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -149,19 +225,35 @@ function AdminMenuDetailPage(props) {
                                     {
                                         !isEditing ?
                                             <>
-                                                <input type="text" css={s.input} readOnly value={menu ? menu.option : ''} />
+                                                <input
+                                                    type="text"
+                                                    css={s.input}
+                                                    readOnly
+                                                    value={menu?.data?.data.menuDetailList.map(menuDetail => menuDetail.option.optionName).join(', ')}
+                                                />
                                             </>
                                             :
                                             <ReactSelect
                                                 isMulti
                                                 isDisabled={!isEditing}
                                                 css={s.select}
-                                                name="categories"
+                                                name="options"
                                                 onChange={handleSelectOptionChange}
-                                                options={optionOptions}
+                                                options={options.map(option => ({
+                                                    value: option.optionId,
+                                                    label: option.optionName // 오타 수정
+                                                })) || []} // options에도 변환된 데이터 사용
                                                 className="basic-multi-select"
                                                 classNamePrefix="select"
-                                                defaultValue={menu ? [{ value: menu.option, label: menu.option }] : []}
+                                                defaultValue={menu ? 
+                                                    menu.data.data.menuDetailList
+                                                        .filter(menuDetail => 
+                                                            options.some(option => option.optionId === menuDetail.option.optionId)
+                                                        )
+                                                        .map(menuDetail => ({
+                                                            value: menuDetail.option.optionId,
+                                                            label: menuDetail.option.optionName
+                                                        })) : []}
                                             />
                                     }
                                 </div>
@@ -171,7 +263,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="" css={s.input} readOnly={!isEditing} value={menu ? menu.comment : ""}></textarea>
+                                    <textarea name="comment" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.comment || ""}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -197,3 +289,4 @@ function AdminMenuDetailPage(props) {
 }
 
 export default AdminMenuDetailPage;
+

@@ -7,7 +7,7 @@ function AdminPageSideBar(props) {
     const navigate = useNavigate();
 
     const handleMenuClick = () => {
-        navigate("/admin/menu");
+        navigate("/admin/menus?page=1");
     }
     const handleSalesClick = () => {
         navigate("/admin/sales");
