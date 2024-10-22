@@ -13,13 +13,13 @@ function AdminMenuPage(props) {
     const [totalPageCount, setTotalPageCount] = useState(1);
     const [menus, setMenus] = useState([]);
     const navigate = useNavigate();
-    const [ searchValue, setSearchValue ] = useState(searchParams.get("search") ?? ""); 
+    const [ searchValue, setSearchValue ] = useState(searchParams.get("searchName") ?? ""); 
     const limit = 13;
     
 
     const menuList = useQuery(
         ["menuListQuery", searchParams.get("page"), searchParams.get("search")],
-        async () => await instance.get(`/admin/menus?page=${searchParams.get("page")}&limit=${limit}&search=${searchValue}`),
+        async () => await instance.get(`/admin/menus?page=${searchParams.get("page")}&limit=${limit}&searchName=${searchValue}`),
         {
             retry: 0,
             refetchOnWindowFocus: false,
@@ -49,7 +49,7 @@ function AdminMenuPage(props) {
     }
 
     const handlePageOnChange = (e) => {
-        navigate(`/admin/menus?page=${e.selected + 1}&search=${searchValue}`);
+        navigate(`/admin/menus?page=${e.selected + 1}&searchName=${searchValue}`);
     }
 
     // 체크박스 상태 관리 
@@ -90,7 +90,8 @@ function AdminMenuPage(props) {
         navigate("/admin/menu/add")
     }
     const handleSearchButtonOnClick = () => {
-        navigate(`/admin/menus?page=1&search=${searchValue}`);
+        navigate(`/admin/menus?page=1&searchName=${searchValue}`);
+        menuList.refetch();
     }
 
     return (

@@ -2,9 +2,16 @@
 import * as s from "./style";
 import ReactSelect from "react-select";
 import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { instance } from "../../../apis/util/instance";
+import { useNavigate } from "react-router-dom";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../../../firebase/firebase";
 
 
 function AdminMenuAddPage(props) {
+    const navigate = useNavigate();
+    const [previewImg, setPreviewImg] = useState("");
     const [inputMenu, setInputMenu] = useState({
         menuId: 0,
         menuName: "",
@@ -13,11 +20,9 @@ function AdminMenuAddPage(props) {
         comment: "",
         option: [{
             optionId: 0,
-            optionName: ""
         }],
         category: [{
             categoryId: 0,
-            categoryName: ""
         }]
     });
 
@@ -48,6 +53,91 @@ function AdminMenuAddPage(props) {
     //         });
     //     }
     // };
+    const optionList = useQuery(
+        ["optionsListQuery"],
+        async () => await instance.get("/admin/menu/add"),
+        {
+            retry: 0,
+            refetchOnWindowFocus: false
+        }
+    )
+    console.log(optionList)
+
+    const categories = optionList?.data?.data.categories || [];
+    const options = optionList?.data?.data.options || [];
+
+    // const addMenuMutation = useMutation(
+    //     async () => await instance.post("/admin/menu"),
+    //     {
+    //         retry: 0,
+    //         refetchOnWindowFocus: false,
+    //         onSuccess: response => {
+    //             alert("작성이 완료되었습니다.")
+    //             navigate(`/admin/menu/detail/${response?.data.menuId}`)
+    //         },
+    //         onError: e => {
+    //             const fieldErrors = e.response.data;
+    //             for(let fieldError of fieldErrors) {
+    //                 if(fieldError.field === "menuName") {
+    //                     alert(fieldError.defaultMessage);
+    //                     return;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // )
+
+    const handleSubmitOnClick = async () => {
+        let response = null;
+        const storageRef = ref(storage, `product/drink/${inputMenu.imgUrl}`);
+        console.log(inputMenu.imgUrl);
+        const task = uploadBytesResumable(storageRef, inputMenu.imgUrl);
+        task.on(
+            "state_changed",
+            (snapshot) => {
+                console.log("업로드 중")
+            },
+            (e) => {
+                console.log("파이어베이스 업로드 중 에러발생");
+                console.error(e);
+            },
+            async (success) => {
+                const url = await getDownloadURL(storageRef);
+                let data = {
+                    ...inputMenu,
+                    imgUrl: url
+                };
+                data.imgUrl = url;
+                console.log("바뀐 데이터");
+                console.log(data);
+                try {
+                    response = await instance.post("/admin/menu", data);
+                    if (response.status !== 200) {
+                        deleteObject(storageRef);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    return;
+                }
+                console.log(response);
+                alert("등록하였습니다.");
+                navigate(`/admin/menu/detail/${response.data.menuId}`)
+            }
+        );
+    }
+
+    const handleimgUrlOnChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                alert("이미지 파일만 업로드 가능합니다.");
+                return;
+            }
+
+            const imageUrl = URL.createObjectURL(file);
+            setPreviewImg(imageUrl); // 미리보기 이미지 URL 설정
+        }
+    };
 
     const handleInputMenuOnChange = (e) => {
         setInputMenu({
@@ -64,17 +154,32 @@ function AdminMenuAddPage(props) {
         window.history.back();
     }
 
-    // 카테고리 옵션 배열
-    const categoryOptions = [
-        { value: "한식", label: "한식" },
-        { value: "패스트푸드", label: "패스트푸드" },
-        { value: "음료", label: "음료" },
-    ];
-    const optionOptions = [
-        { value: "계란 추가", label: "계란 추가" },
-        { value: "소스 선택", label: "소스 선택" },
-        { value: "샷 추가", label: "샷 추가" },
-    ];
+    const handleSelectCategoryChange = (selectedOptions) => {
+        const newCategories = selectedOptions.map(option => ({
+            categoryId: option.value,
+            categoryName: option.label
+        }));
+        setInputMenu({
+            ...inputMenu,
+            category: newCategories
+        });
+    };
+
+    const handleSelectOptionChange = (selectedOptions) => {
+        const newOptions = selectedOptions.map(option => ({
+            optionId: option.value,
+            optionName: option.label
+        }));
+        setInputMenu({
+            ...inputMenu,
+            option: newOptions
+        });
+    };
+
+    // const handleMenuSubmitOnClick = () => {
+    //     addMenuMutation.mutateAsync();
+    // }
+
 
     return (
         <>
@@ -86,10 +191,10 @@ function AdminMenuAddPage(props) {
                     <div css={s.imgContainer}>
                         <div css={s.imgBox}>
                             <div css={s.img}>
-                                <img src={inputMenu.imgUrl} alt="" onClick={handleImageClick} />
+                                <img src={previewImg} alt="" onClick={handleImageClick} />
                             </div>
-                            <input type="file" accept="image/*"  id="fileInput" />
-                            <input type="text" value={inputMenu.imgUrl} readOnly />
+                            <input type="file" accept="image/*"  id="fileInput" onChange={handleimgUrlOnChange} />
+                            <input type="text" value={previewImg.name} readOnly />
                         </div>
                         <div css={s.infoContainer}>
                             <div css={s.infoBox}>
@@ -102,8 +207,11 @@ function AdminMenuAddPage(props) {
                                             isMulti
                                             css={s.select}
                                             name="categories"
-                                            onChange={handleInputMenuOnChange}
-                                            options={categoryOptions}
+                                            onChange={handleSelectCategoryChange}
+                                            options={categories.map(category => ({
+                                                value: category.categoryId,
+                                                label: category.categoryName // 오타 수정
+                                            })) || []} // options에도 변환된 데이터 사용
                                             className="basic-multi-select"
                                             classNamePrefix="select"
                                         />
@@ -115,7 +223,7 @@ function AdminMenuAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" css={s.input} id={inputMenu.menuName} onChange={handleInputMenuOnChange}/>
+                                    <input type="text" css={s.input} name="menuName" onChange={handleInputMenuOnChange}/>
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -123,7 +231,7 @@ function AdminMenuAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" css={s.input} id={inputMenu.menuPrice} onChange={handleInputMenuOnChange}/>
+                                    <input type="text" css={s.input} name="menuPrice" onChange={handleInputMenuOnChange}/>
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -134,9 +242,12 @@ function AdminMenuAddPage(props) {
                                     <ReactSelect
                                         isMulti
                                         css={s.select}
-                                        name="categories"
-                                        onChange={handleInputMenuOnChange}
-                                        options={optionOptions}
+                                        name="options"
+                                        onChange={handleSelectOptionChange}
+                                        options={options.map(option => ({
+                                            value: option.optionId,
+                                            label: option.optionName // 오타 수정
+                                        })) || []} // options에도 변환된 데이터 사용
                                         className="basic-multi-select"
                                         classNamePrefix="select"
                                     />
@@ -147,7 +258,7 @@ function AdminMenuAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="" css={s.input} id={inputMenu.comment} onChange={handleInputMenuOnChange}></textarea>
+                                    <textarea  css={s.input} name="comment" onChange={handleInputMenuOnChange}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +266,7 @@ function AdminMenuAddPage(props) {
                 </div>
                 <div css={s.buttonBox}>
                     <button onClick={handleBackOnClick}>취소</button>
-                    <button>확인</button>
+                    <button onClick={handleSubmitOnClick}>확인</button>
                 </div>
             </div>
         </>
