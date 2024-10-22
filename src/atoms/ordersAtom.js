@@ -10,6 +10,6 @@ export const ordersAtom = atom({
         user: {
             phoneNumber: "010-"
         },
-        menuCart: []
+        menuCarts: []
     }
 })

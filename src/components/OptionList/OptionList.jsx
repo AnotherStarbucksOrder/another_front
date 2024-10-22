@@ -2,39 +2,42 @@ import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 
-function OptionList({ menuInfo, selectedOptions, handleOptionOnClick}) {
+function OptionList({ options, menuCart, setMenuCart }) {
 
-    const [ isActiveOptions, setIsActiveOptions] = useState({}); // {"당도": "달게"};
-    
-
-    const handleClick = (optionDetailId, optionName, optionValue, optionPrice) => {
-        setIsActiveOptions(options => ({
-            ...options,
-            [optionName]: optionDetailId
+    const handleOnClick = (menuDetail, optionDetail) => {
+        setMenuCart(menuCart => ({
+            ...menuCart,
+            options: menuCart.options.map(option => 
+                option.optionId === menuDetail.option.optionId 
+                ? {
+                    optionId: menuDetail.option.optionId,
+                    optionName: menuDetail.option.optionName,
+                    optionDetailId: optionDetail.optionDetailId,
+                    optionDetailValue: optionDetail.optionDetailValue,
+                    optionDetailPrice: optionDetail.optionDetailPrice,
+                }
+                : option
+            )
         }))
-        handleOptionOnClick(optionName, optionValue, optionPrice)
     }
 
     return (
         <div css={s.optionDetail}>
         {
-            menuInfo.data?.menuDetailList.map((menuDetail) => {
+            options.map((menuDetail) => {
                 return (
                     <div key={menuDetail.menuDetailId} css={s.options}>
                         <p>{menuDetail.option.optionName}</p>
                         <div css={s.buttons}>
                             {
-                                menuDetail.option.optionDetail.map(option => 
+                                menuDetail.option.optionDetail.map(optionDetail => 
                                     <button 
-                                        key={option.optionDetailId} 
-                                        value={option.optionDetailId}
-                                        onClick={() => {
-                                            handleClick(option.optionDetailId, menuDetail.option.optionName, option.optionDetailValue, option.optionDetailPrice)
-                                        }}
-                                        css={isActiveOptions[menuDetail.option.optionName] === option.optionDetailId 
+                                        key={optionDetail.optionDetailId} 
+                                        onClick={() => handleOnClick(menuDetail, optionDetail)}
+                                        css={menuCart.options.filter(op => op.optionDetailId === optionDetail.optionDetailId).length > 0
                                             ? s.activeButton : ''}
                                         >
-                                        {option.optionDetailValue}
+                                        {optionDetail.optionDetailValue}
                                     </button>
                                 )
                             }
