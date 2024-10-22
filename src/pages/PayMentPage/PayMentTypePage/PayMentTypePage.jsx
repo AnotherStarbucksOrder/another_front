@@ -8,15 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
-import { useSetRecoilState } from 'recoil';
 import { ordersAtom } from '../../../atoms/ordersAtom';
+import { useRecoilState } from 'recoil';
 
 
 function PayMentTypePage() {
 
     const navigate = useNavigate();
 
-    const setOrdersAtom = useSetRecoilState(ordersAtom);
+    const [ orders, setOrders ] = useRecoilState(ordersAtom);
+    console.log(orders)
 
     // 상단에 - 버튼 클릭 시
     const handleCancleOnClick = () => {
@@ -25,8 +26,8 @@ function PayMentTypePage() {
 
     // 포인트 결제 클릭
     const handlePointOnClick = () => {  
-        setOrdersAtom(orders => ({
-            ...orders,
+        setOrders(order => ({
+            ...order,
             paymentType: "point",
         }))
         navigate("/reward");
@@ -49,15 +50,15 @@ function PayMentTypePage() {
 
         }).then(result => {
             if(result.isConfirmed) {
-                setOrdersAtom(orders => ({
-                    ...orders,
+                setOrders(order => ({
+                    ...order,
                     paymentType: "card"
                 }))
                 navigate("/reward");
             }
             else if(result.dismiss === Swal.DismissReason.cancel) {
-                setOrdersAtom(orders => ({
-                    ...orders,
+                setOrders(order => ({
+                    ...order,
                     paymentType: "card"
                 }))
                 navigate("/payment/card");
@@ -68,7 +69,7 @@ function PayMentTypePage() {
     return (
         <>
             <MainTop/>
-            <MainTopBar/>
+            <MainTopBar handleCategoryOnChange={() => {}}/>
             <div css={s.layout}>
                 <div css={s.container}>
                     <button onClick={handleCancleOnClick}><FontAwesomeIcon icon={faXmark} /></button>
@@ -84,83 +85,12 @@ function PayMentTypePage() {
                                 <p>100,000원</p>
                             </div>
                         </div>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
-                            </div>
-                        </div>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
-                            </div>
-                        </div>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
-                            </div>
-                        </div>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
-                            </div>
-                        </div>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
-                            </div>
-                        </div>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
-                            </div>
-                        </div>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
-                            </div>
-                        </div>
-                        
                     </div>
                     <div css={s.totalCount}>
                         <p>합계</p>
                         <div>
-                            <p>1 개</p>
-                            <p>100,000원</p>
+                            <p>{orders.orderAmount} 개</p>
+                            <p>{orders.orderQuantity} 원</p>
                         </div>
                     </div>
                     <div css={s.buttons}>

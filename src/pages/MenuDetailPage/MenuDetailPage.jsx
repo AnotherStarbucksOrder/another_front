@@ -3,8 +3,6 @@ import MainTop from '../../components/MainTop/MainTop'
 import MainTopBar from '../../components/MainTopBar/MainTopBar'
 import MainFooter from '../../components/MainFooter/MainFooter'
 import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
-/** @jsxImportSource @emotion/react */
-import * as s from './style';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +10,9 @@ import { useQuery } from 'react-query';
 import { instance } from '../../apis/util/instance';
 import { ordersAtom } from '../../atoms/ordersAtom';
 import OptionList from '../../components/OptionList/OptionList';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
+/** @jsxImportSource @emotion/react */
+import * as s from './style';
 
 function MenuDetailPage() {
 
@@ -20,9 +20,10 @@ function MenuDetailPage() {
 
     const params = useParams();
     const menuId = params.menuId;
-    const setOrders = useSetRecoilState(ordersAtom);
+    const [ orders, setOrders ]  = useRecoilState(ordersAtom);
     const [ selectedOptions, setSelectedOptions ] = useState([]);
     const [ totalCount, setTotalCount ] = useState(1);
+
 
     // 각 메뉴 정보 Query 
     const menuInfo = useQuery(
@@ -31,9 +32,18 @@ function MenuDetailPage() {
             const response = await instance.get(`/menu/${menuId}`)
             return response.data
         },
-        {  
+        { 
             retry: 0,
             refetchOnWindowFocus: false,
+            onSuccess: response => {
+                setSelectedOptions(response.menuDetailList.map(detail => ({
+                        id: detail.option.optionDetailId,
+                        name: detail.option.optionName,
+                        value: detail.option.optionDetail[0].optionDetailValue,
+                        price: detail.option.optionDetail[0].optionDetailPrice,
+                    }))
+                );
+            }
         }
     )
 
@@ -42,12 +52,12 @@ function MenuDetailPage() {
     }
 
     const handlePlusButtonOnClick = () => {
-        setTotalCount(totalCount => totalCount + 1);
+        setTotalCount(totalCount => totalCount + 1)
     }
 
     const handleMinusButtonOnClick = () => {   
         if(totalCount > 1) {
-            setTotalCount(totalCount => totalCount - 1);
+            setTotalCount(totalCount => totalCount - 1)
         }
     }
 
@@ -57,18 +67,19 @@ function MenuDetailPage() {
         // 같은 이름의 옵션이 있는지 확인 
         const existOption = selectedOptions.find(option => option.name === optionName);
 
-        if (existOption) {
-            // 같은 이름의 옵션이 이미 있을 때 optionValue와 price만 업데이트 (예시: 당도에 덜달게를 선택했는데 달게로 바꿨어 그때 달게로 넣어지는)
-            const updatedOptions = selectedOptions.map(option =>
-                option.name === optionName
-                    ? 
-                    { 
-                        ...option, 
-                        value: optionDetailValue, price: parseInt(optionPrice) 
-                    } 
-                    : option
-            );
-            setSelectedOptions(updatedOptions);
+        if (existOption) { // 같은 이름의 옵션이 이미 있을 때 optionValue와 price만 업데이트
+            if(existOption.value !== optionDetailValue) {
+                const updatedOptions = selectedOptions.map(option =>
+                    option.name === optionName
+                        ? 
+                        { 
+                            ...option, 
+                            value: optionDetailValue, price: parseInt(optionPrice) 
+                        } 
+                        : option
+                );
+                setSelectedOptions(updatedOptions);
+            }
 
         } else {
             // 같은 이름의 옵션이 없으면 새로 추가
@@ -150,7 +161,7 @@ function MenuDetailPage() {
     return (
     <>
         <MainTop/>
-        <MainTopBar/>
+        <MainTopBar handleCategoryOnChange={() => {}}/>
         <div css={s.layout}>
             <div css={s.container}>
                 <button onClick={handleOrderCancleOnClick}><FontAwesomeIcon icon={faXmark} /></button>
@@ -176,9 +187,10 @@ function MenuDetailPage() {
                 <div css={s.optionInfoContainer}>
                     <OptionList
                         menuInfo={menuInfo} 
+                        selectedOptions={selectedOptions}
                         handleOptionOnClick={handleOptionOnClick}
-                        />
-                        <button onClick={handleSelectCompleteOnClick} >선택 완료</button>
+                    />
+                    <button onClick={handleSelectCompleteOnClick}>선택 완료</button>
                 </div>
             </div>
         </div>

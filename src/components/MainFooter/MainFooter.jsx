@@ -31,6 +31,8 @@ function MainFooter() {
 
     }, [orders.menuCart]); 
 
+    console.log(orders)
+
     // 수량 + 버튼 클릭했을 때
     const handlePlusButtonOnClick = (menuId, options) => {
         
@@ -67,7 +69,7 @@ function MainFooter() {
     }
 
     // 장바구니 개별 삭제 버튼 클릭 
-    const handleDeleteButtonOnClick = (menuId, menuName) => {
+    const handleDeleteButtonOnClick = (menuId, menuName, options) => {
 
         Swal.fire({
             title: `${menuName}을 삭제하시겠습니까?`,
@@ -80,10 +82,10 @@ function MainFooter() {
             cancelButtonColor: "#3EA270"
         }).then(result => {
             if(result.isConfirmed) {
-                // 내가 버튼을 누른 해당 menuId랑 일치하지 않은것들만 남겨두기 
+                // 내가 버튼을 누른 해당 menuId, options가 일치하지 않은것들만 남겨두기 
                 setOrders(order => ({
                     ...order,
-                    menuCart: order.menuCart.filter(menu => menu.menuId !== menuId) 
+                    menuCart: order.menuCart.filter(menu => !(menu.menuId === menuId && JSON.stringify(menu.options) === JSON.stringify(options))) 
                 }));
             } else if(result.dismiss === Swal.DismissReason.cancel) {
                 return;
@@ -115,6 +117,8 @@ function MainFooter() {
             }
         })
     }
+
+
     
     // 결제하기 버튼 클릭했을 때
     const handlePaymentOnClick = () => {
@@ -130,8 +134,11 @@ function MainFooter() {
                             orders.menuCart.map((menu, index) => (
                                 <div css={s.orderDetail} key={index}>
                                     <div css={s.orderProduct}>
-                                        <button onClick={() => handleDeleteButtonOnClick(menu.menuId, menu.menuName)}><FontAwesomeIcon icon={faXmark} /></button>
-                                        <p>{menu.menuName}</p>
+                                        <button onClick={() => handleDeleteButtonOnClick(menu.menuId, menu.menuName, menu.options)}><FontAwesomeIcon icon={faXmark} /></button>
+                                        <div>
+                                            <p>{menu.menuName}</p>
+                                            <p>- {menu.options.map(option => Object.values(option)[0]).join(', ')}</p> 
+                                        </div>
                                     </div>
                                     <div css={s.countButtons}>
                                         <div>
@@ -140,7 +147,7 @@ function MainFooter() {
                                             <button onClick={() => handlePlusButtonOnClick(menu.menuId, menu.options)}><FaCirclePlus/></button>
                                         </div>
                                         <p>{parseInt(menu.price).toLocaleString('Ko-KR')}원</p>
-                                    </div >
+                                    </div>
                                 </div>
                             ))
                         }
