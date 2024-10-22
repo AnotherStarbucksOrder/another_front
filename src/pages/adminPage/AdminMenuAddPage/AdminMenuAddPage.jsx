@@ -3,17 +3,59 @@ import * as s from "./style";
 import ReactSelect from "react-select";
 import { useState } from "react";
 
+
 function AdminMenuAddPage(props) {
+    const [inputMenu, setInputMenu] = useState({
+        menuId: 0,
+        menuName: "",
+        menuPrice: 0,
+        imgUrl: "",
+        comment: "",
+        option: [{
+            optionId: 0,
+            optionName: ""
+        }],
+        category: [{
+            categoryId: 0,
+            categoryName: ""
+        }]
+    });
 
-    const [image, setImage] = useState(null);
+    // const handleimgUrlOnChange = async (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         if (!file.type.startsWith('image/')) {
+    //             alert("이미지 파일만 업로드 가능합니다.");
+    //             return;
+    //         }
 
-    const handleChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
-        }
-    };
+    //         const imageName = file.name; // 파일 이름
+    //         const folderRef = ref(storage, 'board/img/'); // 이미지가 저장될 폴더
+
+    //         // 중복 파일 체크
+    //         const result = await listAll(folderRef);
+    //         const existingFiles = result.items.map(item => item.name);
+
+    //         if (existingFiles.includes(imageName)) {
+    //             alert("이미 존재하는 이미지입니다.");
+    //             return;
+    //         }
+
+    //         const imageUrl = URL.createObjectURL(file);
+    //         setInputMenu({
+    //             ...inputMenu,
+    //             imgUrl: imageUrl // 이미지 URL 업데이트
+    //         });
+    //     }
+    // };
+
+    const handleInputMenuOnChange = (e) => {
+        setInputMenu({
+            ...inputMenu,
+            [e.target.name]: e.target.value
+        })
+    }
+
     const handleImageClick = () => {
         document.getElementById('fileInput').click();
     };
@@ -44,9 +86,10 @@ function AdminMenuAddPage(props) {
                     <div css={s.imgContainer}>
                         <div css={s.imgBox}>
                             <div css={s.img}>
-                                <img src={image} alt="" onClick={handleImageClick} />
+                                <img src={inputMenu.imgUrl} alt="" onClick={handleImageClick} />
                             </div>
-                            <input type="file" accept="image/*" onChange={handleChange} id="fileInput" />
+                            <input type="file" accept="image/*"  id="fileInput" />
+                            <input type="text" value={inputMenu.imgUrl} readOnly />
                         </div>
                         <div css={s.infoContainer}>
                             <div css={s.infoBox}>
@@ -59,7 +102,7 @@ function AdminMenuAddPage(props) {
                                             isMulti
                                             css={s.select}
                                             name="categories"
-                                            // onChange={handleSelectCategoryChange}
+                                            onChange={handleInputMenuOnChange}
                                             options={categoryOptions}
                                             className="basic-multi-select"
                                             classNamePrefix="select"
@@ -72,7 +115,7 @@ function AdminMenuAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" css={s.input} />
+                                    <input type="text" css={s.input} id={inputMenu.menuName} onChange={handleInputMenuOnChange}/>
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -80,7 +123,7 @@ function AdminMenuAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" css={s.input} />
+                                    <input type="text" css={s.input} id={inputMenu.menuPrice} onChange={handleInputMenuOnChange}/>
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -92,7 +135,7 @@ function AdminMenuAddPage(props) {
                                         isMulti
                                         css={s.select}
                                         name="categories"
-                                        // onChange={handleSelectOptionChange}
+                                        onChange={handleInputMenuOnChange}
                                         options={optionOptions}
                                         className="basic-multi-select"
                                         classNamePrefix="select"
@@ -104,7 +147,7 @@ function AdminMenuAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="" css={s.input} ></textarea>
+                                    <textarea name="" css={s.input} id={inputMenu.comment} onChange={handleInputMenuOnChange}></textarea>
                                 </div>
                             </div>
                         </div>

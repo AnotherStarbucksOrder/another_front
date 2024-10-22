@@ -56,7 +56,7 @@ function SignInPage(props) {
             }
         }
         
-        localStorage.setItem("accessToken", "bearer " + signinData.token);
+        localStorage.setItem("accessToken", "Bearer " + signinData.token);
         
         instance.interceptors.request.use(config => {
             config.headers["Authorization"] = localStorage.getItem("accessToken");

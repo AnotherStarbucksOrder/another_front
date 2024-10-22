@@ -60,7 +60,7 @@ function AdminRoutes(props) {
                         <AdminPageSideBar />    
                         <Routes>
                             <Route path="/" element={<IndexPage />} />
-                            <Route path="/menu" element={<AdminMenuPage />} />
+                            <Route path="/menus" element={<AdminMenuPage />} />
                             <Route path="/menu/add" element={<AdminMenuAddPage />} />
                             <Route path="/menu/detail/:menuId" element={<AdminMenuDetailPage />} />
                             <Route path="/sales" element={<AdminSalespage />} />

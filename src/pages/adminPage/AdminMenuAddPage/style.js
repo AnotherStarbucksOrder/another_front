@@ -43,8 +43,16 @@ export const imgBox = css`
     padding-top: 10px;
     width:400px;
 
-    & input {
+    & input:nth-of-type(1) {
         display: none;
+    }
+    & input:nth-of-type(2) {
+        box-sizing: border-box;
+        border: none;
+        width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 `;
 
