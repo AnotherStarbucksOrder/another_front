@@ -1,51 +1,62 @@
 /** @jsxImportSource @emotion/react */
-import { useCallback, useState } from "react";
-import { useParams } from "react-router-dom"; // useParams 임포트
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
 import * as s from "./style";
 import ReactSelect from "react-select";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 import { storage } from "../../../firebase/firebase";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 function AdminMenuDetailPage(props) {
     const { menuId } = useParams(); // URL에서 menuId 가져오기
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
-    const [image, setImage] = useState("");
-    const [ initialMenuData, setInitialMenuData ] = useState(null)
-    const [ modifyMenuData, setModifyMenuData ] = useState({
+    const [initialMenuData, setInitialMenuData] = useState(null);
+    const [previewData, setPreViewData] = useState({
         menuId: 0,
         menuName: "",
         menuPrice: 0,
         imgUrl: "",
         comment: "",
-        option: [{
-            optionId: 0,
-            optionName: ""
-        }],
-        category:[{
-            categoryId: 0,
-            categoryName: ""
-        }]
-    })
+        categories: "",
+        options: "",
+        optionIds: [],
+        categoryIds: []
+    });
+    const [modifyMenuData, setModifyMenuData] = useState({
+        menuId: 0,
+        menuName: "",
+        menuPrice: 0,
+        imgUrl: "",
+        comment: "",
+        optionIds: [],
+        categoryIds: []
+    });
 
     const menu = useQuery(
         ["menuQuery", menuId],
-        async () => await instance.get(`/menu/${menuId}`),
+        async () => await instance.get(`/admin/menu/detail/${menuId}`),
         {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: (response) => {
+                console.log(response);
                 const menuData = response?.data
+
+                const { categories, options, ...rest } = menuData;
                 setInitialMenuData(menuData);
-                setModifyMenuData(menuData);
+                setPreViewData(menuData);
+                setModifyMenuData(rest);
                 console.log(menuData);
             }
         }
     )
-    console.log(menu);
+    console.log(initialMenuData);
+    console.log(previewData);
+    console.log(modifyMenuData);
 
-    const optionList = useQuery(
+    const selectList = useQuery(
         ["optionsListQuery"],
         async () => await instance.get("/admin/menu/add"),
         {
@@ -53,10 +64,54 @@ function AdminMenuDetailPage(props) {
             refetchOnWindowFocus: false
         }
     )
-    console.log(optionList)
+    console.log(selectList)
 
-    const categories = optionList?.data?.data.categories || [];
-    const options = optionList?.data?.data.options || [];
+    const selectCategory = selectList?.data?.data.categories || [];
+    const selectOption = selectList?.data?.data.options || [];
+
+    const categoryArray = previewData.categories.split(',').map(category => {
+        const categoryName = category.trim();
+        const matchedCategory = selectCategory.find(selectCat => selectCat.categoryName === categoryName);
+        return {
+            value: matchedCategory ? matchedCategory.categoryId : categoryName, // ID 또는 원래 이름
+            label: categoryName
+        };
+    });
+
+    const optionArray = previewData.options.split(',').map(option => {
+        const optionName = option.trim();
+        const matchedOption = selectOption.find(selectOpt => selectOpt.optionName === optionName);
+        return {
+            value: matchedOption ? matchedOption.optionId : optionName, // ID 또는 원래 이름
+            label: optionName
+        };
+    });
+    console.log(categoryArray);
+    console.log(optionArray);
+
+
+    // const modifyMenuMutaion = useMutation(
+    //     async () => await instance.post("/amdin/modify"),
+    //     {
+    //         retry: 0,
+    //         refetchOnWindowFocus: false,
+    //         onSuccess: response => {
+    //             alert("메뉴정보를 수정하였습니다.")
+    //             setIsEditing(false);
+    //         }
+    //     }
+    // )
+
+    const deleteMenuMutation = useMutation(
+        async () => await instance.delete(`/admin/menu/${menuId}`),
+        {
+            onSuccess: response => {
+                alert("게시글을 삭제하였습니다.");
+                navigate("/admin/menus?page=")
+            }
+        }
+    )
+
 
     const handleImageClick = () => {
         document.getElementById('fileInput').click();
@@ -68,55 +123,94 @@ function AdminMenuDetailPage(props) {
     }
 
     const handleEditOnClick = () => {
+
         setIsEditing(true);
     }
     const handleConfirmOnClick = () => {
-        setIsEditing(false); // 수정 모드 해제
+        // modifyMenuMutaion.mutateAsync();
         console.log(modifyMenuData);
     }
     const handleCancleOnClick = () => {
         setIsEditing(false);
-        if(initialMenuData) {
+        if (initialMenuData) {
             setModifyMenuData(initialMenuData);
         }
     }
-
-    const handleImgLoad = useCallback(() => {
-        const input = document.getElementById("fileInput");
-        const imgFile = input.files[0];
-
-        if(!imgFile) return;
-
-        if(!modifyMenuData.imgUrl || modifyMenuData.imgUrl !== imgFile.name) {
-            const storgeRef = ref(storage, `product/drink/${imgFile.name}`);
-            const task = uploadBytesResumable(storgeRef, imgFile);
-            task.on(
-                "state_changed",
-                () => { },
-                () => { },
-                async () => {
-                    const url = await getDownloadURL(storgeRef);
-                    setImage(url);
-                    setModifyMenuData(modifyMenuData => ({
-                        ...modifyMenuData,
-                        imgUrl: url
-                    }));
-                }
-            );
-        } else {
-            alert("이미지가 이미 존재합니다.")
+    const handleDeleteMenuOnClick = () => {
+        if(window.confirm("삭제하시겠습니끼?")) {
+            deleteMenuMutation.mutateAsync();
         }
-    }, [modifyMenuData])
+    }
+
+    // const handleImgLoad = useCallback(() => {
+    //     const input = document.getElementById("fileInput");
+    //     const imgFile = input.files[0];
+
+    //     if(!imgFile) return;
+
+    //     if(!modifyMenuData.imgUrl || modifyMenuData.imgUrl !== imgFile.name) {
+    //         const storgeRef = ref(storage, `product/drink/${imgFile.name}`);
+    //         const task = uploadBytesResumable(storgeRef, imgFile);
+    const handleSubmitOnClick = async () => {
+        let response = null;
+        const storageRef = ref(storage, `product/drink/${modifyMenuData.imgUrl}`);
+        console.log(modifyMenuData.imgUrl);
+        const task = uploadBytesResumable(storageRef, modifyMenuData.imgUrl);
+        task.on(
+            "state_changed",
+            (snapshot) => {
+                console.log("업로드 중")
+            },
+            (e) => {
+                console.log("파이어베이스 업로드 중 에러발생");
+                console.error(e);
+            },
+            async (success) => {
+                const url = await getDownloadURL(storageRef);
+                let data = {
+                    ...modifyMenuData,
+                    imgUrl: url
+                };
+                data.imgUrl = url;
+                console.log("바뀐 데이터");
+                console.log(data);
+                try {
+                    response = await instance.post("/admin/modify", data);
+                    if (response.status !== 200) {
+                        deleteObject(storageRef);
+                    }
+                    if (response.status === 200) {
+                        deleteObject(storageRef, initialMenuData.imgUrl)
+                    }
+                } catch (e) {
+                    console.error(e);
+                    return;
+                }
+                alert("등록하였습니다.");
+                setIsEditing(false);
+            }
+        );
+    }
+    // }, [modifyMenuData])
 
     const handleSelectCategoryChange = (selectedOptions) => {
         const newCategories = selectedOptions.map(option => ({
             categoryId: option.value,
             categoryName: option.label
         }));
-        setModifyMenuData({
+
+        const categoryNames = newCategories.map(cat => cat.categoryName).join(', ');
+        const categoryIds = newCategories.map(cat => cat.categoryId); // ID 리스트로 저장
+
+        setPreViewData(previewData => ({
+            ...previewData,
+            categories: categoryNames, // 이름을 문자열로 저장
+            categoryIds: categoryIds // ID 리스트 저장
+        }));
+        setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
-            category: newCategories
-        });
+            categoryIds: categoryIds // ID 리스트 저장
+        }));
     };
 
     const handleSelectOptionChange = (selectedOptions) => {
@@ -124,20 +218,34 @@ function AdminMenuDetailPage(props) {
             optionId: option.value,
             optionName: option.label
         }));
-        setModifyMenuData({
+
+        const optionNames = newOptions.map(opt => opt.optionName).join(', ');
+        const optionIds = newOptions.map(opt => opt.optionId); // ID 리스트로 저장
+
+        setPreViewData(previewData => ({
+            ...previewData,
+            options: optionNames, // 이름을 문자열로 저장
+            optionIds: optionIds // ID 리스트 저장
+        }));
+        setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
-            option: newOptions
-        });
+            optionIds: optionIds // ID 리스트 저장
+        }));
     };
 
+
     const handleModifyInputOnChange = (e) => {
+        setPreViewData(previewData => ({
+            ...previewData,
+            [e.target.name]: e.target.value
+        }))
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
             [e.target.name]: e.target.value
         }))
     }
 
-    
+
 
     return (
         <>
@@ -152,16 +260,16 @@ function AdminMenuDetailPage(props) {
                                 !isEditing ?
                                     <>
                                         <div css={s.img}>
-                                            <img src={modifyMenuData.imgUrl} alt="" />
+                                            <img src={previewData.imgUrl} alt="" />
                                         </div>
                                     </>
                                     :
                                     <>
                                         <div css={s.img}>
-                                            <img src={modifyMenuData.imgUrl} alt="" onClick={handleImageClick} />
+                                            <img src={previewData.imgUrl} alt="" onClick={handleImageClick} />
                                         </div>
-                                        <input type="file" accept="image/*"  id="fileInput" onChange={handleImgLoad} />
-                                        <input type="text" value={modifyMenuData.imgUrl} readOnly />
+                                        <input type="file" accept="image/*" id="fileInput" onChange={handleModifyInputOnChange} />
+                                        <input type="text" value={previewData.imgUrl} readOnly />
                                     </>
                             }
                         </div>
@@ -175,7 +283,7 @@ function AdminMenuDetailPage(props) {
                                         {
                                             !isEditing ?
                                                 <>
-                                                    <input type="text" css={s.input} readOnly value={menu ? menu.category : ''} />
+                                                    <input type="text" css={s.input} readOnly value={previewData.categories} />
                                                 </>
                                                 :
                                                 <ReactSelect
@@ -183,19 +291,13 @@ function AdminMenuDetailPage(props) {
                                                     css={s.select}
                                                     name="categories"
                                                     onChange={handleSelectCategoryChange}
-                                                    options={categories.map(category => ({
+                                                    options={selectCategory.map(category => ({
                                                         value: category.categoryId,
                                                         label: category.categoryName // 오타 수정
                                                     })) || []} // options에도 변환된 데이터 사용
                                                     className="basic-multi-select"
                                                     classNamePrefix="select"
-                                                    // defaultValue={menu ? 
-                                                    //     categotyList?.data?.data.categories
-                                                    //         .filter(category => menu.categories.includes(category.categoryId)) // menu에 있는 카테고리만 필터링
-                                                    //         .map(category => ({
-                                                    //             value: category.categoryId,
-                                                    //             label: category.categoryName // 오타 수정
-                                                    //         })) : []}
+                                                    defaultValue={categoryArray}
                                                 />
                                         }
                                     </div>
@@ -206,7 +308,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" name="menuName" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuName || ""} />
+                                    <input type="text" name="menuName" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={previewData.menuName || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -214,7 +316,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" name="menuPrice" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuPrice || ""} />
+                                    <input type="text" name="menuPrice" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={previewData.menuPrice || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -229,7 +331,7 @@ function AdminMenuDetailPage(props) {
                                                     type="text"
                                                     css={s.input}
                                                     readOnly
-                                                    value={menu?.data?.data.menuDetailList.map(menuDetail => menuDetail.option.optionName).join(', ')}
+                                                    value={previewData.options}
                                                 />
                                             </>
                                             :
@@ -239,21 +341,13 @@ function AdminMenuDetailPage(props) {
                                                 css={s.select}
                                                 name="options"
                                                 onChange={handleSelectOptionChange}
-                                                options={options.map(option => ({
+                                                options={selectOption.map(option => ({
                                                     value: option.optionId,
                                                     label: option.optionName // 오타 수정
                                                 })) || []} // options에도 변환된 데이터 사용
                                                 className="basic-multi-select"
                                                 classNamePrefix="select"
-                                                defaultValue={menu ? 
-                                                    menu.data.data.menuDetailList
-                                                        .filter(menuDetail => 
-                                                            options.some(option => option.optionId === menuDetail.option.optionId)
-                                                        )
-                                                        .map(menuDetail => ({
-                                                            value: menuDetail.option.optionId,
-                                                            label: menuDetail.option.optionName
-                                                        })) : []}
+                                                defaultValue={optionArray}
                                             />
                                     }
                                 </div>
@@ -263,7 +357,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="comment" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.comment || ""}></textarea>
+                                    <textarea name="comment" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={previewData.comment || ""}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -274,12 +368,12 @@ function AdminMenuDetailPage(props) {
                         <>
                             <button onClick={handleBackOnClick}>확인</button>
                             <button onClick={handleEditOnClick}>수정</button>
-                            <button onClick={() => alert("아무것도 없음")}>삭제</button>
+                            <button onClick={handleDeleteMenuOnClick}>삭제</button>
                         </>
                     ) : (
                         <>
                             <button onClick={handleCancleOnClick}>취소</button>
-                            <button onClick={handleConfirmOnClick}>수정</button>
+                            <button onClick={handleSubmitOnClick}>수정</button>
                         </>
                     )}
                 </div>

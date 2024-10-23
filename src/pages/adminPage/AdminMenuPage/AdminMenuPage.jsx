@@ -6,20 +6,22 @@ import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
 import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
+import { Switch } from "pretty-checkbox-react";
 
 function AdminMenuPage(props) {
     const [searchParams, setSearchParams] = useSearchParams();   //주소:포트/페이지URL?KEY=VALUE(쿼리스트링, 파람스)
     const [checkedAll, setCheckedAll] = useState(false);
     const [totalPageCount, setTotalPageCount] = useState(1);
+    const [menuStatus, setMenuStatus] = useState(0);
     const [menus, setMenus] = useState([]);
     const navigate = useNavigate();
-    const [ searchValue, setSearchValue ] = useState(searchParams.get("search") ?? ""); 
+    const [ searchValue, setSearchValue ] = useState(searchParams.get("searchName") ?? ""); 
     const limit = 13;
     
 
     const menuList = useQuery(
         ["menuListQuery", searchParams.get("page"), searchParams.get("search")],
-        async () => await instance.get(`/admin/menus?page=${searchParams.get("page")}&limit=${limit}&search=${searchValue}`),
+        async () => await instance.get(`/admin/menus?page=${searchParams.get("page")}&limit=${limit}&searchName=${searchValue}`),
         {
             retry: 0,
             refetchOnWindowFocus: false,
@@ -44,12 +46,13 @@ function AdminMenuPage(props) {
             }
         }
     );
+
     const handleSearchInputOnChange = (e) => {
         setSearchValue(e.target.value);
     }
 
     const handlePageOnChange = (e) => {
-        navigate(`/admin/menus?page=${e.selected + 1}&search=${searchValue}`);
+        navigate(`/admin/menus?page=${e.selected + 1}&searchName=${searchValue}`);
     }
 
     // 체크박스 상태 관리 
@@ -90,7 +93,8 @@ function AdminMenuPage(props) {
         navigate("/admin/menu/add")
     }
     const handleSearchButtonOnClick = () => {
-        navigate(`/admin/menus?page=1&search=${searchValue}`);
+        navigate(`/admin/menus?page=1&searchName=${searchValue}`);
+        menuList.refetch();
     }
 
     return (
@@ -121,6 +125,7 @@ function AdminMenuPage(props) {
                                 <th>가격</th>
                                 <th>카테고리</th>
                                 <th>옵션</th>
+                                <th>노출 여부</th>
                                 <th>--</th>
                             </tr>
                         </thead>
@@ -133,6 +138,7 @@ function AdminMenuPage(props) {
                                         <td>{menu.menuPrice}</td>
                                         <td>{menu.categories}</td>
                                         <td>{menu.options}</td>
+                                        <td><Switch></Switch></td>
                                         <td><Link to={`/admin/menu/detail/${menu.menuId}`}>상세보기</Link></td>
                                     </tr>
                                 )
