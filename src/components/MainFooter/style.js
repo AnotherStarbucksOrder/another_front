@@ -58,7 +58,7 @@ export const orderDetail = css`
 
     & p {
         margin: 0;
-        font-size: 26px;
+        font-size: 23px;
         font-weight: 600;
     }
 `;
@@ -78,7 +78,7 @@ export const orderProduct = css`
         flex-direction: column;
         
         & > p:nth-last-of-type(1) {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 400;
             color: #595959;
         }

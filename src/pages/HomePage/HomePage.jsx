@@ -17,7 +17,7 @@ function HomePage() {
     const handleTakeOutClick = () => {
         setOrdersAtom(orders => ({
             ...orders,
-            orderType: "takeout"
+            orderType: 1
         }))
         navigate('/home');
     };
@@ -25,7 +25,7 @@ function HomePage() {
     const handleEatInClick = () => {
         setOrdersAtom(orders => ({
             ...orders,
-            orderType: "eatIn"
+            orderType: 2
         }))
         navigate('/home');
     };

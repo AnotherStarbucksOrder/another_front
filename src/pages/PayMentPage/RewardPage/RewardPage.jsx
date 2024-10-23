@@ -16,7 +16,7 @@ function RewardPage() {
     const navigate = useNavigate();
 
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
-    const inputValue = orders?.user?.phoneNumber;
+    const { phoneNumber: inputValue } = orders.user;
 
     // 상단에 x 버튼 클릭 시
     const handleOrderCancleOnClick = () => {
@@ -24,6 +24,7 @@ function RewardPage() {
             ...orders,
             paymentType: "",
             user: {
+                ...orders.user,
                 phoneNumber: "010-"
             }
         }))
@@ -58,18 +59,19 @@ function RewardPage() {
     }
 
     const handleKeyPadOnClick = (value) => {
+
         if(value === "backspace") {
             if(inputValue.length > 4) { 
                 const newValue = inputValue.slice(0, -1); 
                 updateNewPhoneNumber(newValue);
                 return;
             }
-            return;
+            return
         }
 
-        const onlyNumbers = inputValue.replace(/[^0-9]/g, ""); // 숫자만 남기기
-        const newValue = onlyNumbers + value; // 숫자만 추가
-        updateNewPhoneNumber(formatPhoneNumber(newValue)); // 포맷된 값으로 업데이트
+        const onlyNumbers = inputValue.replace(/[^0-9]/g, "");  // 숫자만 남기기
+        const newValue = onlyNumbers + value;                   // 숫자만 추가
+        updateNewPhoneNumber(formatPhoneNumber(newValue));      // 포맷된 값으로 업데이트
     }
 
 
@@ -90,7 +92,7 @@ function RewardPage() {
                     />
                 </div>
                 <div css={s.numberPad}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, "backspace", 0].map((key) => (
+                    {["1", "2", "3", "4", "5", "6", "7", "8", "9", "backspace", "0"].map((key) => (
                     <button 
                         key={key} 
                         onClick={() => handleKeyPadOnClick(key)}
