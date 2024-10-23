@@ -1,30 +1,38 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
-import { useParams } from "react-router-dom"; // useParams 임포트
+import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
 import * as s from "./style";
 import ReactSelect from "react-select";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 import { storage } from "../../../firebase/firebase";
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 function AdminMenuDetailPage(props) {
     const { menuId } = useParams(); // URL에서 menuId 가져오기
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
-    // const [image, setImage] = useState("");
-    const [initialMenuData, setInitialMenuData] = useState(null)
+    const [initialMenuData, setInitialMenuData] = useState(null);
+    const [previewData, setPreViewData] = useState({
+        menuId: 0,
+        menuName: "",
+        menuPrice: 0,
+        imgUrl: "",
+        comment: "",
+        categories: "",
+        options: "",
+        optionIds: [],
+        categoryIds: []
+    });
     const [modifyMenuData, setModifyMenuData] = useState({
         menuId: 0,
         menuName: "",
         menuPrice: 0,
         imgUrl: "",
         comment: "",
-        options: "",
-        categories: "",
         optionIds: [],
         categoryIds: []
-
-    })
+    });
 
     const menu = useQuery(
         ["menuQuery", menuId],
@@ -35,13 +43,18 @@ function AdminMenuDetailPage(props) {
             onSuccess: (response) => {
                 console.log(response);
                 const menuData = response?.data
+
+                const { categories, options, ...rest } = menuData;
                 setInitialMenuData(menuData);
-                setModifyMenuData(menuData);
+                setPreViewData(menuData);
+                setModifyMenuData(rest);
                 console.log(menuData);
             }
         }
     )
-    console.log(menu);
+    console.log(initialMenuData);
+    console.log(previewData);
+    console.log(modifyMenuData);
 
     const selectList = useQuery(
         ["optionsListQuery"],
@@ -56,7 +69,7 @@ function AdminMenuDetailPage(props) {
     const selectCategory = selectList?.data?.data.categories || [];
     const selectOption = selectList?.data?.data.options || [];
 
-    const categoryArray = modifyMenuData.categories.split(',').map(category => {
+    const categoryArray = previewData.categories.split(',').map(category => {
         const categoryName = category.trim();
         const matchedCategory = selectCategory.find(selectCat => selectCat.categoryName === categoryName);
         return {
@@ -64,8 +77,8 @@ function AdminMenuDetailPage(props) {
             label: categoryName
         };
     });
-    
-    const optionArray = modifyMenuData.options.split(',').map(option => {
+
+    const optionArray = previewData.options.split(',').map(option => {
         const optionName = option.trim();
         const matchedOption = selectOption.find(selectOpt => selectOpt.optionName === optionName);
         return {
@@ -89,6 +102,16 @@ function AdminMenuDetailPage(props) {
     //     }
     // )
 
+    const deleteMenuMutation = useMutation(
+        async () => await instance.delete(`/admin/menu/${menuId}`),
+        {
+            onSuccess: response => {
+                alert("게시글을 삭제하였습니다.");
+                navigate("/admin/menus?page=")
+            }
+        }
+    )
+
 
     const handleImageClick = () => {
         document.getElementById('fileInput').click();
@@ -100,6 +123,7 @@ function AdminMenuDetailPage(props) {
     }
 
     const handleEditOnClick = () => {
+
         setIsEditing(true);
     }
     const handleConfirmOnClick = () => {
@@ -110,6 +134,11 @@ function AdminMenuDetailPage(props) {
         setIsEditing(false);
         if (initialMenuData) {
             setModifyMenuData(initialMenuData);
+        }
+    }
+    const handleDeleteMenuOnClick = () => {
+        if(window.confirm("삭제하시겠습니끼?")) {
+            deleteMenuMutation.mutateAsync();
         }
     }
 
@@ -162,8 +191,8 @@ function AdminMenuDetailPage(props) {
             }
         );
     }
-
     // }, [modifyMenuData])
+
     const handleSelectCategoryChange = (selectedOptions) => {
         const newCategories = selectedOptions.map(option => ({
             categoryId: option.value,
@@ -173,9 +202,13 @@ function AdminMenuDetailPage(props) {
         const categoryNames = newCategories.map(cat => cat.categoryName).join(', ');
         const categoryIds = newCategories.map(cat => cat.categoryId); // ID 리스트로 저장
 
-        setModifyMenuData(...modifyMenuData => ({
-            ...modifyMenuData,
+        setPreViewData(previewData => ({
+            ...previewData,
             categories: categoryNames, // 이름을 문자열로 저장
+            categoryIds: categoryIds // ID 리스트 저장
+        }));
+        setModifyMenuData(modifyMenuData => ({
+            ...modifyMenuData,
             categoryIds: categoryIds // ID 리스트 저장
         }));
     };
@@ -189,15 +222,23 @@ function AdminMenuDetailPage(props) {
         const optionNames = newOptions.map(opt => opt.optionName).join(', ');
         const optionIds = newOptions.map(opt => opt.optionId); // ID 리스트로 저장
 
+        setPreViewData(previewData => ({
+            ...previewData,
+            options: optionNames, // 이름을 문자열로 저장
+            optionIds: optionIds // ID 리스트 저장
+        }));
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
-            options: optionNames, // 이름을 문자열로 저장
             optionIds: optionIds // ID 리스트 저장
         }));
     };
 
 
     const handleModifyInputOnChange = (e) => {
+        setPreViewData(previewData => ({
+            ...previewData,
+            [e.target.name]: e.target.value
+        }))
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
             [e.target.name]: e.target.value
@@ -219,16 +260,16 @@ function AdminMenuDetailPage(props) {
                                 !isEditing ?
                                     <>
                                         <div css={s.img}>
-                                            <img src={modifyMenuData.imgUrl} alt="" />
+                                            <img src={previewData.imgUrl} alt="" />
                                         </div>
                                     </>
                                     :
                                     <>
                                         <div css={s.img}>
-                                            <img src={modifyMenuData.imgUrl} alt="" onClick={handleImageClick} />
+                                            <img src={previewData.imgUrl} alt="" onClick={handleImageClick} />
                                         </div>
                                         <input type="file" accept="image/*" id="fileInput" onChange={handleModifyInputOnChange} />
-                                        <input type="text" value={modifyMenuData.imgUrl} readOnly />
+                                        <input type="text" value={previewData.imgUrl} readOnly />
                                     </>
                             }
                         </div>
@@ -242,7 +283,7 @@ function AdminMenuDetailPage(props) {
                                         {
                                             !isEditing ?
                                                 <>
-                                                    <input type="text" css={s.input} readOnly value={modifyMenuData.categories} />
+                                                    <input type="text" css={s.input} readOnly value={previewData.categories} />
                                                 </>
                                                 :
                                                 <ReactSelect
@@ -267,7 +308,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" name="menuName" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuName || ""} />
+                                    <input type="text" name="menuName" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={previewData.menuName || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -275,7 +316,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" name="menuPrice" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuPrice || ""} />
+                                    <input type="text" name="menuPrice" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={previewData.menuPrice || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -290,7 +331,7 @@ function AdminMenuDetailPage(props) {
                                                     type="text"
                                                     css={s.input}
                                                     readOnly
-                                                    value={modifyMenuData.options}
+                                                    value={previewData.options}
                                                 />
                                             </>
                                             :
@@ -316,7 +357,7 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="comment" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.comment || ""}></textarea>
+                                    <textarea name="comment" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={previewData.comment || ""}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -327,7 +368,7 @@ function AdminMenuDetailPage(props) {
                         <>
                             <button onClick={handleBackOnClick}>확인</button>
                             <button onClick={handleEditOnClick}>수정</button>
-                            <button onClick={() => alert("아무것도 없음")}>삭제</button>
+                            <button onClick={handleDeleteMenuOnClick}>삭제</button>
                         </>
                     ) : (
                         <>

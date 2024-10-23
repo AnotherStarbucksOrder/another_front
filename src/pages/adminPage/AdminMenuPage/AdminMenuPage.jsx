@@ -6,11 +6,13 @@ import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
 import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
+import { Switch } from "pretty-checkbox-react";
 
 function AdminMenuPage(props) {
     const [searchParams, setSearchParams] = useSearchParams();   //주소:포트/페이지URL?KEY=VALUE(쿼리스트링, 파람스)
     const [checkedAll, setCheckedAll] = useState(false);
     const [totalPageCount, setTotalPageCount] = useState(1);
+    const [menuStatus, setMenuStatus] = useState(0);
     const [menus, setMenus] = useState([]);
     const navigate = useNavigate();
     const [ searchValue, setSearchValue ] = useState(searchParams.get("searchName") ?? ""); 
@@ -44,6 +46,7 @@ function AdminMenuPage(props) {
             }
         }
     );
+
     const handleSearchInputOnChange = (e) => {
         setSearchValue(e.target.value);
     }
@@ -122,6 +125,7 @@ function AdminMenuPage(props) {
                                 <th>가격</th>
                                 <th>카테고리</th>
                                 <th>옵션</th>
+                                <th>노출 여부</th>
                                 <th>--</th>
                             </tr>
                         </thead>
@@ -134,6 +138,7 @@ function AdminMenuPage(props) {
                                         <td>{menu.menuPrice}</td>
                                         <td>{menu.categories}</td>
                                         <td>{menu.options}</td>
+                                        <td><Switch></Switch></td>
                                         <td><Link to={`/admin/menu/detail/${menu.menuId}`}>상세보기</Link></td>
                                     </tr>
                                 )
