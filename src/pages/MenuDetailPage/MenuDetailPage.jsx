@@ -43,8 +43,8 @@ function MenuDetailPage() {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response)
-                setMenuCart(menuCart => ({
+                // 기본값 넣어줌
+                setMenuCart(menuCart => ({  
                     ...menuCart,
                     menuName: response.menuName,
                     menuPrice: response.menuPrice,
@@ -65,6 +65,8 @@ function MenuDetailPage() {
         navigate("/home");
     }
 
+
+    // + 버튼 클릭시
     const handleCountMinusButtonOnClick = () => {
         if(menuCart.count > 1) {
             setMenuCart(menuCart => ({
@@ -74,6 +76,7 @@ function MenuDetailPage() {
         }
     }
 
+    // - 버튼 클릭시
     const handleCountPlusButtonOnClick = () => {
         setMenuCart(menuCart => ({
             ...menuCart,
@@ -81,6 +84,7 @@ function MenuDetailPage() {
         }));
     }
 
+    // count가 변할때마다 totalPrice 계산
     useEffect(() => {
         setMenuCart(menuCart => ({
             ...menuCart,
@@ -88,11 +92,12 @@ function MenuDetailPage() {
         }));
     }, [menuCart.count])
 
+
     // 선택 완료 버튼 클릭 시
     const handleSelectCompleteOnClick = () => {
         const newMenuCart = {...menuCart};
 
-        if(orders.menuCarts.filter(menuCart => {
+        if(orders.products.filter(menuCart => {
             const preMenuCart = {
                 menuId: menuCart.menuId,
                 menuName: menuCart.menuName,
@@ -106,10 +111,11 @@ function MenuDetailPage() {
             };
 
             return JSON.stringify(preMenuCart) === JSON.stringify(sufMenuCart);
-        }).length > 0) {
+        }).length > 0) { 
+            // menuId, options가 같으면 totalPrice, count만 올려짐 
             setOrders(order => ({
                 ...order,
-                menuCarts: order.menuCarts.map(menuCart => ({
+                products: order.products.map(menuCart => ({
                     ...menuCart, 
                     totalPrice: !menuCart.totalPrice ? 0 : menuCart.totalPrice + newMenuCart.totalPrice, 
                     count: menuCart.count + newMenuCart.count,}))
@@ -117,7 +123,7 @@ function MenuDetailPage() {
         }else {
             setOrders(order => ({
                 ...order,
-                menuCarts: [...order.menuCarts, newMenuCart]
+                products: [...order.products, newMenuCart]
             }));
         }
 
@@ -143,7 +149,7 @@ function MenuDetailPage() {
                                     <p>{menuInfo.data.comment}</p>
                                 </div>
                                 <div css={s.productPriceInfo}>
-                                    <p>{parseInt(menuInfo.data.menuPrice).toLocaleString('ko-KR')} 원</p>
+                                    <p>{(menuInfo.data.menuPrice).toLocaleString('ko-KR')} 원</p>
                                     <div css={s.productCount}>
                                         <button onClick={handleCountMinusButtonOnClick} ><FaCircleMinus /></button>
                                         <p>{menuCart.count}</p>

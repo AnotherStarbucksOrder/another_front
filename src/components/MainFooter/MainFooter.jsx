@@ -14,24 +14,23 @@ function MainFooter() {
     const navigate = useNavigate();
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
 
-    console.log(orders)
 
     useEffect(() => {
         let totalAmount = 0;
         let totalQuantity = 0;
         
-        for (let i = 0; i < orders.menuCarts.length; i++) {
-            totalAmount += orders.menuCarts[i].count;
-            totalQuantity += orders.menuCarts[i].totalPrice;
+        for (let i = 0; i < orders.products.length; i++) {
+            totalAmount += orders.products[i].totalPrice;
+            totalQuantity += orders.products[i].count;
         }
         
         setOrders(order => ({
             ...order,
-            orderAmount: totalAmount,
-            orderQuantity: totalQuantity
+            amount: totalAmount,
+            quantity: totalQuantity
         }));
 
-    }, [orders.menuCarts]); 
+    }, [orders.products]); 
 
 
     
@@ -42,7 +41,7 @@ function MainFooter() {
             setOrders(orders => {
                 return {
                     ...orders,
-                    menuCarts: orders.menuCarts.map(menuCart => {
+                    products: orders.products.map(menuCart => {
                         if(JSON.stringify(menuCart) === JSON.stringify(updateMenuCart)) {
                             return {
                                 ...menuCart,
@@ -62,7 +61,7 @@ function MainFooter() {
         setOrders(orders => {
             return {
                 ...orders,
-                menuCarts: orders.menuCarts.map(menuCart => {
+                products: orders.products.map(menuCart => {
                     if(JSON.stringify(menuCart) === JSON.stringify(updateMenuCart)) {
                         return {
                             ...menuCart,
@@ -93,7 +92,7 @@ function MainFooter() {
                 // 내가 버튼을 누른 해당 menuId, options가 일치하지 않은것들만 남겨두기 
                 setOrders(order => ({
                     ...order,
-                    menuCarts: order.menuCarts.filter(menu => !(menu.menuId === menuId && JSON.stringify(menu.options) === JSON.stringify(options))) 
+                    products: order.products.filter(menu => !(menu.menuId === menuId && JSON.stringify(menu.options) === JSON.stringify(options))) 
                 }));
             } else if(result.dismiss === Swal.DismissReason.cancel) {
                 return;
@@ -103,6 +102,11 @@ function MainFooter() {
 
     // 장바구니 전체 삭제 버튼 클릭 
     const hanldeAlldeleteButtonOnClick = () => {
+
+        if(orders.products.length === 0) {
+            return;
+        }
+
         Swal.fire({
             title: "전체메뉴를 삭제하시겠습니까?",
             color: "#036635",
@@ -116,9 +120,9 @@ function MainFooter() {
             if(result.isConfirmed) {
                 setOrders(order => ({
                     ...order,
-                    orderAmount: "",
-                    orderQuantity: "",
-                    menuCarts: []
+                    amount: "",
+                    quantity: "",
+                    products: []
                 }))
             } else if(result.dismiss === Swal.DismissReason.cancel) {
                 return;
@@ -126,16 +130,15 @@ function MainFooter() {
         })
     }
 
-
-    
     // 결제하기 버튼 클릭했을 때
     const handlePaymentOnClick = () => {
+        if(orders.products.length === 0) {
+            return;
+        }
+        
         navigate("/payment");
     };
 
-    useEffect(() => {
-        console.log(orders)
-    })
 
     return (
         <div css={s.layout}>
@@ -143,7 +146,7 @@ function MainFooter() {
                 <p>Order</p>
                 <div css={s.orderDetailContainer}>
                         {
-                            orders.menuCarts.map((menuCart, index) => (
+                            orders.products.map((menuCart, index) => (
                                 <div css={s.orderDetail} key={index}>
                                     <div css={s.orderProduct}>
                                         <button onClick={() => handleDeleteButtonOnClick(menuCart.menuId, menuCart.menuName, menuCart.options)}><FontAwesomeIcon icon={faXmark} /></button>
@@ -158,7 +161,7 @@ function MainFooter() {
                                             <p>{menuCart.count}</p>
                                             <button onClick={() => handlePlusButtonOnClick(menuCart)}><FaCirclePlus/></button>
                                         </div>
-                                        <p>{parseInt(menuCart.totalPrice).toLocaleString('Ko-KR')}원</p>
+                                        <p>{(menuCart.totalPrice).toLocaleString('Ko-KR')}원</p>
                                     </div>
                                 </div>
                             ))
@@ -167,8 +170,8 @@ function MainFooter() {
             </div>
             <div css={s.totalContainer}>
                 <div css={s.totalCount}>
-                    <p>총 수량: {orders.orderAmount} 개</p>
-                    <p>총 가격: {orders.orderQuantity.toLocaleString('ko-KR')} 원</p>
+                    <p>총 수량: {orders.quantity} 개</p>
+                    <p>총 가격: {orders.amount.toLocaleString('ko-KR')} 원</p>
                 </div>
                 <div css={s.buttons}>
                     <button onClick={hanldeAlldeleteButtonOnClick}>전체 삭제</button>

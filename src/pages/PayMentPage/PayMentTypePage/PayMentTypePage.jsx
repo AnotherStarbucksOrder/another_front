@@ -1,5 +1,4 @@
 import React from 'react';
-import MainFooter from '../../../components/MainFooter/MainFooter';
 import MainTop from '../../../components/MainTop/MainTop';
 import MainTopBar from '../../../components/MainTopBar/MainTopBar';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +16,6 @@ function PayMentTypePage() {
     const navigate = useNavigate();
 
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
-    console.log(orders)
 
     // 상단에 - 버튼 클릭 시
     const handleCancleOnClick = () => {
@@ -44,9 +42,6 @@ function PayMentTypePage() {
             confirmButtonColor: "#3EA270",
             cancelButtonColor: "#3EA270",
             reverseButtons: true,
-            customClass: {
-                popup: "sweetalert-layout",
-            }
 
         }).then(result => {
             if(result.isConfirmed) {
@@ -75,31 +70,36 @@ function PayMentTypePage() {
                     <button onClick={handleCancleOnClick}><FontAwesomeIcon icon={faXmark} /></button>
                     <p>주문 결제</p>
                     <div css={s.menuContainer}>
-                        <div css={s.menuInfo}>
-                            <div css={s.productInfo}>
-                                <p>자몽허니블랙티</p>
-                                <p>ICE, VENTI, 덜 달게, 얼음 많이</p>
-                            </div> 
-                            <div css={s.productPrice}>
-                                <p>1개</p>
-                                <p>100,000원</p>
+                        {
+                            orders.products.map(menuCart => 
+                                <div css={s.menuInfo} key={menuCart.menuId}>
+                                    <div css={s.productInfo}>
+                                        <p>{menuCart.menuName}</p>
+                                        <p>{menuCart.options.map(option => option.optionName + "(" + option.optionDetailValue + ")").join(', ')}</p>
+                                    </div> 
+                                    <div css={s.productPrice}>
+                                        <p>{menuCart.count} 개</p>
+                                        <p>{(menuCart.totalPrice).toLocaleString('ko-KR')} 원</p>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    </div>
+                    <div css={s.bottom}>
+                        <div css={s.totalCount}>
+                            <p>합 계</p>
+                            <div>
+                                <p>{orders.quantity} 개</p>
+                                <p>{orders.amount.toLocaleString('ko-KR')} 원</p>
                             </div>
                         </div>
-                    </div>
-                    <div css={s.totalCount}>
-                        <p>합계</p>
-                        <div>
-                            <p>{orders.orderAmount} 개</p>
-                            <p>{orders.orderQuantity} 원</p>
+                        <div css={s.buttons}> 
+                            <button onClick={handlePointOnClick}>포인트 결제</button>
+                            <button onClick={handleCardOnClick}>카드 결제</button>
                         </div>
-                    </div>
-                    <div css={s.buttons}>
-                        <button onClick={handlePointOnClick}>포인트 결제</button>
-                        <button onClick={handleCardOnClick}>카드 결제</button>
                     </div>
                 </div>
             </div>
-            <MainFooter/>
         </>
     )
 }
