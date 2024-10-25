@@ -43,8 +43,13 @@ function AdminRoutes(props) {
                 }
             },
             onError: e => {
-                if(location.pathname !== "/admin/auth/signin") {
+                if(location.pathname !== "/admin/auth/signin" || !localStorage.getItem("accessToken")) {
                     navigate("/admin/auth/signin");
+                }
+                if(e.response.status === 403) {
+                    alert("접근 권한이 없습니다.")
+                    localStorage.removeItem("accessToken")
+                    navigate("/")
                 }
             }
         }
