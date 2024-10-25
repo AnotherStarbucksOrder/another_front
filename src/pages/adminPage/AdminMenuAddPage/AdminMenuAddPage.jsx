@@ -13,17 +13,12 @@ function AdminMenuAddPage(props) {
     const navigate = useNavigate();
     const [previewImg, setPreviewImg] = useState("");
     const [inputMenu, setInputMenu] = useState({
-        menuId: 0,
         menuName: "",
         menuPrice: 0,
         imgUrl: "",
         comment: "",
-        option: [{
-            optionId: 0,
-        }],
-        category: [{
-            categoryId: 0,
-        }]
+        optionIds: [],
+        categories: []
     });
 
     // const handleimgUrlOnChange = async (e) => {
@@ -55,7 +50,7 @@ function AdminMenuAddPage(props) {
     // };
     const optionList = useQuery(
         ["optionsListQuery"],
-        async () => await instance.get("/admin/menu/add"),
+        async () => await instance.get("/admin/menu/values"),
         {
             retry: 0,
             refetchOnWindowFocus: false
@@ -87,57 +82,112 @@ function AdminMenuAddPage(props) {
     //     }
     // )
 
-    const handleSubmitOnClick = async () => {
-        let response = null;
-        const storageRef = ref(storage, `product/drink/${inputMenu.imgUrl}`);
-        console.log(inputMenu.imgUrl);
-        const task = uploadBytesResumable(storageRef, inputMenu.imgUrl);
-        task.on(
-            "state_changed",
-            (snapshot) => {
-                console.log("업로드 중")
-            },
-            (e) => {
-                console.log("파이어베이스 업로드 중 에러발생");
-                console.error(e);
-            },
-            async (success) => {
-                const url = await getDownloadURL(storageRef);
-                let data = {
-                    ...inputMenu,
-                    imgUrl: url
-                };
-                data.imgUrl = url;
-                console.log("바뀐 데이터");
-                console.log(data);
-                try {
-                    response = await instance.post("/admin/menu", data);
-                    if (response.status !== 200) {
-                        deleteObject(storageRef);
-                    }
-                } catch (e) {
-                    console.error(e);
-                    return;
-                }
-                console.log(response);
-                alert("등록하였습니다.");
-                navigate(`/admin/menu/detail/${response.data.menuId}`)
+    const submitMenuData = async (data) => {
+        try {
+            const response = await instance.post(`/admin/menu`, data);
+            if (response.status === 200) {
+                alert("등록되었습니다.");
+                navigate("/admin/menus?page=1")
+            } else {
+                alert("등록 실패");
             }
-        );
-    }
-
-    const handleimgUrlOnChange = async (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            if (!file.type.startsWith('image/')) {
-                alert("이미지 파일만 업로드 가능합니다.");
-                return;
-            }
-
-            const imageUrl = URL.createObjectURL(file);
-            setPreviewImg(imageUrl); // 미리보기 이미지 URL 설정
+        } catch (error) {
+            console.error("등록 요청 중 에러 발생:", error);
+            alert("등록 요청 중 에러가 발생했습니다.");
         }
     };
+
+    const handleSubmitOnClick = async () => {
+        try {
+            const input = document.getElementById("fileInput");
+            const imgFile = input.files[0];
+
+            let uploaddData = { ...inputMenu };
+
+            // 이미지가 선택된 경우
+            if (imgFile) {
+                const storageRef = ref(storage, `/product/drink/${imgFile.name}`);
+                const task = uploadBytesResumable(storageRef, imgFile);
+
+                task.on(
+                    "state_changed",
+                    (snapshot) => {
+                        console.log("업로드 중");
+                        console.log(uploaddData);
+                    },
+                    (error) => {
+                        console.error("업로드 중 에러 발생:", error);
+                        alert("업로드 중 에러가 발생했습니다.");
+                    },
+                    async () => {
+                        // 업로드 완료 후 다운로드 URL 가져오기
+                        const url = await getDownloadURL(storageRef);
+                        uploaddData.imgUrl = url; // URL 업데이트
+                        await submitMenuData(uploaddData);
+                    }
+                );
+            } else {
+                // 이미지가 선택되지 않았을 경우
+                await submitMenuData(uploaddData);
+            }
+        } catch (error) {
+            console.error("수정 중 에러 발생:", error);
+            alert("수정 중 에러가 발생했습니다.");
+        }
+    };
+
+
+    // const handleSubmitOnClick = async () => {
+    //     let response = null;
+    //     const storageRef = ref(storage, `product/drink/${inputMenu.imgUrl}`);
+    //     console.log(inputMenu.imgUrl);
+    //     const task = uploadBytesResumable(storageRef, inputMenu.imgUrl);
+    //     task.on(
+    //         "state_changed",
+    //         (snapshot) => {
+    //             console.log("업로드 중")
+    //         },
+    //         (e) => {
+    //             console.log("파이어베이스 업로드 중 에러발생");
+    //             console.error(e);
+    //         },
+    //         async (success) => {
+    //             const url = await getDownloadURL(storageRef);
+    //             let data = {
+    //                 ...inputMenu,
+    //                 imgUrl: url
+    //             };
+    //             data.imgUrl = url;
+    //             console.log("바뀐 데이터");
+    //             console.log(data);
+    //             try {
+    //                 response = await instance.post("/admin/menu", data);
+    //                 if (response.status !== 200) {
+    //                     deleteObject(storageRef);
+    //                 }
+    //             } catch (e) {
+    //                 console.error(e);
+    //                 return;
+    //             }
+    //             console.log(response);
+    //             alert("등록하였습니다.");
+    //             navigate(`/admin/menu/detail/${response.data.menuId}`)
+    //         }
+    //     );
+    // }
+
+    // const handleimgUrlOnChange = async (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         if (!file.type.startsWith('image/')) {
+    //             alert("이미지 파일만 업로드 가능합니다.");
+    //             return;
+    //         }
+
+    //         const imageUrl = URL.createObjectURL(file);
+    //         setPreviewImg(imageUrl); // 미리보기 이미지 URL 설정
+    //     }
+    // };
 
     const handleInputMenuOnChange = (e) => {
         setInputMenu({
@@ -145,7 +195,7 @@ function AdminMenuAddPage(props) {
             [e.target.name]: e.target.value
         })
     }
-
+    console.log(inputMenu)    
     const handleImageClick = () => {
         document.getElementById('fileInput').click();
     };
@@ -159,9 +209,10 @@ function AdminMenuAddPage(props) {
             categoryId: option.value,
             categoryName: option.label
         }));
+        console.log(newCategories.map(category => category.categoryId))
         setInputMenu({
             ...inputMenu,
-            category: newCategories
+            categories: newCategories.map(category => category.categoryId)
         });
     };
 
@@ -170,9 +221,10 @@ function AdminMenuAddPage(props) {
             optionId: option.value,
             optionName: option.label
         }));
+        console.log(newOptions.map(option => option.optionId))
         setInputMenu({
             ...inputMenu,
-            option: newOptions
+            optionIds: newOptions.map(option => option.optionId)
         });
     };
 
@@ -191,10 +243,10 @@ function AdminMenuAddPage(props) {
                     <div css={s.imgContainer}>
                         <div css={s.imgBox}>
                             <div css={s.img}>
-                                <img src={previewImg} alt="" onClick={handleImageClick} />
+                                <img src={inputMenu.imgUrl} alt="" onClick={handleImageClick} />
                             </div>
-                            <input type="file" accept="image/*"  id="fileInput" onChange={handleimgUrlOnChange} />
-                            <input type="text" value={previewImg.name} readOnly />
+                            <input type="file" accept="image/*"  id="fileInput" name="imgUrl" onChange={handleInputMenuOnChange} />
+                            <input type="text" value={inputMenu.imgUrl} readOnly />
                         </div>
                         <div css={s.infoContainer}>
                             <div css={s.infoBox}>
