@@ -32,21 +32,6 @@ export const functionBox = css`
     padding: 20px;
 `;
 
-export const searchBox = css`
-    display: flex;
-    align-items: center;
-    width: 100px;
-
-    & select, & input {
-        flex-grow: 1;
-        text-align: center;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 16px;
-    }
-`;
-
 
 
 export const buttonBox = css`
@@ -87,48 +72,75 @@ export const buttonBox = css`
     }
 `;
 
-export const tableLatout = css`
+export const tableContainer = css`
     box-sizing: border-box;
-    padding: 0 20px;
-    width: 100%;
-    height: 694px;
-
-    & table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed; 
-    }
-
-    & th, & td {
-        padding: 12px;
-        text-align: center;
-        border: 1px solid #ddd;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        /* border-bottom: 1px solid #ddd; */
-    }
-
-    & th {
-        background-color: #f4f4f4;
-        font-weight: bold;
-        &:nth-of-type(1) {
-            width: 10%;
-        }
-        &:nth-of-type(2) {
-            width: 15%;
-        }
-        &:nth-of-type(3) {
-            width: 5%;
-        }
-        &:nth-of-type(4) {
-            width: 5%;
-        }
-        &:nth-of-type(5) {
-            width: 5%;
-        }
-    }
+    margin: 0 auto;
+    border: 1px solid #ddd; /* 셀 테두리 추가 */
+    width: 1580px;
 `;
+
+export const tableLayout = css`
+position: relative;
+box-sizing: border-box;
+width: 100%;
+max-height: 680px;
+overflow-y: auto;
+
+& table {
+    box-sizing: border-box;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    
+}
+
+& thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #f4f4f4; /* 헤더 배경 색상 */
+
+
+}
+
+& th, & td {
+    box-sizing: border-box;
+    height: 25px;
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* 셀 테두리 추가 */
+    border-right: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:nth-last-of-type(1) {
+        border-right: none; 
+    }
+}
+
+& th {
+    font-weight: bold;
+
+    &:nth-of-type(1) {
+        width: 10%;
+    }
+    &:nth-of-type(2) {
+        width: 15%;
+    }
+    &:nth-of-type(3) {
+        width: 5%;
+    }
+    &:nth-of-type(4) {
+        width: 5%;
+    }
+    &:nth-of-type(5) {
+        width: 5%;
+    }
+}
+`;
+
 // 992-234-64
 export const tableButton = css`
     box-sizing: border-box;
@@ -143,39 +155,3 @@ export const tableButton = css`
 
 `;
 
-export const paginateContainer = css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    & > ul {
-        list-style-type: none;
-        display: flex;
-        padding: 0;
-
-        & > li {
-            margin: 0px 5px;
-        }
-
-        & a {
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #dbdbdb;
-            border-radius: 32px;
-            padding: 0px 5px;
-            min-width: 32px;
-            height: 32px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        & .active {
-            border-radius: 32px;
-            background-color: #bbbbbb;
-            color: #ffffff;
-        }
-    }
-`;
