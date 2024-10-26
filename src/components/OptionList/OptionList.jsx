@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 
@@ -9,7 +9,8 @@ function OptionList({ options, menuCart, setMenuCart }) {
             ...menuCart,
             options: menuCart.options.map(option => 
                 option.optionId === menuDetail.option.optionId 
-                ? {
+                ? 
+                {
                     optionId: menuDetail.option.optionId,
                     optionName: menuDetail.option.optionName,
                     optionDetailId: optionDetail.optionDetailId,

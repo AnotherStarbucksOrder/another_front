@@ -41,13 +41,6 @@ function PointPaymentPage() {
         }
     }
 
-    // <div>
-    // <p>사용할 스탬프: </p>
-    // <button onClick={handleMinusButtonOnClick}><FaCircleMinus/></button>
-    // <p>{totalCount}</p>
-    // <button onClick={handlePlusButtonOnClick}><FaCirclePlus/></button>
-    // </div>
-
 
 
     return (
@@ -69,9 +62,9 @@ function PointPaymentPage() {
                     </div>
                     <div css={s.totalCount}>
                         <p>남은잔액</p>
-                        <p>0원</p>
+                        <p>100원</p>
                     </div>
-                        <button>0원 결제</button>
+                        <button>카드 결제</button>
                 </div>
             </div>
         </>

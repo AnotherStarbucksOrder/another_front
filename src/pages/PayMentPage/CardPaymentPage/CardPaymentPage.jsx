@@ -16,9 +16,6 @@ function CardPaymentPage() {
     const navigate = useNavigate();
 
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
-    const { phoneNumber, point } = orders.user;
-    const completedMessage = phoneNumber === "010-" ? "결제가 완료되었습니다."
-    : `${phoneNumber.slice(-4)}님, 주문이 완료되었습니다.\n포인트 개수: ${point}개` 
 
     // 이전버튼 클릭 시
     const beforeOnClick = () => {
@@ -26,6 +23,7 @@ function CardPaymentPage() {
             ...orders,
             paymentType: "",
             user: {
+                ...orders.user,
                 phoneNumber: "010-"
             }
         }))
@@ -33,7 +31,7 @@ function CardPaymentPage() {
     }
 
 
-    // 결제하기 버튼 클릭 시
+    // *결제하기 버튼 클릭 시
     const payMentCompletedOnClick = () => { 
         
         const newPortoneData = { 
@@ -45,19 +43,17 @@ function CardPaymentPage() {
                 name: item.menuName,
                 amount: item.totalPrice,
                 quantity: item.count
-            })),
-            customer: {
-                phoneNumber: orders.user.phoneNumber 
-            }
+            }))
         }
 
-        // 포트원으로 요청 보내기 
+        // *포트원으로 요청 보내기 
         PortOne.requestPayment(newPortoneData)
         .then(response => {
-            console.log(response)
             const orderData = {
                 paymentId: response.paymentId,
                 totalAmount: newPortoneData.totalAmount,
+                orderType: orders.orderType,
+                customer: orders.user.phoneNumber,
                 products: newPortoneData.products,
             }
             orderMutation.mutateAsync(orderData);
@@ -65,16 +61,20 @@ function CardPaymentPage() {
         .catch(error => alert("오류"));
     }
 
-    // 결제완료데이터 Mutation 
+    // *결제완료데이터 Mutation (관리자 필요 데이터)
     const orderMutation = useMutation(
-        async (order) => {
-            return await instance.post('/order', order)
-        },
+        async (orderData) => await instance.post('/order', orderData),
         {
-            onSuccess: data => {
+            retry: 0,
+            refetchOnWindowFocus: false,
+            onSuccess: response => {
+                if(orders.user.userId !== 0) {
+                    checkMutation.mutateAsync();
+                    return;
+                }
                 let timerInterval;
                 Swal.fire({
-                    title: completedMessage,
+                    title: `주문이 완료되었습니다!`,
                     color: "#036635",
                     html: "<b>5</b>초 뒤 자동으로 홈화면으로 이동합니다!",
                     timer: 5000,
@@ -89,10 +89,21 @@ function CardPaymentPage() {
                     willClose: () => {
                         clearInterval(timerInterval);  
                     }
-                }).then(result => {
-                    navigate("/");
-                    setOrders(defaultOrders)
-                })
+                    }).then(result => {
+                        navigate("/");
+                        setOrders(defaultOrders)
+                    })
+            },
+        }
+    )
+
+    // * 포인트 적립, 포인트 사용 요청 
+    const checkMutation = useMutation(
+        async () => await instance.post("/points/check"),
+        {
+            retry: 0,
+            refetchOnWindowFocus: false,
+            onSuccess: response => {
             }
         }
     )
@@ -105,7 +116,7 @@ function CardPaymentPage() {
             <div css={s.totalCount}>
                 <p>카드를 넣어주세요</p>
                 <p>기기하단에 있는 카드리더기에 카드를 넣어주세요</p>
-                <p>결제금액: {orders.amount}원</p>
+                <p>결제금액: {(orders.amount).toLocaleString('ko-KR')}원</p>
             </div>
             <img src="/cardImg.jpg" alt="" />
             <div css={s.buttons}>
