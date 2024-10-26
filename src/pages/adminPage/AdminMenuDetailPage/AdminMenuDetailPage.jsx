@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
 import * as s from "./style";
 import ReactSelect from "react-select";
@@ -20,12 +20,16 @@ function AdminMenuDetailPage(props) {
         comment: "",
         categories: "",
         options: "",
+    });
+    const [modifyMenuData, setModifyMenuData] = useState({
+        menuId: 0,
+        menuName: "",
+        menuPrice: 0,
+        imgUrl: "",
+        comment: "",
         optionIds: [],
         categoryIds: []
     });
-    const [previewData, setPreViewData] = useState(initialMenuData);
-    const [modifyMenuData, setModifyMenuData] = useState(initialMenuData);
-
     const menu = useQuery(
         ["menuQuery", menuId],
         async () => await instance.get(`/admin/menu/detail/${menuId}`),
@@ -34,29 +38,35 @@ function AdminMenuDetailPage(props) {
             refetchOnWindowFocus: false,
             onSuccess: (response) => {
                 const menuData = response?.data;
-                const { categories, options, ...rest } = menuData;
-
+                const { options, categories, menuStatus, ...modifyData } = menuData;
+    
                 setInitialMenuData(menuData);
-                setPreViewData(menuData);
-                setModifyMenuData(rest);
-
-                // ID 리스트 설정
-                const categoryIdList = categoryArray.map(category => category.value);
-                const optionIdList = optionArray.map(option => option.value);
-
-                console.log(categoryIdList)
-                console.log(optionIdList)
-
+                setModifyMenuData(modifyData);
+    
+                // 카테고리 ID 매핑
+                const categoryIds = categories.split(',').map(category => {
+                    const trimmedCategory = category.trim();
+                    const matchedCategory = selectCategory.find(selectCat => selectCat.categoryName === trimmedCategory);
+                    return matchedCategory ? matchedCategory.categoryId : null; // 일치하는 ID 또는 null
+                }).filter(id => id !== null); // null 값 제거
+    
+                // 옵션 ID 매핑
+                const optionIds = options.split(',').map(option => {
+                    const trimmedOption = option.trim();
+                    const matchedOption = selectOption.find(selectOpt => selectOpt.optionName === trimmedOption);
+                    return matchedOption ? matchedOption.optionId : null; // 일치하는 ID 또는 null
+                }).filter(id => id !== null); // null 값 제거
+    
+                // 수정할 메뉴 데이터에 ID 설정
                 setModifyMenuData(modifyMenuData => ({
                     ...modifyMenuData,
-                    categoryIds: categoryIdList.map(categoryId => categoryId),
-                    optionIds: optionIdList
+                    categoryIds: categoryIds,
+                    optionIds: optionIds
                 }));
             }
         }
-    )
+    );
     console.log(initialMenuData);
-    console.log(previewData);
     console.log(modifyMenuData);
 
     const selectList = useQuery(
@@ -64,47 +74,39 @@ function AdminMenuDetailPage(props) {
         async () => await instance.get("/admin/menu/values"),
         {
             retry: 0,
-            refetchOnWindowFocus: false
+            refetchOnWindowFocus: false,
         }
     )
+    console.log(modifyMenuData)
     console.log(selectList)
 
     const selectCategory = selectList?.data?.data.categories || [];
     const selectOption = selectList?.data?.data.options || [];
 
-    const categoryArray = previewData.categories.split(',').map(category => {
+    const categoryArray = initialMenuData.categories.split(',').map(category => {
         const categoryName = category.trim();
         const matchedCategory = selectCategory.find(selectCat => selectCat.categoryName === categoryName)
 
         return {
             value: matchedCategory ? matchedCategory.categoryId : categoryName, // ID 또는 원래 이름
-            label: categoryName
+            label: categoryName,
         };
     });
 
-    const optionArray = previewData.options.split(',').map(option => {
+    const optionArray = initialMenuData.options.split(',').map(option => {
         const optionName = option.trim();
         const matchedOption = selectOption.find(selectOpt => selectOpt.optionName === optionName);
+
         return {
             value: matchedOption ? matchedOption.optionId : optionName, // ID 또는 원래 이름
             label: optionName
         };
     });
-    console.log(categoryArray);
-    console.log(optionArray);
 
+    console.log(categoryArray.map(category => category.value));
+    console.log(optionArray.map(option => option.value));
 
-    // const modifyMenuMutaion = useMutation(
-    //     async () => await instance.post("/amdin/modify"),
-    //     {
-    //         retry: 0,
-    //         refetchOnWindowFocus: false,
-    //         onSuccess: response => {
-    //             alert("메뉴정보를 수정하였습니다.")
-    //             setIsEditing(false);
-    //         }
-    //     }
-    // )
+    console.log(modifyMenuData);
 
     const deleteMenuMutation = useMutation(
         async () => await instance.delete(`/admin/menu/${menuId}`),
@@ -116,30 +118,29 @@ function AdminMenuDetailPage(props) {
         }
     )
 
-
     const handleImageClick = () => {
         document.getElementById('fileInput').click();
     };
-
 
     const handleBackOnClick = () => {
         window.history.back();
     }
 
     const handleEditOnClick = () => {
-
         setIsEditing(true);
+        menu.refetch();
     }
+
     const handleConfirmOnClick = () => {
         // modifyMenuMutaion.mutateAsync();
         console.log(modifyMenuData);
     }
+
     const handleCancleOnClick = () => {
-        setPreViewData(initialMenuData);
         setModifyMenuData(initialMenuData);
         setIsEditing(false);
     }
-    
+
     const handleDeleteMenuOnClick = () => {
         if (window.confirm("삭제하시겠습니끼?")) {
             deleteMenuMutation.mutateAsync();
@@ -152,6 +153,7 @@ function AdminMenuDetailPage(props) {
             if (response.status === 200) {
                 alert("수정되었습니다.");
                 setIsEditing(false);
+                menu.refetch();
             } else {
                 alert("업데이트 실패");
             }
@@ -165,14 +167,15 @@ function AdminMenuDetailPage(props) {
         try {
             const input = document.getElementById("fileInput");
             const imgFile = input.files[0];
-
+    
+            // 기존 메뉴 데이터를 복사하여 사용
             let updatedData = { ...modifyMenuData };
-
+    
             // 이미지가 선택된 경우
             if (imgFile) {
                 const storageRef = ref(storage, `/product/drink/${imgFile.name}`);
                 const task = uploadBytesResumable(storageRef, imgFile);
-
+    
                 task.on(
                     "state_changed",
                     (snapshot) => {
@@ -185,12 +188,13 @@ function AdminMenuDetailPage(props) {
                     async () => {
                         // 업로드 완료 후 다운로드 URL 가져오기
                         const url = await getDownloadURL(storageRef);
-                        updatedData.imgUrl = url; // URL 업데이트
+                        updatedData.imgUrl = url; // 새 URL 업데이트
                         await submitMenuData(updatedData);
                     }
                 );
             } else {
-                // 이미지가 선택되지 않았을 경우
+                // 이미지가 선택되지 않았을 경우 기존 URL 유지
+                updatedData.imgUrl = modifyMenuData.imgUrl || ""; // 기존 URL 유지
                 await submitMenuData(updatedData);
             }
         } catch (error) {
@@ -208,11 +212,6 @@ function AdminMenuDetailPage(props) {
         const categoryNames = newCategories.map(cat => cat.categoryName).join(', ');
         const categoryIds = newCategories.map(cat => cat.categoryId); // ID 리스트로 저장
 
-        setPreViewData(previewData => ({
-            ...previewData,
-            categories: categoryNames, // 이름을 문자열로 저장
-            categoryIds: categoryIds // ID 리스트 저장
-        }));
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
             categoryIds: categoryIds // ID 리스트 저장
@@ -227,11 +226,7 @@ function AdminMenuDetailPage(props) {
 
         const optionNames = newOptions.map(opt => opt.optionName).join(', ');
         const optionIds = newOptions.map(opt => opt.optionId); // ID 리스트로 저장
-        setPreViewData(previewData => ({
-            ...previewData,
-            options: optionNames, // 이름을 문자열로 저장
-            optionIds: optionIds // ID 리스트 저장
-        }));
+
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
             optionIds: optionIds // ID 리스트 저장
@@ -240,10 +235,6 @@ function AdminMenuDetailPage(props) {
 
 
     const handleModifyInputOnChange = (e) => {
-        setPreViewData(previewData => ({
-            ...previewData,
-            [e.target.name]: e.target.value
-        }))
 
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
@@ -289,7 +280,7 @@ function AdminMenuDetailPage(props) {
                                         {
                                             !isEditing ?
                                                 <>
-                                                    <input type="text" css={s.input} readOnly value={previewData.categories} />
+                                                    <input type="text" css={s.input} readOnly value={initialMenuData.categories} />
                                                 </>
                                                 :
                                                 <ReactSelect
@@ -337,7 +328,7 @@ function AdminMenuDetailPage(props) {
                                                     type="text"
                                                     css={s.input}
                                                     readOnly
-                                                    value={previewData.options}
+                                                    value={initialMenuData.options}
                                                 />
                                             </>
                                             :
