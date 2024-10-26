@@ -50,11 +50,11 @@ function MenuDetailPage() {
                     menuPrice: response.menuPrice,
                     totalPrice: response.menuPrice,
                     options: response.menuDetailList.map(detail => ({
-                        optionId: detail.option.optionId,
-                        optionName: detail.option.optionName,
-                        optionDetailId: detail.option.optionDetail[0].optionDetailId,
-                        optionDetailValue: detail.option.optionDetail[0].optionDetailValue,
-                        optionDetailPrice: detail.option.optionDetail[0].optionDetailPrice,
+                        optionId: detail?.option.optionId,
+                        optionName: detail?.option.optionName,
+                        optionDetailId: detail?.option.optionDetail[0].optionDetailId,
+                        optionDetailValue: detail?.option.optionDetail[0].optionDetailValue,
+                        optionDetailPrice: detail?.option.optionDetail[0].optionDetailPrice,
                     }))
                 }))
             }
@@ -62,9 +62,8 @@ function MenuDetailPage() {
     )
 
     const handleOrderCancleOnClick = () => {
-        navigate("/home");
+        navigate(-1);
     }
-
 
     // + 버튼 클릭시
     const handleCountMinusButtonOnClick = () => {
@@ -127,7 +126,7 @@ function MenuDetailPage() {
             }));
         }
 
-        navigate("/home");
+        navigate(-1);
     };
 
 

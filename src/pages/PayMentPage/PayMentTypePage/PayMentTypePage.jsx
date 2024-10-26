@@ -10,7 +10,6 @@ import * as s from './style';
 import { ordersAtom } from '../../../atoms/ordersAtom';
 import { useRecoilState } from 'recoil';
 
-
 function PayMentTypePage() {
 
     const navigate = useNavigate();

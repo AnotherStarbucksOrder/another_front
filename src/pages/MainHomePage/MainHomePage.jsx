@@ -54,7 +54,6 @@ function MainHomePage() {
 			setSearchParams({ page: 1 }); 
 		}
 	}
-
 	
 	return (
 		<>

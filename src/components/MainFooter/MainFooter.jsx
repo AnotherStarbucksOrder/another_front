@@ -135,7 +135,6 @@ function MainFooter() {
         if(orders.products.length === 0) {
             return;
         }
-        
         navigate("/payment");
     };
 

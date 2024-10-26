@@ -19,11 +19,11 @@ function MainTopBar({ handleCategoryOnChange }) {
             return response.data
         },
         {
+            retry: 0,
+            refetchOnWindowFocus: false,
             onSuccess: data => {
                 setCategories(data.categories)
             },
-            refetchOnWindowFocus: false,
-            retry: 0
         }
     )
 
@@ -39,9 +39,9 @@ function MainTopBar({ handleCategoryOnChange }) {
         }
     };
 
-
+    // 선택한 카테고리 ID 
     const handleSelectedCategoryId = (categoryId) => {
-        handleCategoryOnChange(categoryId); // MainHomePage
+        handleCategoryOnChange(categoryId);         
         setIsActiveCategory(categoryId);
     }
 

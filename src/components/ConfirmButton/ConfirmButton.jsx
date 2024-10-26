@@ -14,26 +14,41 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
     const phoneNumber = orders.user.phoneNumber;
     
-    const getUser = useQuery(
+    // 전화번호로 point랑 userId 가져오기
+        const getUserInfo = useQuery(
         ["getUserQuery"],
-        async () => await instance.get(`/points/user/${phoneNumber}`),
+        async () => await instance.get(`/point/user/${phoneNumber}`),
         {
+            retry: 0,
+            refetchOnWindowFocus: false,
             onSuccess: response => {
+                setOrders(orders => ({
+                    ...orders,
+                    user: {
+                        ...orders.user,
+                        userId: response.data.userId,
+                        totalPoint: response.data.totalPoint
+                    }
+                }))
                 if(orders.paymentType === "card") {
-                    setOrders(orders => ({
-                        ...orders,
-                        user: {
-                            ...orders.user,
-                            phoneNumber: phoneNumber
-                        }
-                    }))
                     navigate("/payment/card")
+                    return;
                 }
                 if(orders.paymentType === "point") {
+                    if(response.data.totalPoint < 4000) {
+                        Swal.fire({
+                            title: `사용가능한 포인트 개수가 부족합니다 \n 보유포인트: ${response.data.totalPoint}`,
+                            showConfirmButton: true,
+                            showCancleButton: false
+                        }).then(result => {
+                            navigate(-1)
+                        })
+                        return;
+                    }
                     navigate("/payment/point")
                 }
             },
-            enabled: false
+            enabled: false,
         }
     )    
 
@@ -52,7 +67,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
             return;
         }
 
-        getUser.refetch();
+        getUserInfo.refetch();
     }
 
     return (
