@@ -83,7 +83,7 @@ export const tableLayout = css`
 position: relative;
 box-sizing: border-box;
 width: 100%;
-max-height: 680px;
+max-height: 660px;
 overflow-y: auto;
 
 & table {

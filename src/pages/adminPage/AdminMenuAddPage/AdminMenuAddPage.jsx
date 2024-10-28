@@ -11,7 +11,6 @@ import { storage } from "../../../firebase/firebase";
 
 function AdminMenuAddPage(props) {
     const navigate = useNavigate();
-    const [previewImg, setPreviewImg] = useState("");
     const [inputMenu, setInputMenu] = useState({
         menuName: "",
         menuPrice: 0,
