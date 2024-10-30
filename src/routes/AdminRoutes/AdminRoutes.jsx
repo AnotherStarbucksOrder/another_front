@@ -76,10 +76,10 @@ function AdminRoutes(props) {
                             <Route path="/user/detail/:userId" element={<AdminUserDetailPage />} />
                             <Route path="/user/add" element={<AdminUserAddPage />} />
                             <Route path="/category" element={<AdminCategoryPage />} />
-                            <Route path="/category/update/:orderId" element={<AdminCategoryUpdatePage />} />
+                            <Route path="/category/update/:categoryId" element={<AdminCategoryUpdatePage />} />
                             <Route path="/category/add" element={<AdminCategoryAddPage />} />
                             <Route path="/option" element={<AdminOptionPage />} />
-                            <Route path="/option/update/:orderId" element={<AdminOptionUpdatePage />} />
+                            <Route path="/option/update/:optionId" element={<AdminOptionUpdatePage />} />
                             <Route path="/option/add" element={<AdminOptionAddPage />} />
                         </Routes>
                     </>} />

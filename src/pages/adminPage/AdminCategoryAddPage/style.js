@@ -110,6 +110,13 @@ export const registerMenu = css`
         background-color: white;
     }
 `;
+export const menuContainer = css`
+    box-sizing: border-box;
+    /* border-bottom: 3px solid ${COLORS.lineColor}; */
+    height: 250px;
+    overflow: scroll;
+`;
+
 
 export const menuBox = css`
     display: flex;

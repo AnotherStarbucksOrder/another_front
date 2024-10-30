@@ -74,14 +74,14 @@ export const buttonBox = css`
 
 export const tableContainer = css`
     box-sizing: border-box;
-    margin: 0 auto;
-    border: 1px solid #ddd; /* 셀 테두리 추가 */
-    width: 1580px;
+    padding: 0 20px;
+    width: 100%;
 `;
 
 export const tableLayout = css`
 position: relative;
 box-sizing: border-box;
+border: 1px solid #ddd; /* 셀 테두리 추가 */
 width: 100%;
 max-height: 660px;
 overflow-y: auto;

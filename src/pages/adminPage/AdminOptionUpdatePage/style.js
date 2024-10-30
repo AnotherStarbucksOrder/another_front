@@ -84,6 +84,8 @@ export const radio = css`
 `;
 
 export const registerContainer = css`
+    box-sizing: border-box;
+    height: 330px;
     & button {
         cursor: pointer;
     }
@@ -93,7 +95,7 @@ export const registerMenu = css`
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     padding-bottom: 5px;
     border-bottom: 3px solid ${COLORS.lineColor};
 
@@ -111,14 +113,24 @@ export const registerMenu = css`
     }
 `;
 
+export const menuContainer = css`
+    box-sizing: border-box;
+    border-bottom: 3px solid ${COLORS.lineColor};
+    height: 270px;
+    overflow: scroll;
+`;
+
 export const menuBox = css`
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0 15px;
-    padding-bottom: 5px;
+    padding-bottom: 3px;
     border-bottom: 1px solid ${COLORS.lineColor};
-    overflow: scroll;
+
+    &:nth-last-of-type(1) {
+        margin-bottom: 10px;
+    }
 
 
 

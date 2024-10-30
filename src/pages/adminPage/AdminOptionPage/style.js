@@ -69,6 +69,7 @@ export const buttonBox = css`
     & button {
         padding: 10px;
         border: none;
+        border-radius: 8px;
         cursor: pointer;
 
         &:hover {
@@ -78,103 +79,74 @@ export const buttonBox = css`
         &:active {
             background-color: #bdbdbd;
         }
-
-        &:nth-of-type(1) {
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-        }
-
-        &:nth-last-of-type(1) {
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
     }
 
-    & div{
-        width: 1px;
-        height: 30px;
-        background-color: #ccc;
-        margin: 0;
-    }
 `;
-
-export const tableLatout = css`
+export const tableContainer = css`
     box-sizing: border-box;
     padding: 0 20px;
-    height: 694px; 
     width: 100%;
-    
-
-    & table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed; 
-    }
-
-    & th, & td {
-        padding: 12px;
-        text-align: center;
-        border: 1px solid #ddd;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        /* border-bottom: 1px solid #ddd; */
-    }
-
-    & th {
-        background-color: #f4f4f4;
-        font-weight: bold;
-        &:nth-of-type(1) {
-            width: 10%;
-        }
-        &:nth-of-type(2) {
-            width: 15%;
-        }
-        &:nth-of-type(3) {
-            width: 5%;
-        }
-        &:nth-of-type(4) {
-            width: 5%;
-        }
-        &:nth-of-type(5) {
-            width: 5%;
-        }
-    }
 `;
 
-export const paginateContainer = css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+export const tableLayout = css`
+position: relative;
+box-sizing: border-box;
+border: 1px solid #ddd; /* 셀 테두리 추가 */
+width: 100%;
+max-height: 660px;
+overflow-y: auto;
 
-    & > ul {
-        list-style-type: none;
-        display: flex;
-        padding: 0;
+& table {
+    box-sizing: border-box;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 
-        & > li {
-            margin: 0px 5px;
-        }
+    
+}
 
-        & a {
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #dbdbdb;
-            border-radius: 32px;
-            padding: 0px 5px;
-            min-width: 32px;
-            height: 32px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+& thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #f4f4f4; /* 헤더 배경 색상 */
 
-        & .active {
-            border-radius: 32px;
-            background-color: #bbbbbb;
-            color: #ffffff;
-        }
+
+}
+
+& th, & td {
+    box-sizing: border-box;
+    height: 25px;
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* 셀 테두리 추가 */
+    border-right: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:nth-last-of-type(1) {
+        border-right: none; 
     }
+}
+
+& th {
+    font-weight: bold;
+
+    &:nth-of-type(1) {
+        width: 10%;
+    }
+    &:nth-of-type(2) {
+        width: 15%;
+    }
+    &:nth-of-type(3) {
+        width: 5%;
+    }
+    &:nth-of-type(4) {
+        width: 5%;
+    }
+    &:nth-of-type(5) {
+        width: 5%;
+    }
+}
 `;

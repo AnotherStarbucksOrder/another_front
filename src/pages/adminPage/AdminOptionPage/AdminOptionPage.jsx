@@ -1,24 +1,70 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
 import { useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
-import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 import { Switch } from "pretty-checkbox-react";
 import '@djthoms/pretty-checkbox';
+import { useInfiniteQuery, useMutation } from "react-query";
+import { instance } from "../../../apis/util/instance";
 
 function AdminOptionPage(props) {
-    const [searchParams, setSearchParams] = useSearchParams();   //주소:포트/페이지URL?KEY=VALUE(쿼리스트링, 파람스)
-    const [totalPageCount, setTotalPageCount] = useState(1);
     const limit = 12;
     const navigate = useNavigate();
+    const [options, setOptions] = useState([]);
 
-    const [orders ] = useState([
-        { orderId: 1, orderStatus: "완료", orderType: "카트", price: 1000, orderDate: "2024-01-01", orders: "sadsadsa" },
-        { orderId: 2, orderStatus: "취소", orderType: "포인트", price: 2300, orderDate: "2024-01-01", orders: "dasdsada" },
-        { orderId: 3, orderStatus: "완료", orderType: "카드", price: 20000, orderDate: "2024-01-01", orders: "dasdsa" },
-    ]);
- 
+    const optionList = useInfiniteQuery(
+        ["optionListQuery"],
+        async ({ pageParam = 1 }) => await instance.get(`/admin/option?page=${pageParam}`),
+        {
+            getNextPageParam: (lastPage, allPage) => {
+                const totalPageCount = lastPage.data.totalCount % limit === 0
+                    ? lastPage.data.totalCount / limit
+                    : Math.floor(lastPage.data.totalCount / limit) + 1;
+
+                return totalPageCount !== allPage.length ? allPage.length + 1 : null;
+            },
+            onSuccess: response => {
+                setOptions(response?.data?.pages.map(options => options.data))
+            }
+        }
+    )
+    console.log(optionList);
+
+    //카테고리 상태관리
+    const optionStatusUpdateMutation = useMutation(
+        async (optionId) => await instance.patch(`/admin/option/status/${optionId}`),
+        {
+            onSuccess: () => {
+                optionList.refetch();
+            }
+        }
+    )
+    const handleOptionStatusChekcked = (optionId) => {
+        setOptions(options =>
+            options?.data.map(option =>
+                option.optionId === optionId
+                    ? { ...option, optionStatus:  1 ? 0 : 1 }
+                    : option
+            )
+        );
+        optionStatusUpdateMutation.mutateAsync(optionId);
+    };
+
+    const optionDeleteMutation = useMutation(
+        async (optionId) => await instance.delete(`/admin/option/${optionId}`),
+        {
+            onSuccess: () => {
+                alert("삭제하였습니다.");
+                optionList.refetch();
+            }
+        }
+    )
+    const handleOptionDeleteOnClick = (optionId) => {
+        if(window.confirm("삭제하시겠습니까?")) {
+            optionDeleteMutation.mutateAsync(optionId);
+        }
+    }
+
 
     return (
         <>
@@ -29,49 +75,41 @@ function AdminOptionPage(props) {
                 <div css={s.functionBox}>
                     <div css={s.buttonBox}>
                         <button onClick={() => navigate("/admin/option/add")}>추가</button>
-                        <div />
-                        <button>순서 편집</button>
                     </div>
                 </div>
-                <div css={s.tableLatout}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>코드</th>
-                                <th>옵션 명</th>
-                                <th>노출 여부</th>
-                                <th>수정</th>
-                                <th>삭제</th>
+                <div css={s.tableContainer}>
+                    <div css={s.tableLayout}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>코드</th>
+                                    <th>옵션 명</th>
+                                    <th>노출 여부</th>
+                                    <th>수정</th>
+                                    <th>삭제</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                orders.map(order =>
-                                    <tr key={order.orderId}>
-                                        <td>{order.orderDate}</td>
-                                        <td>{order.orderId}</td>
-                                        <td><Switch></Switch></td>
-                                        <td><button css={s.tableButton} onClick={() => navigate(`/admin/option/update/${order.orderId}`)}>수정</button></td>
-                                        <td><button css={s.tableButton}>삭제</button></td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div css={s.paginateContainer}>
-                    <ReactPaginate
-                        breakLabel="..."
-                        previousLabel={<><IoMdArrowDropleft /></>}
-                        nextLabel={<><IoMdArrowDropright /></>}
-                        pageCount={totalPageCount}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        activeClassName='active'
-                    // onPageChange={handlePageOnChange}
-                    // forcePage={parseInt(searchParams.get("page")) - 1} 
-                    />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    optionList?.data?.pages.map(options => options?.data.map(option =>
+                                        <tr key={option.optionId}>
+                                            <td>{option.optionId}</td>
+                                            <td>{option.optionName}</td>
+                                            <td>
+                                                <Switch value={option.optionStatus} 
+                                                    checked={option.optionStatus === 1} 
+                                                    onChange={() => handleOptionStatusChekcked(option.optionId)} />
+                                            </td>
+                                            <td><button css={s.tableButton} onClick={() => navigate(`/admin/option/update/${option.optionId}`)}>수정</button></td>
+                                            <td><button css={s.tableButton} onClick={() => handleOptionDeleteOnClick(option.optionId)}>삭제</button></td>
+                                        </tr>
+
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </>
