@@ -1,21 +1,80 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from "react";
-import { useParams } from "react-router-dom"; // useParams 임포트
 import * as s from "./style";
+import { useMutation, useQuery } from "react-query";
 import { Radio } from "pretty-checkbox-react";
+import { instance } from "../../../apis/util/instance";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function AdminCategoryUpdatePage(props) {
-    const { orderId } = useParams(); // URL에서 menuId 가져오기
+    const {categoryId} = useParams();
+    const navigate = useNavigate();
 
-    const [orders] = useState([
-        { orderId: 1, orderStatus: "완료", orderType: "카트", price: 1000, orderDate: "2024-01-01", orders: "sadsadsa" },
-        { orderId: 2, orderStatus: "취소", orderType: "포인트", price: 2300, orderDate: "2024-01-01", orders: "dasdsada" },
-        { orderId: 3, orderStatus: "완료", orderType: "카드", price: 20000, orderDate: "2024-01-01", orders: "dasdsa" },
-    ]);
+    const [initialCategoryData, setInitailCategoryData]= useState({
+            categoryId: 0,
+            categoryName: "",
+            categoryStatus: 0,
+    })
+    const [modifyCategoryData, setModifyCategoryData] = useState({
+        categoryId: 0,
+        categoryName: "",
+        categoryStatus: 0,
+    })
 
-    const order = orders.find(order => order.orderId === parseInt(orderId)); // menuId에 해당하는 메뉴 찾기
+    const category = useQuery(
+        ["categoryQuery", categoryId],
+        async () => await instance.get(`/admin/category/${categoryId}`),
+        {
+            retry: 0,
+            refetchOnWindowFocus: false,
+            onSuccess: response => {
+                console.log(response?.data)
+                const categoryData = response?.data;
+                const { menuList, ...rest } = categoryData
+
+                setInitailCategoryData(rest.category);
+                setModifyCategoryData(rest.category); 
+            }
+        }
+    );
+    console.log(modifyCategoryData);
+    console.log(category)
+    console.log(category?.data?.data.menuList)
+
+    const modifyCategoryMutation = useMutation(
+        async () => await instance.patch(`/admin/category/${categoryId}`, modifyCategoryData),
+        {
+            onSuccess: () => {
+                alert("수정되었습니다.");
+                navigate("/admin/category")
+            }
+        }
+    )
+
+    const handleModifyDataInputOnChange = (e) => {
+        setModifyCategoryData(modifyCategoryData =>({
+            ...modifyCategoryData,
+
+                [e.target.name]: e.target.value
+           
+        }))
+    }
+    const handleCategoryStatusChange = (e) => {
+        setModifyCategoryData(modifyCategoryData => ({
+            ...modifyCategoryData,
+
+                categoryStatus: Number(e.target.value) // categoryStatus만 업데이트
+            
+        }));
+    }
+
+    const handleModifyCategoryOnClick = () => {
+        modifyCategoryMutation.mutateAsync();
+        console.log(modifyCategoryData);
+    }
 
     const handleBackOnClick = () => {
+        setModifyCategoryData(initialCategoryData);
         window.history.back();
     }
 
@@ -30,35 +89,51 @@ function AdminCategoryUpdatePage(props) {
                         <div css={s.infoBox}>
                             <div css={s.option}>
                                 <p css={s.optionTitle}>코드 번호 : </p>
-                                <input type="text" css={s.selectContainer} disabled value={order ? order.orderId : ''} />
+                                <input type="text" value={modifyCategoryData.categoryId} 
+                                    css={s.selectContainer} disabled  />
                             </div>
                             <div css={s.option}>
                                 <p css={s.optionTitle}>카테고리 명 : </p>
-                                <input type="text" css={s.selectContainer} value={order ? order.orderId : ''} />
+                                <input type="text" name="categoryName" 
+                                    value={modifyCategoryData.categoryName} 
+                                    css={s.selectContainer} 
+                                    onChange={handleModifyDataInputOnChange}/>
                             </div>
                             <div css={s.option}>
                                 <div css={s.optionTitle}>
                                     <p>노출 여부</p>
                                 </div>
                                 <div css={s.radioBox}>
-                                    <Radio css={s.radio} name="b">사용</Radio>
-                                    <Radio name="b" bigger>미사용</Radio>
+                                <Radio css={s.radio} name="categoryStatus" value={1} 
+                                    checked={modifyCategoryData.categoryStatus === 1} 
+                                    onChange={handleCategoryStatusChange}>
+                                       사용
+                                </Radio>
+                                <Radio name="categoryStatus" value={0}
+                                     checked={modifyCategoryData.categoryStatus === 0} 
+                                     onChange={handleCategoryStatusChange} bigger>
+                                        미사용
+                                </Radio>
                                 </div>
                             </div>
                             <div css={s.registerContainer}>
                                 <div css={s.registerMenu}>
                                     <p>등록메뉴</p>
-                                    <button>+</button>
                                 </div>
-                                <div css={s.menuBox}>
-                                    <p>아메리카노</p>
-                                    <button>x</button>
+                                <div css={s.menuContainer}>
+                                {
+                                    category?.data?.data.menuList.map(menu => (
+                                        <div css={s.menuBox} key={menu.menuId}>
+                                            <p>{menu.menuName}</p>
+                                        </div>
+                                    ))
+                                }
                                 </div>
                             </div>
                         </div>
                         <div css={s.buttonBox}>
                             <button onClick={handleBackOnClick}>취소</button>
-                            <button>수정</button>
+                            <button onClick={handleModifyCategoryOnClick}>수정</button>
                         </div>
                     </div>
                 </div>

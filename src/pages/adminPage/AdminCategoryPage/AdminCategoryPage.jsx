@@ -58,7 +58,7 @@ function AdminCategoryPage(props) {
         setCategories(categories =>
             categories?.data.map(category =>
                 category.categoryId === categoryId
-                    ? { ...category, menuStatus:  1 ? 0 : 1 }
+                    ? { ...category, categoryStatus:  1 ? 0 : 1 }
                     : category
             )
         );
@@ -82,11 +82,12 @@ function AdminCategoryPage(props) {
         }
     }
 
+
     return (
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>카테고리 관리( table 수정 예정 )</p>
+                    <p>카테고리 관리</p>
                 </div>
                 <div css={s.functionBox}>
                     <div css={s.buttonBox}>
@@ -115,8 +116,8 @@ function AdminCategoryPage(props) {
                                             <td>{category.categoryId}</td>
                                             <td>{category.categoryName}</td>
                                             <td><Switch value={category.categoryStatus} checked={category.categoryStatus === 1} onChange={() => handleCategoryStatusChekcked(category.categoryId)} /></td>
-                                            <td><button css={s.tableButton} value={category.categoryId} onClick={() => navigate(`/admin/category/update/${category.categoryId}`)}>수정</button></td>
-                                            <td><button css={s.tableButton} value={category.categoryId} onClick={() => handleCategoryDeleteOnClick(category.categoryId)} >삭제</button></td>
+                                            <td><button css={s.tableButton}  onClick={() => navigate(`/admin/category/update/${category.categoryId}`)}>수정</button></td>
+                                            <td><button css={s.tableButton}  onClick={() => handleCategoryDeleteOnClick(category.categoryId)} >삭제</button></td>
                                         </tr>
                                     )
                                     )
