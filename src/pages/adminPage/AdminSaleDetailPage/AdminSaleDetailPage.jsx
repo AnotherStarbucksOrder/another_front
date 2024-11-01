@@ -12,13 +12,13 @@ function AdminSaleDetailPage(props) {
         { orderId: 3, orderStatus: "완료", orderType: "카드", price: 20000, orderDate: "2024-01-01", orders: "dasdsa" },
     ]);
 
-    
+
 
     return (
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>매출 관리( 수정 할 걸? )</p>
+                    <p>매출 관리( 수정 해야겠다 )</p>
                 </div>
                 <div css={s.container}>
                     <div css={s.saleContainer}>
@@ -29,24 +29,18 @@ function AdminSaleDetailPage(props) {
                             <p>총 매출: 1,200,000원</p>
                         </div>
                         <div css={s.orderTypeBox}>
-                            <div css={s.typeTitle}>
-                                <p>결제 수단 별 매출</p>
-                            </div>
+                            <p>결제 수단 별 매출</p>
                             <div css={s.priceBox}>
                                 <div>카드 결제 : </div>
                                 <div>1,000,000원</div>
                             </div>
-                            <div css={s.typeTitle}>
-                                <p>메뉴 별 매출</p>
-                            </div>
-                            <div css={s.priceBox}>
+                            <p>메뉴 별 매출</p>
+                            <div>
                                 <div>카드 결제 : </div>
                                 <div>1,000,000원</div>
                             </div>
-                            <div css={s.typeTitle}>
-                                <p>환불 내역</p>
-                            </div>
-                            <div css={s.priceBox}>
+                            <p>환불 내역</p>
+                            <div>
                                 <div>카드 결제 : </div>
                                 <div>1,000,000원</div>
                             </div>

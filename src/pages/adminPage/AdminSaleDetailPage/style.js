@@ -39,10 +39,10 @@ export const saleContainer = css`
     justify-content: space-between;
     align-items: center;
     border: 1px solid ${COLORS.lineColor};
-    margin-top: 60px;
+    margin-top: 40px;
     padding: 10 0 30px;
     width: 500px;
-    height: 800px;
+    height: 750px;
     overflow: scroll;
 `;
 
@@ -80,7 +80,17 @@ export const orderTypeBox = css`
     align-items: center;
     padding: 0 100px;
     width: 100%;
-    height: 100%;`;
+    height: 550px;
+    overflow: auto;
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    & p {
+        font-size: 20px;
+        font-weight: 600;
+    }
+`;
 
 export const typeTitle = css`
     box-sizing: border-box;

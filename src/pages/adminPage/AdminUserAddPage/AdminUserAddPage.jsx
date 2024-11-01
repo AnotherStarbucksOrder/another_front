@@ -1,7 +1,39 @@
 /** @jsxImportSource @emotion/react */
+import { useState } from "react";
 import * as s from "./style";
+import { useMutation } from "react-query";
+import { instance } from "../../../apis/util/instance";
+import { useNavigate } from "react-router-dom";
 
 function AdminUserAddPage(props) {
+    const navigate = useNavigate();
+    const [inputUser, setInputUser ] = useState({
+        phoneNumber: "",
+        starCount: 0,
+        memo: ""
+    })
+
+    const addUserMutation = useMutation(
+        async () => await instance.post("/admin/user", inputUser),
+        {
+            onSuccess: () => {
+                alert("등록하였습니다.");
+                navigate("/admin/user?page=1")
+            }
+        }
+    )
+
+    const handleUserInputChange = (e) => {
+        setInputUser({
+            ...inputUser,
+            [e.target.name]: e.target.value
+        });
+    }
+
+    const handleInputUserSubmitClick = () => {
+        addUserMutation.mutateAsync();
+        console.log(inputUser);
+    }
 
     const handleBackOnClick = () => {
         window.history.back();
@@ -20,33 +52,9 @@ function AdminUserAddPage(props) {
                             <div css={s.infoBox}>
                                 <div css={s.option}>
                                     <div css={s.optionTitle}>
-                                        <p>이름 : </p>
-                                    </div>
-                                    <input type="text" css={s.input} />
-                                </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
                                         <p>전화번호 : </p>
                                     </div>
-                                    <input type="text" css={s.input} />
-                                </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>포인트 : </p>
-                                    </div>
-                                    <input type="text" css={s.input} />
-                                </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>가입일 : </p>
-                                    </div>
-                                    <input type="text" css={s.input} />
+                                    <input type="text" name="phoneNumber" css={s.input} onChange={handleUserInputChange} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -54,7 +62,7 @@ function AdminUserAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메모 : </p>
                                     </div>
-                                    <textarea name="" css={s.input}></textarea>
+                                    <textarea name="memo" css={s.input} onChange={handleUserInputChange}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +70,7 @@ function AdminUserAddPage(props) {
                 </div>
                 <div css={s.buttonBox}>
                     <button onClick={handleBackOnClick}>취소</button>
-                    <button>등록</button>
+                    <button onClick={handleInputUserSubmitClick}>등록</button>
                 </div>
             </div>
         </>
