@@ -7,10 +7,15 @@ export const ordersAtom = atom({
         paymentType: "",        
         amount: 0,              // 총 가격         
         quantity: 0,            // 총 수량
+        paymentId: "",
         user: {     
             userId: 0,            
             phoneNumber: "010-",
-            totalPoint: 0
+            coupons: [
+                // couponId: 0,         
+                // couponName: "", 
+                // registerDate: ""
+            ]
         },
         products: [            
             // {
@@ -37,7 +42,9 @@ export const portoneData = {
     locale: 'KO_KR',
     channelKey: "channel-key-fbf79352-9ad6-4d07-b0c6-0a5d1504f884",
     payMethod: 'EASY_PAY',
-    products: [],           // 줘야해
+    products: [             // 줘야해
+        
+    ],           
     windowType: {
         pc: 'IFRAME',
     }
@@ -48,10 +55,15 @@ export const defaultOrders = {
     orderType: 0,          
     paymentType: "",        
     amount: 0,                      
-    quantity: 0,            
-    user: {                 
+    quantity: 0,   
+    paymentId: "",         
+    user: {     
+        userId: 0,            
         phoneNumber: "010-",
-        point: 0
+        coupons: []
     },
     products: [],
 };
+
+// coupons: [ 1, 2, 4] ~> 사용한 쿠폰아이디만 배열로 넣어서 달라!
+// 

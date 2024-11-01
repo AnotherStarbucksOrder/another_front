@@ -14,7 +14,6 @@ function MainFooter() {
     const navigate = useNavigate();
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
 
-
     useEffect(() => {
         let totalAmount = 0;
         let totalQuantity = 0;
@@ -36,16 +35,21 @@ function MainFooter() {
     
     // 수량 - 버튼 클릭했을 때 
     const handleMinusButtonOnClick = (updateMenuCart) => {
-
+        
         if(updateMenuCart.count > 1) {
             setOrders(orders => {
                 return {
                     ...orders,
                     products: orders.products.map(menuCart => {
                         if(JSON.stringify(menuCart) === JSON.stringify(updateMenuCart)) {
+                            let optionPrice = 0;
+
+                            for(let i = 0; i < menuCart.options.length; i++) {
+                                optionPrice += menuCart.options[i].optionDetailPrice
+                            }
                             return {
                                 ...menuCart,
-                                totalPrice: menuCart.totalPrice - menuCart.menuPrice,
+                                totalPrice: menuCart.totalPrice - menuCart.menuPrice - optionPrice,
                                 count: menuCart.count - 1,
                             };
                         }
@@ -63,9 +67,14 @@ function MainFooter() {
                 ...orders,
                 products: orders.products.map(menuCart => {
                     if(JSON.stringify(menuCart) === JSON.stringify(updateMenuCart)) {
+                        let optionPrice = 0;
+
+                        for(let i = 0; i < menuCart.options.length; i++) {
+                            optionPrice += menuCart.options[i].optionDetailPrice
+                        }
                         return {
                             ...menuCart,
-                            totalPrice: menuCart.totalPrice + menuCart.menuPrice,
+                            totalPrice: menuCart.totalPrice + menuCart.menuPrice + optionPrice,
                             count: menuCart.count + 1,
                         };
                     }
@@ -160,7 +169,7 @@ function MainFooter() {
                                             <p>{menuCart.count}</p>
                                             <button onClick={() => handlePlusButtonOnClick(menuCart)}><FaCirclePlus/></button>
                                         </div>
-                                        <p>{(menuCart.totalPrice).toLocaleString('Ko-KR')}원</p>
+                                        <p>{(menuCart.totalPrice).toLocaleString()}원</p>
                                     </div>
                                 </div>
                             ))
@@ -170,7 +179,7 @@ function MainFooter() {
             <div css={s.totalContainer}>
                 <div css={s.totalCount}>
                     <p>총 수량: {orders.quantity} 개</p>
-                    <p>총 가격: {orders.amount.toLocaleString('ko-KR')} 원</p>
+                    <p>총 가격: {orders.amount.toLocaleString()} 원</p>
                 </div>
                 <div css={s.buttons}>
                     <button onClick={hanldeAlldeleteButtonOnClick}>전체 삭제</button>

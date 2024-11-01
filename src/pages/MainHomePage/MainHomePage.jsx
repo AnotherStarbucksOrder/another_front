@@ -17,7 +17,7 @@ function MainHomePage() {
 
 	const [ searchParams, setSearchParams ] = useSearchParams();
 	const [ totalPageCount, setTotalPageCount ] = useState(1);
-	const [ selectedCategoryId, setSelectedCategoryId ] = useState(11);
+	const selectedCategoryId = searchParams.get("categoryId") || 11;
 	const limit = 9;
 	const currentPage = searchParams.get("page") || 1;
 
@@ -44,14 +44,13 @@ function MainHomePage() {
 
 	// 페이지이동할때 마다 + 1
 	const handlePageOnChange = (e) => {
-		setSearchParams({ page: e.selected + 1 })
+		setSearchParams({ page: e.selected + 1, categoryId: selectedCategoryId  })
 	}
 
 	// 카테고리가 변경될때마다 categoryId를 set, page를 1로 초기화
 	const handleCategoryOnChange = (categoryId) => {
 		if(categoryId !== selectedCategoryId) {
-			setSelectedCategoryId(categoryId);
-			setSearchParams({ page: 1 }); 
+			setSearchParams({ page: 1, categoryId });
 		}
 	}
 	
@@ -89,7 +88,7 @@ function MainHomePage() {
 							pageRangeDisplayed={5}
 							activeClassName='active'
 							onPageChange={handlePageOnChange}
-							forcePage={parseInt(searchParams.get("page") || 1) - 1}
+							forcePage={parseInt(currentPage) - 1}
 						/>
 					</div>
 				</div>

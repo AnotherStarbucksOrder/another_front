@@ -8,7 +8,6 @@ import PayMentTypePage from "./pages/PayMentPage/PayMentTypePage/PayMentTypePage
 import CardPaymentPage from "./pages/PayMentPage/CardPaymentPage/CardPaymentPage";
 import RewardPage from "./pages/PayMentPage/RewardPage/RewardPage";
 import PointPaymentPage from "./pages/PayMentPage/PointPaymentPage/PointPaymentPage";
-
 import AdminRoutes from "./routes/AdminRoutes/AdminRoutes";
 
 function App() {
@@ -26,7 +25,6 @@ function App() {
             
             {/* admin 페이지 */}
             <Route path="/admin/*" element={<AdminRoutes />} />
-
         </Routes>
         </>
     );

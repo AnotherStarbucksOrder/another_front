@@ -84,7 +84,7 @@ function RewardPage() {
             <button onClick={handleOrderCancleOnClick}><FontAwesomeIcon icon={faXmark} /></button>
             <div css={s.container}>
                 <div css={s.phoneNumber}>
-                    <p>포인트번호를 입력해주세요</p>
+                    <p>적립 할 번호를 입력해주세요</p>
                     <input type="text" 
                         value={inputValue}
                         onChange={handleInputOnChange} 

@@ -9,7 +9,7 @@ function MainTopBar({ handleCategoryOnChange }) {
 
     const [ categories, setCategories] = useState([]);
     const [ currentMenuIndex, setCurrentMenuIndex ] = useState(0); 
-    const [ isActiveCategory, setIsActiveCategory] = useState("");
+    const [ isActiveCategory, setIsActiveCategory] = useState(0);
 
     // 카테고리 list Query
     const categoryList = useQuery(
@@ -44,7 +44,6 @@ function MainTopBar({ handleCategoryOnChange }) {
         handleCategoryOnChange(categoryId);         
         setIsActiveCategory(categoryId);
     }
-
 
 
     return (

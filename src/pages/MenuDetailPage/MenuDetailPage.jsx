@@ -14,6 +14,7 @@ import { useRecoilState } from 'recoil';
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 
+
 function MenuDetailPage() {
 
     const navigate = useNavigate();
@@ -85,11 +86,18 @@ function MenuDetailPage() {
 
     // count가 변할때마다 totalPrice 계산
     useEffect(() => {
+        let optionPrice = 0;
+
+        for(let i = 0; i < menuCart.options.length; i++) {
+            optionPrice += menuCart.options[i].optionDetailPrice
+        }
+
         setMenuCart(menuCart => ({
             ...menuCart,
-            totalPrice: (!menuCart.menuPrice ? 0 : menuCart.menuPrice) * menuCart.count,
+            totalPrice: (!menuCart.menuPrice ? 0 : menuCart.menuPrice + optionPrice) * menuCart.count,
         }));
-    }, [menuCart.count])
+
+    }, [menuCart.count, menuCart.options])
 
 
     // 선택 완료 버튼 클릭 시
@@ -117,7 +125,8 @@ function MenuDetailPage() {
                 products: order.products.map(menuCart => ({
                     ...menuCart, 
                     totalPrice: !menuCart.totalPrice ? 0 : menuCart.totalPrice + newMenuCart.totalPrice, 
-                    count: menuCart.count + newMenuCart.count,}))
+                    count: menuCart.count + newMenuCart.count,
+                }))
             }));
         }else {
             setOrders(order => ({
@@ -125,10 +134,8 @@ function MenuDetailPage() {
                 products: [...order.products, newMenuCart]
             }));
         }
-
         navigate(-1);
     };
-
 
     return (
     <>
@@ -148,7 +155,7 @@ function MenuDetailPage() {
                                     <p>{menuInfo.data.comment}</p>
                                 </div>
                                 <div css={s.productPriceInfo}>
-                                    <p>{(menuInfo.data.menuPrice).toLocaleString('ko-KR')} 원</p>
+                                    <p>{(menuInfo.data.menuPrice).toLocaleString()} 원</p>
                                     <div css={s.productCount}>
                                         <button onClick={handleCountMinusButtonOnClick} ><FaCircleMinus /></button>
                                         <p>{menuCart.count}</p>
