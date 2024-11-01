@@ -4,12 +4,12 @@ import MainTopBar from '../../../components/MainTopBar/MainTopBar';
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { defaultOrders, ordersAtom, portoneData } from '../../../atoms/ordersAtom';
 import { useRecoilState } from 'recoil';
 import { useMutation } from 'react-query';
 import { instance } from '../../../apis/util/instance';
 import * as PortOne from "@portone/browser-sdk/v2";
+import Swal from 'sweetalert2';
 
 function CardPaymentPage() {
 
@@ -31,35 +31,80 @@ function CardPaymentPage() {
     }
 
 
-    // *결제하기 버튼 클릭 시
+    // *결제하기 버튼 클릭 시 -> 포트원 결제 요청 날림 
     const payMentCompletedOnClick = () => { 
-        
+        processPortOnePayment();
+    }
+
+    // * 포트원 결제 로직
+    const processPortOnePayment = () => {
         const newPortoneData = { 
             ...portoneData,
             paymentId: crypto.randomUUID(),
             totalAmount: orders.amount,
             products: orders.products.map(item => ({
                 id: item.menuId,
-                name: item.menuName,
+                name: item.menuName + "(" + item.options.map(option => option.optionName + "-" + option.optionDetailValue).join(', ') + ")",
                 amount: item.totalPrice,
-                quantity: item.count
+                quantity: item.count,
             }))
-        }
+        };
 
-        // *포트원으로 요청 보내기 
         PortOne.requestPayment(newPortoneData)
         .then(response => {
-            const orderData = {
-                paymentId: response.paymentId,
-                totalAmount: newPortoneData.totalAmount,
-                orderType: orders.orderType,
-                customer: orders.user.phoneNumber,
-                products: newPortoneData.products,
-            }
-            orderMutation.mutateAsync(orderData);
-        })
-        .catch(error => alert("오류"));
-    }
+            // 포트원 성공 시
+            if(response.transactionType === "PAYMENT" && !response.code) { 
+                setOrders(orders => ({
+                    ...orders,
+                    paymentId: response.paymentId
+                }))
+                // 여기서 별 적립 사용하고, paymentType이 star들어온 부분에 대해서는 바로 요청 날리기 
+                Swal.fire({
+                    title: "별 적립을 하시겠습니까?",
+                    color: "#036635",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "네",
+                    cancelButtonText: "아니요"
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        navigate("/reward"); 
+                    } else {
+                        const orderData = {
+                            paymentId: response.paymentId,
+                            totalAmount: newPortoneData.totalAmount,
+                            totalQuantity: orders.quantity,
+                            orderType: orders.orderType,
+                            customer: orders.user,
+                            products: newPortoneData.products,
+                        }
+                        orderMutation.mutateAsync(orderData);
+                    }
+                })
+                // 카카오페이 x 버튼 클릭 시 (결제 취소)
+            }  else if(response.code === "FAILURE_TYPE_PG" && response.pgCode === "CANCEL") { 
+                Swal.fire({
+                    title: "결제가 취소되었습니다.",
+                    color: "#036635",
+                    confirmButtonColor: "#3EA270",
+                    confirmButtonText: "확인"
+                }).then(() => {
+                    beforeOnClick();  
+                });
+        }
+    })
+    // 결제 중 오류 발생 
+    .catch(error => {
+        Swal.fire({
+            title: "결제 중 오류가 발생하였습니다. 다시 결제해주세요",
+            color: "#036635",
+            confirmButtonColor: "#3EA270",
+            confirmButtonText: "확인"
+        }).then(() => {
+            beforeOnClick();  // 이전 화면으로 이동
+        });
+    });
+}
 
     // *결제완료데이터 Mutation (관리자 필요 데이터)
     const orderMutation = useMutation(
@@ -68,13 +113,9 @@ function CardPaymentPage() {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                if(orders.user.userId !== 0) {
-                    checkMutation.mutateAsync();
-                    return;
-                }
                 let timerInterval;
                 Swal.fire({
-                    title: `주문이 완료되었습니다!`,
+                    title: "결제가 완료되었습니다!",
                     color: "#036635",
                     html: "<b>5</b>초 뒤 자동으로 홈화면으로 이동합니다!",
                     timer: 5000,
@@ -89,24 +130,14 @@ function CardPaymentPage() {
                     willClose: () => {
                         clearInterval(timerInterval);  
                     }
-                    }).then(result => {
-                        navigate("/");
-                        setOrders(defaultOrders)
-                    })
-            },
-        }
-    )
-
-    // * 포인트 적립, 포인트 사용 요청 
-    const checkMutation = useMutation(
-        async () => await instance.post("/points/check"),
-        {
-            retry: 0,
-            refetchOnWindowFocus: false,
-            onSuccess: response => {
+                }).then(result => {
+                    navigate("/");
+                    setOrders(defaultOrders)
+                })
             }
         }
     )
+    console.log(orders)
 
     return (
     <>
@@ -116,7 +147,7 @@ function CardPaymentPage() {
             <div css={s.totalCount}>
                 <p>카드를 넣어주세요</p>
                 <p>기기하단에 있는 카드리더기에 카드를 넣어주세요</p>
-                <p>결제금액: {(orders.amount).toLocaleString('ko-KR')}원</p>
+                <p>결제금액: {(orders.amount).toLocaleString()}원</p>
             </div>
             <img src="/cardImg.jpg" alt="" />
             <div css={s.buttons}>
