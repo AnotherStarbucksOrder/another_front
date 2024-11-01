@@ -1,58 +1,101 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
+import { useMutation, useQuery } from "react-query";
+import { instance } from "../../../apis/util/instance";
 
 function AdminUserPage(props) {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [totalPageCount, setTotalPageCount] = useState(1);
-    const limit = 12;
     const [ checkedAll, setCheckedAll ] = useState(false);
+    const [ users, setUsers ] = useState([]);
     const navigate = useNavigate();
+    const [searchValue, setSearchValue] = useState(searchParams.get("searchName") ?? "");
+    const limit = 13;
 
-    const [users, setUsers] = useState([
-        { userId:1, phoneNum: "010-1111-1111", name: "김하나", point: 10, registerDate:"2024-01-01", memo: "sadsadsa" },
-        { userId:2, phoneNum: "010-2222-2222", name: "김둘", point: 0, registerDate:"2024-01-01", memo: "dasdsada" },
-        { userId:3, phoneNum: "010-3333-3333", name: "김셋", point: 20, registerDate:"2024-01-01", memo: "dasdsa" },
-    ]);
-
-    useEffect(() => {
-        const checkStates = users.map(user => user.isChecked);
-        if(checkStates.includes(false)) {
-            setCheckedAll(false);
+    const userList = useQuery(
+        ["userListQuery", searchParams.get("page"), searchParams.get("search")],
+        async () => await instance.get(`/admin/user?page=${searchParams.get("page")}&limit=${limit}&searchName=${searchValue}`),
+        {
+            retry: 0,
+            refetchOnWindowFocus: false,
+            onSuccess: response => {
+                console.log(response.data);
+                setUsers(response?.data.data);
+                setTotalPageCount(
+                    response.data.totalCount % limit === 0
+                    ? response.data.totalCount / limit
+                    : Math.floor(response.data.totalCount / limit) + 1
+                );
+            }
         }
-    },[users])
+    )
+    console.log(users)
+    console.log(userList)
 
-    const handleCheckedChange = (e) => {
-        setUsers(users => [...users.map(user => {
-            if(user.userId === parseInt(e.target.value)){
-                return {
-                    ...user,
-                    isChecked: !user.isChecked
-                }
+
+    const deleteUserMutation = useMutation(
+        async (userIds) =>{ 
+            for( const userId of userIds){
+                await instance.delete(`/admin/user?userIds=${userId}`)
             }
-            return user;
-        })])
+        },
+        {
+            onSuccess: () => {
+                alert("삭제하였습니다");
+                userList.refetch();
+            }
+        }
+    )
+
+    const handleSearchInputChange = (e) => {
+        setSearchValue(e.target.value);
     }
 
-    const handleCheckedAllChange = (e) => {
-        setCheckedAll(checked => {
-            if(!checked) {
-                setUsers([...users.map(user => ({...user, isChecked: true}))]);
-            } else {
-                resetViewUsers();
-            }
-            return !checked
-        })
+    const handlePageOnChange = (e) => {
+        navigate(`/admin/user?page=${e.selected + 1}&searchName=${searchValue}`)
     }
 
-    const resetViewUsers = () => {
-        setUsers([...users.map(user => ({...user, isChecked: false}))])
+     // 체크박스 상태 관리 
+     useEffect(() => {
+        const allChecked = users.every(user => user.isChecked);
+        setCheckedAll(allChecked);
+    }, [users]);
+
+    const handleUserChecked = (userId) => {
+        setUsers(users =>
+            users.map(user =>
+                user.userId === userId ? { ...user, isChecked: !user.isChecked } : user
+            )
+        );
+    };
+    console.log(users.filter(user => user.isChecked).map(user => user.userId))
+
+
+    const handleCheckedAllChange = () => {
+        const newCheckedState = !checkedAll;
+        setUsers(users.map(user => ({ ...user, isChecked: newCheckedState })));
+        setCheckedAll(newCheckedState);
+    };
+
+    const handleDeleteUserOnClick = () => {
+        const userIds = users.filter(user => user.isChecked).map(user => user.userId);
+
+        if(window.confirm("삭제하시겠습니까?")) {
+            deleteUserMutation.mutateAsync(userIds);
+        };
+    }
+
+    const handleSearchButtonClick = () => {
+        navigate(`/admin/user?page=1&searchName=${searchValue}`);
+        userList.refetch();
     }
 
     const handleUserAddOnClick = () => {
-        navigate("/admin/user/add")
+        navigate("/admin/user/add");
     }
 
     return (
@@ -63,13 +106,13 @@ function AdminUserPage(props) {
                 </div>
                 <div css={s.functionBox}>
                     <div css={s.searchBox}>
-                        <input type="text" placeholder="전화번호, 이름, 고유번호"/>
-                        <button>🔍</button>
+                        <input type="text" placeholder="전화번호" onChange={handleSearchInputChange} value={searchValue}/>
+                        <button onClick={handleSearchButtonClick}>🔍</button>
                     </div>
                     <div css={s.buttonBox}>
                         <button onClick={handleUserAddOnClick}>등록</button>
                         <div />
-                        <button>삭제</button>
+                        <button onClick={handleDeleteUserOnClick}>삭제</button>
                     </div>
                 </div>
                 <div css={s.tableLatout}>
@@ -77,10 +120,9 @@ function AdminUserPage(props) {
                         <thead>
                             <tr>
                                 <th><input type="checkbox" onChange={handleCheckedAllChange} checked={checkedAll}/></th>
-                                <th>이름</th>
+                                <th>번호</th>
                                 <th>전화번호</th>
                                 <th>포인트</th>
-                                <th>가입일</th>
                                 <th>메모</th>
                                 <th>--</th>
                             </tr>
@@ -89,11 +131,10 @@ function AdminUserPage(props) {
                             {
                                 users.map(user => 
                                     <tr key={user.userId}>
-                                        <td><input type="checkbox" onChange={handleCheckedChange} checked={user.isChecked} value={user.userId}/></td>
-                                        <td>{user.name}</td>
-                                        <td>{user.phoneNum}</td>
-                                        <td>{user.point}</td>
-                                        <td>{user.registerDate}</td>
+                                        <td><input type="checkbox" onChange={() => handleUserChecked(user.userId)} checked={user.isChecked} value={user.userId}/></td>
+                                        <td>{user.userId}</td>
+                                        <td>{user.phoneNumber}</td>
+                                        <td>{user.starCount}</td>
                                         <td>{user.memo}</td>
                                         <td><Link to={`/admin/user/detail/${user.userId}`}>상세보기</Link></td>
                                     </tr>
@@ -111,8 +152,8 @@ function AdminUserPage(props) {
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     activeClassName='active'
-                    // onPageChange={handlePageOnChange}
-                    // forcePage={parseInt(searchParams.get("page")) - 1} 
+                    onPageChange={handlePageOnChange}
+                    forcePage={parseInt(searchParams.get("page") || 1) - 1}
                 />
             </div>
             </div>

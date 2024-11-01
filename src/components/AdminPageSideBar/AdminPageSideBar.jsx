@@ -16,7 +16,7 @@ function AdminPageSideBar(props) {
         navigate("/admin/order");
     }
     const handleUserClick = () => {
-        navigate("/admin/user");
+        navigate("/admin/user?page=1");
     }
     const handleCategoryClick = () => {
         navigate("/admin/category");

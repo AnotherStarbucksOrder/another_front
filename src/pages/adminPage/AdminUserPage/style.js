@@ -135,11 +135,9 @@ export const tableLatout = css`
             width: 10%;
         }
         &:nth-of-type(5) {
-            width: 10%;
+            width: 30%;
         }
-        &:nth-of-type(7) {
-            width: 10%;
-        }
+
 
     }
 

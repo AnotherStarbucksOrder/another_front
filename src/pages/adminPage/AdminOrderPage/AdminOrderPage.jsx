@@ -35,7 +35,7 @@ function AdminOrderpage(props) {
                     </div>
                     <div css={s.buttonBox}>
                         <input type="date" />
-                        <input type="date" />
+                        <input type="month" />
                         <button>조회</button>
                     </div>
                 </div>
