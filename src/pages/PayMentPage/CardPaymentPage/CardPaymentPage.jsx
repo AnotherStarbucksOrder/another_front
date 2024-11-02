@@ -21,15 +21,18 @@ function CardPaymentPage() {
     const beforeOnClick = () => {
         setOrders(orders => ({
             ...orders,
-            paymentType: "",
+            paymentType: 0,
+            amount: orders.originalAmount,
             user: {
                 ...orders.user,
-                phoneNumber: "010-"
+                userId: 0,
+                phoneNumber: "010-",
+                coupons: [],
+                usedCoupon: []
             }
         }))
         navigate("/payment");
     }
-
 
     // *결제하기 버튼 클릭 시 -> 포트원 결제 요청 날림 
     const payMentCompletedOnClick = () => { 
@@ -58,30 +61,43 @@ function CardPaymentPage() {
                     ...orders,
                     paymentId: response.paymentId
                 }))
-                // 여기서 별 적립 사용하고, paymentType이 star들어온 부분에 대해서는 바로 요청 날리기 
-                Swal.fire({
-                    title: "별 적립을 하시겠습니까?",
-                    color: "#036635",
-                    showConfirmButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: "네",
-                    cancelButtonText: "아니요"
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        navigate("/reward"); 
-                    } else {
-                        const orderData = {
-                            paymentId: response.paymentId,
-                            totalAmount: newPortoneData.totalAmount,
-                            totalQuantity: orders.quantity,
-                            orderType: orders.orderType,
-                            customer: orders.user,
-                            products: newPortoneData.products,
+
+                // 백엔드 보낼 데이터 
+                const orderData = {
+                    paymentId: response.paymentId,
+                    totalAmount: newPortoneData.totalAmount,
+                    totalQuantity: orders.quantity,
+                    orderType: orders.orderType,
+                    paymentType: orders.paymentType,
+                    customer: {
+                        userId: orders.user.userId,
+                        phoneNumber: orders.user.phoneNumber,
+                        usedCoupon: orders.user.usedCoupon.map(coupon => coupon.couponId) 
+                    },
+                    products: newPortoneData.products,
+                }
+
+                // 카드결제인 경우, 별 적립 여부 (쿠폰 결제 별 적립 x)
+                if(orders.paymentType === 1) {
+                    Swal.fire({
+                        title: "별 적립을 하시겠습니까?",
+                        color: "#036635",
+                        showConfirmButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "네",
+                        cancelButtonText: "아니요"
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            navigate("/reward"); 
+                        } else {
+                            orderMutation.mutateAsync(orderData);
                         }
-                        orderMutation.mutateAsync(orderData);
-                    }
-                })
-                // 카카오페이 x 버튼 클릭 시 (결제 취소)
+                    })
+                } else {
+                    orderMutation.mutateAsync(orderData);
+                }
+
+            // 카카오페이 x 버튼 클릭 시 (결제 취소)
             }  else if(response.code === "FAILURE_TYPE_PG" && response.pgCode === "CANCEL") { 
                 Swal.fire({
                     title: "결제가 취소되었습니다.",
