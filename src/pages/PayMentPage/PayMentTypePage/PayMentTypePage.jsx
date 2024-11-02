@@ -26,7 +26,7 @@ function PayMentTypePage() {
     const handlePointOnClick = () => {  
         setOrders(order => ({
             ...order,
-            paymentType: "star",
+            paymentType: 2,
         }))
         navigate("/reward");
     };
@@ -35,7 +35,7 @@ function PayMentTypePage() {
     const handleCardOnClick = () => {
         setOrders(order => ({
             ...order,
-            paymentType: "card"
+            paymentType: 1
         }))
         navigate("/payment/card");
     };

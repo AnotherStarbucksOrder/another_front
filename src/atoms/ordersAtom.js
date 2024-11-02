@@ -4,12 +4,17 @@ export const ordersAtom = atom({
     key: "ordersState",
     default: {
         orderType: 0,          
-        paymentType: "",        
+        paymentType: 0,        
         amount: 0,              // 총 가격         
         quantity: 0,            // 총 수량
         paymentId: "",
+        originalAmount: 0, 
         user: {     
-            userId: 0,            
+            userId: 0,  
+            usedCoupon: [
+                // couponId: 0,
+                // menuId: ""
+            ],          
             phoneNumber: "010-",
             coupons: [
                 // couponId: 0,         
@@ -53,17 +58,16 @@ export const portoneData = {
 // ordersAtom 초기화 
 export const defaultOrders = {
     orderType: 0,          
-    paymentType: "",        
+    paymentType: 0,        
     amount: 0,                      
     quantity: 0,   
-    paymentId: "",         
+    paymentId: "",  
+    originalAmount: 0,        
     user: {     
-        userId: 0,            
+        userId: 0,
+        usedCoupon: [],            
         phoneNumber: "010-",
         coupons: []
     },
     products: [],
-};
-
-// coupons: [ 1, 2, 4] ~> 사용한 쿠폰아이디만 배열로 넣어서 달라!
-// 
+}

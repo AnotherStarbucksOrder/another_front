@@ -22,7 +22,7 @@ function RewardPage() {
     const handleOrderCancleOnClick = () => {
         setOrders(orders => ({
             ...orders,
-            paymentType: "",
+            paymentType: 0,
             user: {
                 ...orders.user,
                 phoneNumber: "010-"

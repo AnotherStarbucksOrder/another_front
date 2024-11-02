@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../../constants/colors";
 
 export const layout = css`
     display: flex;
@@ -10,7 +9,6 @@ export const layout = css`
         align-self: center;
         font-size: 35px;
         font-weight: 600;
-        margin-top: 0;
     }
 
     & div {
@@ -30,7 +28,7 @@ export const productContainer = css`
 export const productInfo = css`
     padding-bottom: 10px;
     align-items: center;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 2px solid #f5f5f5;
 
     & > p:nth-last-of-type(1) {
         width: 150px;
@@ -50,12 +48,22 @@ export const productDetailInfo = css`
     }
 
     & > div {
+        flex-direction: column;
         justify-content: space-around;
         margin-left: 40px;
+        cursor: pointer;
+
+        & > p {
+            margin: 0;
+        }
 
         & > p:nth-of-type(1) {
-            font-size: 20px;
+            font-size: 25px;
             font-weight: 600;
+        }
+
+        & > p:nth-last-of-type(1) {
+            font-size: 18px;
         }
     }
 `;

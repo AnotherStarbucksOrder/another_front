@@ -13,7 +13,6 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
 
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
     const phoneNumber = orders.user.phoneNumber;
-    console.log(orders)
     
     // 전화번호 조회로 해당 user 가져오기 
     // 사용가능한 쿠폰이 없으면 뒤로가기, 있다면 쿠폰 사용페이지로 이동 
@@ -49,7 +48,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                         navigate(-1)
                         setOrders(order => ({
                             ...order,
-                            paymentType: "",
+                            paymentType: 0,
                             user:  {
                                 userId: 0,            
                                 phoneNumber: "010-",
@@ -72,7 +71,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                     navigate(-1)
                     setOrders(order => ({
                         ...order,
-                        paymentType: "",
+                        paymentType: 0,
                         user:  {
                             userId: 0,            
                             phoneNumber: "010-",
@@ -108,7 +107,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
         }))
 
         // 카드 결제로 들어온 거 
-        if(orders.paymentType === "card"){
+        if(orders.paymentType === 1){
             orderData();
             return;
         }
