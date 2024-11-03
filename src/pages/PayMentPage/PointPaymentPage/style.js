@@ -42,9 +42,14 @@ export const layout = css`
 export const container = css`
     flex-direction: column;
     height: 100%;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 
     & > button {
         margin: 0 auto;
+        margin-top: 25px;
         border-radius: 8px;
         width: 300px;
         height: 90px;
@@ -66,12 +71,14 @@ export const container = css`
     }
 `;
 
-export const couponInfo = css`
+export const couponInfo = (isUsed) => css`
     align-items: center;
     margin-bottom: 20px;
     padding-left: 10px;
     border: 3px solid #F1EFE8;
     border-radius: 10px;
+    background-color: ${isUsed ? '#d3d3d3' : 'white'};
+    opacity: ${isUsed ? 0.6 : 1};
     cursor: pointer;
 
     & > img {

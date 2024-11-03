@@ -71,3 +71,17 @@ export const defaultOrders = {
     },
     products: [],
 }
+
+/*
+    paymentId
+    totalAmount
+    totalQuantity
+    orderType
+    paymentType
+    customer: {
+        userId
+        phoneNumber
+        usedCoupon
+    },
+    products(+옵션)
+*/

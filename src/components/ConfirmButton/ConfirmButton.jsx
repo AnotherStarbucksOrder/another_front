@@ -24,41 +24,45 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
             refetchOnWindowFocus: false,
             enabled: false,
             onSuccess: response => {
-                setOrders(order => ({
-                    ...order,
-                    user: {
-                        ...order.user,
-                        userId: response.data.userId,
-                        coupons: response.data.coupons.map(item => ({
-                            couponId: item.couponId,
-                            couponName: item.couponName,
-                            registerDate: item.registerDate
-                        }))
+                console.log(response);
+                // userId가 존재하면 
+                if(response.data.userId !== 0) {
+                    setOrders(order => ({
+                        ...order,
+                        user: {
+                            ...order.user,
+                            userId: response.data.userId,
+                            coupons: response.data.coupons.map(item => ({
+                                couponId: item.couponId,
+                                couponName: item.couponName,
+                                registerDate: item.registerDate
+                            }))
+                        }
+                    }))
+                    // userId는 존재 O, 쿠폰이 x 
+                    if(response.data.coupons.length === 0) {
+                        Swal.fire({
+                            title: "사용할 수 있는 쿠폰이 없습니다",
+                            color: "#036635",
+                            showConfirmButton: true,
+                            confirmButtonText: "네",
+                            confirmButtonColor: "#459661"
+                        }).then(result => {
+                            navigate(-1)
+                            setOrders(order => ({
+                                ...order,
+                                paymentType: 0,
+                                user:  {
+                                    userId: 0,            
+                                    phoneNumber: "010-",
+                                    coupons: []
+                                }
+                            }))
+                        })
+                        return;
                     }
-                }))
-
-                if(response.data.coupons.length === 0) {
-                    Swal.fire({
-                        title: "사용할 수 있는 쿠폰이 없습니다",
-                        color: "#036635",
-                        showConfirmButton: true,
-                        confirmButtonText: "네",
-                        confirmButtonColor: "#459661"
-                    }).then(result => {
-                        navigate(-1)
-                        setOrders(order => ({
-                            ...order,
-                            paymentType: 0,
-                            user:  {
-                                userId: 0,            
-                                phoneNumber: "010-",
-                                coupons: []
-                            }
-                        }))
-                    })
-                    return;
+                    navigate("/payment/point");
                 }
-                navigate("/payment/point");
             },
             // 사용자를 찾을 수 없을 때
             onError: e => {
@@ -121,8 +125,13 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
             paymentId: orders.paymentId,
             totalAmount: orders.amount,
             orderType: orders.orderType,
-            customer: orders.user,
+            paymentType: orders.paymentType,
             totalQuantity: orders.quantity,
+            customer: {
+                userId: orders.user.userId,
+                phoneNumber: orders.user.phoneNumber,
+                usedCoupon: orders.user.usedCoupon.map(coupon => coupon.couponId) 
+            },
             products: orders.products.map(item => ({
                 id: item.menuId,
                 name: item.menuName + "(" + item.options.map(option => option.optionName + "-" + option.optionDetailValue).join(', ') + ")",

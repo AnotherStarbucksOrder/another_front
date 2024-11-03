@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
 function CardPaymentPage() {
 
     const navigate = useNavigate();
-
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
 
     // 이전버튼 클릭 시
@@ -153,7 +152,6 @@ function CardPaymentPage() {
             }
         }
     )
-    console.log(orders)
 
     return (
     <>

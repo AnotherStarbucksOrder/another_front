@@ -8,7 +8,8 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { ordersAtom } from '../../../atoms/ordersAtom';
 import { useRecoilState } from 'recoil';
-import CouponModal from '../CouponModal/CouponModal';
+import CouponModal from '../../../components/CouponModal/CouponModal';
+import Swal from 'sweetalert2';
 
 function PointPaymentPage() {
 
@@ -41,8 +42,20 @@ function PointPaymentPage() {
         navigate("/payment");
     };
 
+    const selectedCouponCount = orders.user.usedCoupon.length;
+    const maxCouponCount = orders.quantity;
+
     // 쿠폰 클릭 시, modal창 open
     const handleCouponOnClick = (couponId) => {
+        if (selectedCouponCount >= maxCouponCount) {
+            Swal.fire({
+                icon: 'warning',
+                title: '사용할 수 있는 음료가 부족합니다.',
+                text: `장바구니에 담은 음료 수만큼 쿠폰을 사용할 수 있습니다.`,
+                showConfirmButton: true,
+            });
+            return;
+        }
         setSelectedCouponId(couponId);
         setOpenModal(true);
     }
@@ -90,16 +103,22 @@ function PointPaymentPage() {
                 <div css={s.container}>
                     <div>
                         {   
-                            orders.user.coupons.map(coupon =>
-                                <div css={s.couponInfo} key={coupon.couponId} onClick={() => handleCouponOnClick(coupon.couponId)}>
-                                    <img src="/starImg.jpg" alt="" />
-                                    <div css={s.couponDetail}>
-                                        <p>Another Starbucks</p>
-                                        <p>{coupon.couponName}</p>
-                                        <p>{coupon.registerDate.slice(0, 10)}</p>
+                            orders.user.coupons.map(coupon => {
+                                
+                                const isUsedCoupon = orders.user.usedCoupon.find(used => used.couponId === coupon.couponId);
+                                return (
+                                    <div key={coupon.couponId} 
+                                        css={s.couponInfo(isUsedCoupon)}     
+                                        onClick={() => handleCouponOnClick(coupon.couponId)}
+                                    >
+                                        <img src="/starImg.jpg" alt="" />
+                                        <div css={s.couponDetail}>
+                                            <p>Another Starbucks</p>
+                                            <p>{coupon.couponName}</p>
+                                            <p>{coupon.registerDate.slice(0, 10)}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            )
+                            )})
                         }
                     </div>
                     <button onClick={handleApplyOnClick}>적용 하기</button>

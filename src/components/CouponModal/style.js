@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { COLORS } from "../../constants/colors";
 
 export const layout = css`
     display: flex;
@@ -13,6 +14,19 @@ export const layout = css`
 
     & div {
         display: flex;
+    }
+
+    & > button {
+        margin: 0 auto;
+        margin-top: 20px;
+        border-radius: 8px;
+        width: 200px;
+        height: 80px;
+        font-size: 28px;
+        font-weight: 600;
+        color: ${COLORS.buttonFontColor};
+        background-color: ${COLORS.buttonColor};
+        cursor: pointer;
     }
 `;
 
