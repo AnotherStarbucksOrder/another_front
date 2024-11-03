@@ -15,8 +15,6 @@ function PayMentTypePage() {
 
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
 
-    console.log(orders)
-
     // 상단에 - 버튼 클릭 시
     const handleCancleOnClick = () => {
         navigate("/home");
@@ -35,7 +33,8 @@ function PayMentTypePage() {
     const handleCardOnClick = () => {
         setOrders(order => ({
             ...order,
-            paymentType: 1
+            paymentType: 1,
+            originalAmount: order.amount
         }))
         navigate("/payment/card");
     };
