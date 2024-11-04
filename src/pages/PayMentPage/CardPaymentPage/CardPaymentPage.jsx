@@ -35,6 +35,32 @@ function CardPaymentPage() {
 
     // *결제하기 버튼 클릭 시 -> 포트원 결제 요청 날림 
     const payMentCompletedOnClick = () => { 
+        
+        const orderData = {
+            paymentId: crypto.randomUUID(),
+            totalAmount: orders.totalAmount,
+            totalQuantity: orders.quantity,
+            orderType: orders.orderType,
+            paymentType: orders.paymentType,
+            customer: {
+                userId: orders.user.userId,
+                phoneNumber: orders.user.phoneNumber,
+                usedCoupon: orders.user.usedCoupon.map(coupon => coupon.couponId) 
+            },
+            products: orders.products.map(item => ({
+                id: item.menuId,
+                name: item.menuName + "(" + item.options.map(option => option.optionName + "-" + option.optionDetailValue).join(', ') + ")",
+                amount: item.totalPrice,
+                quantity: item.count,
+            }))
+        }
+
+        // 결제금액이 0원일 때
+        if(orders.paymentType === 3) {
+            orderMutation.mutateAsync(orderData);
+            return;
+        }
+
         processPortOnePayment();
     }
 
@@ -84,7 +110,9 @@ function CardPaymentPage() {
                         showConfirmButton: true,
                         showCancelButton: true,
                         confirmButtonText: "네",
-                        cancelButtonText: "아니요"
+                        cancelButtonText: "아니요",
+                        confirmButtonColor: "#3EA270",
+                        cancelButtonColor: "#3EA270"
                     }).then(result => {
                         if (result.isConfirmed) {
                             navigate("/reward"); 
