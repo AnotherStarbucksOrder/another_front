@@ -106,10 +106,10 @@ export const tableLatout = css`
         background-color: #f4f4f4;
         font-weight: bold;
         &:nth-of-type(1) {
-            width: 20%;
+            width: 15%;
         }
         &:nth-of-type(2) {
-            width: 15%;
+            width: 10%;
         }
         &:nth-of-type(3) {
             width: 15%;
@@ -117,8 +117,8 @@ export const tableLatout = css`
         &:nth-of-type(4) {
             width: 15%;
         }
-        &:nth-of-type(5) {
-            width: 15%;
+        &:nth-of-type(7) {
+            width: 8%;
         }
     }
 

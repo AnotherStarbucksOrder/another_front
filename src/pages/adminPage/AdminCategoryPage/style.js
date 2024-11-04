@@ -100,8 +100,6 @@ overflow-y: auto;
     top: 0;
     z-index: 1;
     background-color: #f4f4f4; /* 헤더 배경 색상 */
-
-
 }
 
 & th, & td {
