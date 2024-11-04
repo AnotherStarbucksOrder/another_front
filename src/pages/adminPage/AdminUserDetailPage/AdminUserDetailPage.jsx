@@ -18,6 +18,7 @@ function AdminUserDetailPage(props) {
     })
 
     const [ modifyUserData, setModifyUserData] = useState({
+        userId: 0,
         phoneNumber: "",
         starCount: 0,
         memo: ""
@@ -51,7 +52,7 @@ function AdminUserDetailPage(props) {
     )
 
     const deleteUserMutation = useMutation(
-        async () => await instance.delete(`/admin/user/${userId}`),
+        async () => await instance.delete(`/admin/user?ids=${userId}`),
         {
             onSuccess: () => {
                 alert("삭제되었습니다.");

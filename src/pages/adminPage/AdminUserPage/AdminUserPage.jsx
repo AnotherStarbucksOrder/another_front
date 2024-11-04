@@ -40,7 +40,7 @@ function AdminUserPage(props) {
     const deleteUserMutation = useMutation(
         async (userIds) =>{ 
             for( const userId of userIds){
-                await instance.delete(`/admin/user?userIds=${userId}`)
+                await instance.delete(`/admin/user?ids=${userId}`)
             }
         },
         {

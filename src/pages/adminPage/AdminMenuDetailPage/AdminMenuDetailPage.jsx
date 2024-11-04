@@ -109,11 +109,11 @@ function AdminMenuDetailPage(props) {
     console.log(modifyMenuData);
 
     const deleteMenuMutation = useMutation(
-        async () => await instance.delete(`/admin/menu/${menuId}`),
+        async () => await instance.delete(`/admin/menu?ids=${menuId}`),
         {
             onSuccess: response => {
                 alert("게시글을 삭제하였습니다.");
-                navigate("/admin/menus?page=")
+                navigate("/admin/menus?page=1")
             }
         }
     )

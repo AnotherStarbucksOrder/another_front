@@ -37,7 +37,11 @@ function AdminMenuPage(props) {
     console.log(menuList);
 
     const deleteMenuMutation = useMutation(
-        async (menuId) => await instance.delete(`/admin/menu/${menuId}`, menuId),
+        async (menuIds) => {
+            for (const menuId of menuIds ) {
+                await instance.delete(`/admin/menu?ids=${menuId}`)
+            }
+        },
         {
             onSuccess: () => {
                 alert("메뉴를 삭제하였습니다.");
@@ -96,17 +100,18 @@ function AdminMenuPage(props) {
         menuStatusUpdateMutation.mutateAsync(menuId);
     };
 
+    console.log(menus.filter(menu => menu.isChecked).map(menu => menu.menuId))
     console.log(menuList?.data)
     const handleDeleteMenuOnClick = () => {
-        const selectedMenuIds = menus.filter(menu => menu.isChecked).map(menu => menu.menuId);
+        const menuIds = menus.filter(menu => menu.isChecked).map(menu => menu.menuId);
 
-        if (selectedMenuIds.length === 0) {
+        if (menuIds.length === 0) {
             alert("삭제할 메뉴를 선택하세요.");
             return;
         }
 
         if (window.confirm("선택한 메뉴를 삭제하시겠습니까?")) {
-            deleteMenuMutation.mutateAsync(selectedMenuIds);
+            deleteMenuMutation.mutateAsync(menuIds);
         }
     };
 
