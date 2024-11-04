@@ -25,6 +25,7 @@ function CouponModal( {isOpenModal, setOpenModal, pointPaymentRef, selectedCoupo
     // 적용할 음료 선택 
     const handleProductOnClick = (menuId, menuName, productUniqueId) => {
 
+        // 쿠폰 적용 중인 메뉴는 다른 쿠폰에 사용 못하게
         const existingCoupon = orders.user.usedCoupon.find(coupon => coupon.productUniqueId === productUniqueId);
 
         if (existingCoupon) {
@@ -60,8 +61,6 @@ function CouponModal( {isOpenModal, setOpenModal, pointPaymentRef, selectedCoupo
         setSelectedProductId(0);
         setOpenModal(false); 
     };
-    
-    console.log(orders);
 
     return (
         <>

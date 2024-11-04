@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { COLORS, SIZE } from "../../../constants/colors";
 
+
 export const layout = css`
     box-sizing: border-box;
     display: flex;
@@ -71,34 +72,50 @@ export const container = css`
     }
 `;
 
-export const couponInfo = (isUsed) => css`
+export const couponInfo = css`
+    position: relative;
     align-items: center;
     margin-bottom: 20px;
     padding-left: 10px;
     border: 3px solid #F1EFE8;
     border-radius: 10px;
-    background-color: ${isUsed ? '#d3d3d3' : 'white'};
-    opacity: ${isUsed ? 0.6 : 1};
     cursor: pointer;
 
     & > img {
         width: 200px;
-        height: 170px;
+        height: 200px;
     }
 `;
 
-export const couponDetail = css`
+export const checkedIcon = (isUsed) => css`
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    opacity: ${isUsed ? 1 : 0};
+    background-color: #9c9c9c66;
+    width: 200px;
+    height: 200px;
+    
+    & > svg {
+        color: #fafafa;
+        font-size: 100px;
+    }
+`;
+
+export const couponDetail = (isUsed) => css`
     flex-direction: column;
     align-items: center;
     margin-left: 30px;
     width: 550px;
+    color: ${isUsed ? "#9c9c9c": ""};
 
     & > p {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     & > p:nth-last-of-type(2) {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 600;
     }
 `;

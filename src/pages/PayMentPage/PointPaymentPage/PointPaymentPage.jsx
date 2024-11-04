@@ -5,6 +5,7 @@ import MainTop from '../../../components/MainTop/MainTop';
 import MainTopBar from '../../../components/MainTopBar/MainTopBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { IoMdCheckmark } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { ordersAtom } from '../../../atoms/ordersAtom';
 import { useRecoilState } from 'recoil';
@@ -21,6 +22,7 @@ function PointPaymentPage() {
     const [ selectedCouponId ,setSelectedCouponId] = useState(null);
     const pointPaymentRef = useRef();
 
+    // modal 띄우는 거 
     useEffect(() => {
         if(!!pointPaymentRef.current) {
             setModalElement(<CouponModal isOpenModal={isOpenModal} setOpenModal={setOpenModal} pointPaymentRef={pointPaymentRef} selectedCouponId={selectedCouponId}/>);
@@ -53,6 +55,8 @@ function PointPaymentPage() {
                 title: '사용할 수 있는 음료가 부족합니다.',
                 text: `장바구니에 담은 음료 수만큼 쿠폰을 사용할 수 있습니다.`,
                 showConfirmButton: true,
+                confirmButtonText: "네",
+                confirmButtonColor: "#3EA270"
             });
             return;
         }
@@ -78,20 +82,22 @@ function PointPaymentPage() {
                 for (const option of product.options) {
                     totalProductPrice += option.optionDetailPrice;
                 }
-                
                 discountAmount += totalProductPrice;
             }
         }
-    
+
+        const finalAmount = orders.amount - discountAmount;
+
+        // amount가 0원일 때, paymentType을 3으로 설정
         setOrders({
             ...orders,
-            amount: orders.amount - discountAmount,
-            originalAmount: orders.amount
+            amount: finalAmount,
+            originalAmount: orders.amount,
+            paymentType: finalAmount === 0 ? 3 : orders.paymentType
         });
 
         navigate("/payment/card");
     };
-
 
     return (
         <>
@@ -106,13 +112,19 @@ function PointPaymentPage() {
                             orders.user.coupons.map(coupon => {
                                 
                                 const isUsedCoupon = orders.user.usedCoupon.find(used => used.couponId === coupon.couponId);
+
                                 return (
                                     <div key={coupon.couponId} 
-                                        css={s.couponInfo(isUsedCoupon)}     
+                                        css={s.couponInfo}     
                                         onClick={() => handleCouponOnClick(coupon.couponId)}
                                     >
                                         <img src="/starImg.jpg" alt="" />
-                                        <div css={s.couponDetail}>
+                                        {
+                                            isUsedCoupon && (
+                                                <div css={s.checkedIcon(isUsedCoupon)}><IoMdCheckmark/></div>
+                                            )
+                                        }
+                                        <div css={s.couponDetail(isUsedCoupon)}>
                                             <p>Another Starbucks</p>
                                             <p>{coupon.couponName}</p>
                                             <p>{coupon.registerDate.slice(0, 10)}</p>
