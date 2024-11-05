@@ -11,11 +11,6 @@ function AdminSalespage(props) {
     const limit = 12;
     const [searchOption, setSearchOption] = useState(searchParams.get("option") ?? "month");
 
-    const [orders ] = useState([
-        { orderId: 1, orderStatus: "완료", orderType: "카트", price: 1000, orderDate: "2024-01-01", orders: "sadsadsa" },
-        { orderId: 2, orderStatus: "취소", orderType: "포인트", price: 2300, orderDate: "2024-01-01", orders: "dasdsada" },
-        { orderId: 3, orderStatus: "완료", orderType: "카드", price: 20000, orderDate: "2024-01-01", orders: "dasdsa" },
-    ]);
     const handleSearchOptionOnChange = (e) => {
         setSearchOption(e.target.value);
     }
@@ -52,7 +47,7 @@ function AdminSalespage(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {
+                            {/* {
                                 orders.map(order =>
                                     <tr key={order.orderId}>
                                         <td>{order.orderDate}</td>
@@ -63,7 +58,7 @@ function AdminSalespage(props) {
                                         <td><Link to={`/admin/sale/detail/${order.orderId}`}>상세보기</Link></td>
                                     </tr>
                                 )
-                            }
+                            } */}
                         </tbody>
                     </table>
                 </div>

@@ -71,12 +71,22 @@ function AdminOrderpage(props) {
     };
 
     const handleInputStartDate = (e) => {
-        setSearchStartDate(e.target.value);
-    } 
-
+        const selectedStartDate = e.target.value;
+        console.log(selectedStartDate);
+        if (selectedStartDate) {
+            setSearchStartDate(selectedStartDate);
+            navigate(`/admin/order?page=1&startDate=${selectedStartDate}&endDate=${searchEndDate}`);
+        }
+    };
+    
     const handleInputEndDate = (e) => {
-        setSearchEndDate(e.target.value);
-    } 
+        const selectedEndDate = e.target.value;
+        console.log(selectedEndDate);
+        if (selectedEndDate) {
+            setSearchEndDate(selectedEndDate);
+            navigate(`/admin/order?page=1&startDate=${searchStartDate}&endDate=${selectedEndDate}`);
+        }
+    };
 
     const handlePageOnChange = (e) => {
         navigate(`/admin/order?page=${e.selected + 1}&startDate=${searchStartDate}&endDate=${searchEndDate}`)
@@ -101,7 +111,7 @@ function AdminOrderpage(props) {
                         </select>
                     </div>
                     <div css={s.buttonBox}>
-                    <input
+                        <input
                             type={dateType === "month" ? "month" : "date"}
                             value={searchStartDate}
                             onChange={handleInputStartDate}
