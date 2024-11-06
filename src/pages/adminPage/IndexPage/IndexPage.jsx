@@ -142,9 +142,7 @@ function IndexPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.container}>
-                    <div css={s.salesInfoBox}>
-                        <Bar data={data} options={options} />
-                    </div>
+
                     <div css={s.salesTableBox}>
                         <div css={s.toggleContainer}>
                             <div
@@ -161,7 +159,7 @@ function IndexPage(props) {
                             </div>
                         </div>
 
-                        <table css={s.tableStyle}>
+                        <table css={s.tableLayout}>
                             <thead>
                                 <tr>
                                     {selectedOption === 'totalSales' ? (
@@ -185,16 +183,16 @@ function IndexPage(props) {
                                 <tr>
                                     {selectedOption === 'totalSales' ? (
                                         <>
-                                            <td>{(salse?.respSaleDto?.totalAmount).toLocaleString() + "원"}</td>
+                                            <td>{(salse?.respSaleDto?.totalAmount.toLocaleString() || 0) + "원"}</td>
                                             <td>{salse?.respSaleDto?.orderCount}건</td>
-                                            <td>{(salse?.respSaleDto?.refundAmount).toLocaleString() + "원"}</td>
+                                            <td>{(salse?.respSaleDto?.refundAmount.toLocaleString() || 0) + "원"}</td>
                                             <td>{salse?.respSaleDto?.refundCount}건</td>
                                         </>
                                     ) : (
                                         <>
-                                            <td>{(salse?.respSaleDto?.todayTotalAmount).toLocaleString() + "원"}</td>
+                                            <td>{(salse?.respSaleDto?.todayTotalAmount.toLocaleString() || 0) + "원"}</td>
                                             <td>{salse?.respSaleDto?.todayOrderCount}건</td>
-                                            <td>{(salse?.respSaleDto?.todayRefundAmount).toLocaleString() + "원"}</td>
+                                            <td>{(salse?.respSaleDto?.todayRefundAmount.toLocaleString() || 0) + "원"}</td>
                                             <td>{salse?.respSaleDto?.todayRefundCount}건</td>
                                         </>
                                     )}
@@ -202,15 +200,18 @@ function IndexPage(props) {
                             </tbody>
                         </table>
                     </div>
+                    <div css={s.salesInfoBox}>
+                    <img src="/KakaoTalk_Photo_2024-10-17-16-40-07.jpg" alt="" />
+
+                    </div>
                 </div>
                 <div css={s.container}>
                     <div css={s.menuInfoBox}>
-                        <Doughnut data={doudata} options={doughnutOptions} />
+                        <Bar data={data} options={options} />
                     </div>
                     <div css={s.menuInfoBox}>
-                        <img src="/KakaoTalk_Photo_2024-10-17-16-40-07.jpg" alt="" />
+                        <Doughnut data={doudata} options={doughnutOptions} />
                     </div>
-
                 </div>
             </div>
         </>

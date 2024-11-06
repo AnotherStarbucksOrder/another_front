@@ -126,8 +126,8 @@ export const buttonBox = css`
             background-color: #c0c0c0;
         }
 
-        &:nth-of-type(1) {
-            margin-right: 30px;
+        &:nth-of-type(2) {
+            margin-left: 30px;
         }
 
     }

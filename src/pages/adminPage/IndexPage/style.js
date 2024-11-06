@@ -24,8 +24,13 @@ export const salesInfoBox = css`
     box-sizing: border-box;
     width: 740px;
     height: 420px;
-    border: 1px solid #ddd;
-    margin-right: 30px;
+    /* border: 1px solid #ddd; */
+    margin-left: 30px;
+    & img {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
 
 `;
 // export const salesTableBox = css`
@@ -75,7 +80,7 @@ export const inactiveButton = css`
     color: black; /* 비선택 버튼 텍스트 색상 */
 `;
 
-export const tableStyle = css`
+export const tableLayout = css`
     width: 100%;
     border-collapse: collapse; /* 테이블 경계 겹침 처리 */
     margin-top: 20px; /* 테이블과 라디오 버튼 간격 */
@@ -99,13 +104,9 @@ export const menuInfoBox = css`
     width: 740px;
     height: 420px;
     border: 1px solid #ddd;
-    &:nth-of-type(1) {
+    &:nth-of-type(2) {
         padding: 15px;
-        margin-right: 30px;
+        margin-left: 30px;
     }
-    & img {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
+
 `;
