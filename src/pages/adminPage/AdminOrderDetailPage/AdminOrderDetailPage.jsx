@@ -2,12 +2,13 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
 import * as s from "./style";
-import { useMutation, useQuery } from "react-query";
+import {  useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
+import axios from "axios";
 
 function AdminOrderDetailPage(props) {
     const { orderId } = useParams(); // URL에서 menuId 가져오기
-    // const [status, setStatus] = useState("완료");
+    const navigate = useNavigate();
     const [orderInfo, setOrderInfo] = useState({
         createDate: '',
         orderId: '',
@@ -17,7 +18,6 @@ function AdminOrderDetailPage(props) {
         paymentType: 0,
         orderDetail: []
     });
-    const navigate = useNavigate();
 
     const order = useQuery(
         ["orderQuery"],
@@ -31,6 +31,7 @@ function AdminOrderDetailPage(props) {
             }
         }
     )
+
     const getPaymentType = (type) => {
         switch (type) {
             case 1: return '카드';
@@ -39,7 +40,6 @@ function AdminOrderDetailPage(props) {
             default: return '알 수 없음';
         }
     };
-
     const getOrderType = (type) => {
         switch (type) {
             case 1: return 'take-out';
@@ -47,7 +47,6 @@ function AdminOrderDetailPage(props) {
             default: return '알 수 없음';
         }
     };
-
     const getOrderState = (state) => {
         switch (state) {
             case 1: return '결제완료';
@@ -59,7 +58,54 @@ function AdminOrderDetailPage(props) {
     console.log(order?.data?.data.orderDetail)
     console.log(orderInfo?.orderDetail)
 
- 
+    const orderCancelMutation = useMutation(
+        async (orderId) => await instance.patch(`/admin/order/${orderId}/cancellation`),
+        {
+            onSuccess: response => {
+                order.refetch();
+                console.log(response);
+            }
+        }
+    )
+
+    const accessLoginMutation = useMutation(
+        ["accessLogin"],
+        async () => axios.post("https://api.portone.io/login/api-secret", {"apiSecret":process.env.REACT_APP_PORTONE_API_KEY}),
+        {
+            onSuccess: response => {
+                console.log(response)
+            }
+        }
+    )
+    
+    const cancelMutation = useMutation(
+        async ({accessToken, paymentId}) => {
+            const options = {
+                method: 'post',
+                url: `https://api.portone.io/payments/${paymentId}/cancel`,
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + accessToken
+                },
+                data: { reason: '주문 취소 요청' } // 이유를 적절히 수정하세요
+            };
+    
+            const { data } = await axios.request(options);
+            return data; // 반환값을 추가합니다.
+        },
+        {
+            onSuccess: () => {
+                alert("주문이 성공적으로 취소되었습니다.");
+                orderCancelMutation.mutateAsync(order.data.data.orderId);
+            },
+            onError: (error) => {
+                console.error("결제 취소 실패:", error);
+                alert("결제 취소 중 오류가 발생했습니다.");
+            }
+        }
+    );
+    
+
 
     const handleBackOnClick = () => {
         window.history.back();
@@ -67,6 +113,11 @@ function AdminOrderDetailPage(props) {
 
     const handleCancleOnClick = () => {
         if (window.confirm("해당 주문을 취소하시겠습니까?")) {
+            const paymentId = orderInfo.paymentId;
+            accessLoginMutation.mutateAsync().then(response => {
+                cancelMutation.mutateAsync({accessToken: response.data.accessToken, paymentId});
+            });
+            
         }
     }
 
@@ -81,7 +132,7 @@ function AdminOrderDetailPage(props) {
                         <div css={s.order}>
                             <div css={s.orderDetail}>
                                 <p>주문 날짜</p>
-                                {(orderInfo.createDate).split("T")[0]}
+                                {orderInfo.createDate.split("T")[0]}
                             </div>
                             <div css={s.orderDetail}>
                                 <p>주문 번호</p>
@@ -97,13 +148,13 @@ function AdminOrderDetailPage(props) {
                             </div>
                             <div css={s.orderDetail}>
                                 <p>주문 금액</p>
-                                { (orderInfo.orderAmount).toLocaleString() + "원"}
+                                {orderInfo.orderAmount.toLocaleString() + "원"}
                             </div>
                             <div css={s.orderMenu}>
-                                    <p>주문 메뉴</p>
+                                <p>주문 메뉴</p>
                                 {
                                     order?.data?.data.orderDetail.map(order =>
-                                        <div css={s.orderList}>
+                                        <div css={s.orderList} key={order.orderDetailId}>
                                             <div css={s.menuName}>
                                                 {order.orderComment}
                                             </div>
@@ -119,14 +170,14 @@ function AdminOrderDetailPage(props) {
                         </div>
                         <div css={s.buttonBox}>
                             {
-                                orderInfo.orderState === 1 
-                                ?
-                                <>
-                                <button onClick={handleCancleOnClick}>취소</button>
-                                <button onClick={handleBackOnClick}>확인</button>
-                                </>
-                                :
-                                <button onClick={handleBackOnClick}>확인</button>
+                                orderInfo.orderState === 1
+                                    ?
+                                    <>
+                                        <button onClick={handleCancleOnClick}>취소</button>
+                                        <button onClick={handleBackOnClick}>확인</button>
+                                    </>
+                                    :
+                                    <button onClick={handleBackOnClick}>확인</button>
                             }
                         </div>
                     </div>

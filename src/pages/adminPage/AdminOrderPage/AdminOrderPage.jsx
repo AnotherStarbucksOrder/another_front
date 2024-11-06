@@ -141,12 +141,12 @@ function AdminOrderpage(props) {
                             {
                                 orders.map(order =>
                                     <tr key={order.orderId}>
-                                        <td>{(order.createDate).split("T")[0]}</td>
+                                        <td>{order.createDate.split("T")[0]}</td>
                                         <td>{order.orderId}</td>
                                         <td>{getOrderType(order.orderType)}</td>
                                         <td>{getPaymentType(order.paymentType)}</td>
                                         <td>{getOrderState(order.orderState)}</td>
-                                        <td>{(order.orderAmount).toLocaleString() + "원"}</td>
+                                        <td>{order.orderAmount.toLocaleString() + "원"}</td>
                                         <td><Link to={`/admin/order/detail/${order.orderId}`}>상세보기</Link></td>
                                     </tr>
                                 )
