@@ -1,24 +1,24 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
+import { useNavigate, useParams } from "react-router-dom"; 
 import * as s from "./style";
 import {  useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 import axios from "axios";
 
 function AdminOrderDetailPage(props) {
-    const { orderId } = useParams(); // URL에서 menuId 가져오기
-    const navigate = useNavigate();
+    const { orderId } = useParams();
     const [orderInfo, setOrderInfo] = useState({
         createDate: '',
         orderId: '',
-        orderState: 0, // 기본 상태 코드
-        orderType: 0, // 기본 주문 타입 코드
+        orderState: 0, 
+        orderType: 0, 
         orderAmount: 0,
         paymentType: 0,
         orderDetail: []
     });
 
+    // 옵션 상세 조회
     const order = useQuery(
         ["orderQuery"],
         async () => await instance.get(`/admin/order/${orderId}`),
@@ -51,13 +51,11 @@ function AdminOrderDetailPage(props) {
         switch (state) {
             case 1: return '결제완료';
             case 2: return '주문취소';
-            case 3: return '환불';
             default: return '알 수 없음';
         }
     };
-    console.log(order?.data?.data.orderDetail)
-    console.log(orderInfo?.orderDetail)
 
+    // 주문 상태 변경
     const orderCancelMutation = useMutation(
         async (orderId) => await instance.patch(`/admin/order/${orderId}/cancellation`),
         {
@@ -68,30 +66,27 @@ function AdminOrderDetailPage(props) {
         }
     )
 
+    // portone api 인증
     const accessLoginMutation = useMutation(
         ["accessLogin"],
-        async () => axios.post("https://api.portone.io/login/api-secret", {"apiSecret":process.env.REACT_APP_PORTONE_API_KEY}),
-        {
-            onSuccess: response => {
-                console.log(response)
-            }
-        }
+        async () => axios.post("https://api.portone.io/login/api-secret", {"apiSecret":process.env.REACT_APP_PORTONE_API_KEY})
     )
     
+    // 결제 취소
     const cancelMutation = useMutation(
         async ({accessToken, paymentId}) => {
             const options = {
-                method: 'post',
+                method: "post",
                 url: `https://api.portone.io/payments/${paymentId}/cancel`,
                 headers: { 
                     "Content-Type": "application/json",
                     "Authorization": "Bearer " + accessToken
                 },
-                data: { reason: '주문 취소 요청' } // 이유를 적절히 수정하세요
+                data: { reason: "주문 취소 요청" } 
             };
     
             const { data } = await axios.request(options);
-            return data; // 반환값을 추가합니다.
+            return data;
         },
         {
             onSuccess: () => {
@@ -105,8 +100,6 @@ function AdminOrderDetailPage(props) {
         }
     );
     
-
-
     const handleBackOnClick = () => {
         window.history.back();
     }

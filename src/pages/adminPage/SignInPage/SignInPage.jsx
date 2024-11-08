@@ -19,10 +19,9 @@ function SignInPage(props) {
         }));
     }
 
+    // 로그인
     const handleLoginSubmitOnClick = async () => {
-
         const signinData = await signinApi(inputUser);
-        console.log(signinData);
         if (!signinData.isSucess) {
             alert("로그인에 실패하였습니다.")
         }
@@ -35,6 +34,7 @@ function SignInPage(props) {
         });
         navigate("/admin")
     }
+
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             handleLoginSubmitOnClick();
@@ -46,10 +46,14 @@ function SignInPage(props) {
             <Link to={"/"}><h1 css={s.logo}>ANOTHER STARBUCKS</h1></Link>
             <div css={s.loginInfoBox}>
                 <div>
-                    <input type="text" name='username' onChange={handleInputUserOnChange} onKeyDown={handleKeyDown} placeholder='아이디' />
+                    <input type="text" name='username' 
+                        onChange={handleInputUserOnChange} 
+                        onKeyDown={handleKeyDown} placeholder='아이디' />
                 </div>
                 <div>
-                    <input type="password" name='password' onChange={handleInputUserOnChange} onKeyDown={handleKeyDown} placeholder='비밀번호' />
+                    <input type="password" name='password' 
+                        onChange={handleInputUserOnChange} 
+                        onKeyDown={handleKeyDown} placeholder='비밀번호' />
                 </div>
             </div>
             <button css={s.loginButton} onClick={handleLoginSubmitOnClick}>로그인</button>

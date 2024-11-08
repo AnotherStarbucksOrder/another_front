@@ -13,6 +13,7 @@ function AdminCategoryAddPage(props) {
         categoryStatus: 1
     })
     
+    // 카테고리 추가
     const addCategoryMutation = useMutation(
         async () => await instance.post("/admin/category", inputCategory),
         {
@@ -32,10 +33,11 @@ function AdminCategoryAddPage(props) {
             [e.target.name]: e.target.value
         });
     }
+    
     const handleCategoryStatusChange = (e) => {
         setInputCategory({
             ...inputCategory,
-            categoryStatus: Number(e.target.value) // categoryStatus만 업데이트
+            categoryStatus: Number(e.target.value)
         });
     }
 

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
@@ -8,7 +8,7 @@ import { useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 
 function AdminOrderpage(props) {
-    const [searchParams, setSearchParams] = useSearchParams();   //주소:포트/페이지URL?KEY=VALUE(쿼리스트링, 파람스)
+    const [searchParams, setSearchParams] = useSearchParams();
     const [totalPageCount, setTotalPageCount] = useState(1);
     const navigate = useNavigate();
     const limit = 13;
@@ -17,6 +17,7 @@ function AdminOrderpage(props) {
     const [orders, setOrders] = useState([]);
     const [dateType, setDateType] = useState("day");
 
+    // 주문 리스트 조회, 페이지네이션
     const orderList = useQuery(
         ["orderListQuery", searchParams.get("page"), searchStartDate, searchEndDate],
         async () => await instance.get(`/admin/order?page=${searchParams.get("page")}&limit=${limit}&startDate=${searchStartDate}&endDate=${searchEndDate}`),
@@ -56,10 +57,18 @@ function AdminOrderpage(props) {
         switch (state) {
             case 1: return '결제완료';
             case 2: return '주문취소';
-            case 3: return '환불';
             default: return '알 수 없음';
         }
     };
+
+    useEffect(() => {
+        // 쿼리 파라미터가 변경될 때 상태 초기화
+        const startDate = searchParams.get("startDate");
+        const endDate = searchParams.get("endDate");
+        
+        setSearchStartDate(startDate ?? "");
+        setSearchEndDate(endDate ?? "");
+    }, [searchParams]);
 
     const handleDateTypeChange = (e) => {
         setDateType(e.target.value);
@@ -67,12 +76,10 @@ function AdminOrderpage(props) {
         setSearchStartDate("");
         setSearchEndDate("");
         navigate("/admin/order?page=1")
-
     };
 
     const handleInputStartDate = (e) => {
         const selectedStartDate = e.target.value;
-        console.log(selectedStartDate);
         if (selectedStartDate) {
             setSearchStartDate(selectedStartDate);
             navigate(`/admin/order?page=1&startDate=${selectedStartDate}&endDate=${searchEndDate}`);
@@ -81,7 +88,6 @@ function AdminOrderpage(props) {
     
     const handleInputEndDate = (e) => {
         const selectedEndDate = e.target.value;
-        console.log(selectedEndDate);
         if (selectedEndDate) {
             setSearchEndDate(selectedEndDate);
             navigate(`/admin/order?page=1&startDate=${searchStartDate}&endDate=${selectedEndDate}`);
@@ -91,6 +97,7 @@ function AdminOrderpage(props) {
     const handlePageOnChange = (e) => {
         navigate(`/admin/order?page=${e.selected + 1}&startDate=${searchStartDate}&endDate=${searchEndDate}`)
     }
+    
     const handleDateResetClick = () => {
         setSearchStartDate("");
         setSearchEndDate("");
@@ -146,7 +153,7 @@ function AdminOrderpage(props) {
                                         <td>{getOrderType(order.orderType)}</td>
                                         <td>{getPaymentType(order.paymentType)}</td>
                                         <td>{getOrderState(order.orderState)}</td>
-                                        <td>{order.orderAmount.toLocaleString() + "원"}</td>
+                                        <td>{(order.orderAmount.toLocaleString() || 0) + "원"}</td>
                                         <td><Link to={`/admin/order/detail/${order.orderId}`}>상세보기</Link></td>
                                     </tr>
                                 )

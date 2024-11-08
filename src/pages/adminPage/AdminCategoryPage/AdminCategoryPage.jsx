@@ -13,6 +13,7 @@ function AdminCategoryPage(props) {
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
+    // 카테고리 리스트 조회, 무한 스크롤 
     const categoryList = useInfiniteQuery(
         ["categoryListQuery"],
         async ({ pageParam = 1}) => await instance.get(`/admin/category?page=${pageParam}`),
@@ -29,10 +30,10 @@ function AdminCategoryPage(props) {
             }
         }
     )
-    console.log(categoryList)
 
+    // loadMoreRef.current가 존재할 때만 observer 연결
     useEffect(() => {
-        if (loadMoreRef.current) {  // loadMoreRef.current가 존재할 때만 observer 연결
+        if (loadMoreRef.current) {  
             const observer = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting) {
                     categoryList.fetchNextPage();
@@ -41,7 +42,7 @@ function AdminCategoryPage(props) {
     
             observer.observe(loadMoreRef.current);
     
-            return () => observer.disconnect();  // 컴포넌트 언마운트 시 observer 해제
+            return () => observer.disconnect();  
         }
     }, [categoryList.hasNextPage]);
     
@@ -115,9 +116,19 @@ function AdminCategoryPage(props) {
                                         <tr key={category.categoryId}>
                                             <td>{category.categoryId}</td>
                                             <td>{category.categoryName}</td>
-                                            <td><Switch value={category.categoryStatus} checked={category.categoryStatus === 1} onChange={() => handleCategoryStatusChekcked(category.categoryId)} /></td>
-                                            <td><button css={s.tableButton}  onClick={() => navigate(`/admin/category/update/${category.categoryId}`)}>수정</button></td>
-                                            <td><button css={s.tableButton}  onClick={() => handleCategoryDeleteOnClick(category.categoryId)} >삭제</button></td>
+                                            <td>
+                                                <Switch value={category.categoryStatus} 
+                                                    checked={category.categoryStatus === 1} 
+                                                    onChange={() => handleCategoryStatusChekcked(category.categoryId)} />
+                                            </td>
+                                            <td><button css={s.tableButton}  
+                                            onClick={() => navigate(`/admin/category/update/${category.categoryId}`)}>
+                                                수정
+                                            </button></td>
+                                            <td><button css={s.tableButton} 
+                                            onClick={() => handleCategoryDeleteOnClick(category.categoryId)}>
+                                                삭제
+                                            </button></td>
                                         </tr>
                                     )
                                     )

@@ -16,6 +16,7 @@ function AdminUserPage(props) {
     const [searchValue, setSearchValue] = useState(searchParams.get("searchName") ?? "");
     const limit = 13;
 
+    // 회원 리스트 수정, 페이지네이션
     const userList = useQuery(
         ["userListQuery", searchParams.get("page"), searchParams.get("search")],
         async () => await instance.get(`/admin/user?page=${searchParams.get("page")}&limit=${limit}&searchName=${searchValue}`),
@@ -23,7 +24,6 @@ function AdminUserPage(props) {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response.data);
                 setUsers(response?.data.data);
                 setTotalPageCount(
                     response.data.totalCount % limit === 0
@@ -33,10 +33,8 @@ function AdminUserPage(props) {
             }
         }
     )
-    console.log(users)
-    console.log(userList)
 
-
+    // 회원 삭제
     const deleteUserMutation = useMutation(
         async (userIds) =>{ 
             for( const userId of userIds){
@@ -56,7 +54,7 @@ function AdminUserPage(props) {
     }
 
     const handlePageOnChange = (e) => {
-        navigate(`/admin/user?page=${e.selected + 1}&searchName=${searchValue}`)
+        navigate(`/admin/user?page=${e.selected + 1}&searchName=${searchValue}`);
     }
 
      // 체크박스 상태 관리 
@@ -71,9 +69,7 @@ function AdminUserPage(props) {
                 user.userId === userId ? { ...user, isChecked: !user.isChecked } : user
             )
         );
-    };
-    console.log(users.filter(user => user.isChecked).map(user => user.userId))
-
+    }
 
     const handleCheckedAllChange = () => {
         const newCheckedState = !checkedAll;
@@ -106,7 +102,8 @@ function AdminUserPage(props) {
                 </div>
                 <div css={s.functionBox}>
                     <div css={s.searchBox}>
-                        <input type="text" placeholder="전화번호" onChange={handleSearchInputChange} value={searchValue}/>
+                        <input type="text" placeholder="전화번호" 
+                            onChange={handleSearchInputChange} value={searchValue}/>
                         <button onClick={handleSearchButtonClick}>🔍</button>
                     </div>
                     <div css={s.buttonBox}>
@@ -131,7 +128,9 @@ function AdminUserPage(props) {
                             {
                                 users.map(user => 
                                     <tr key={user.userId}>
-                                        <td><input type="checkbox" onChange={() => handleUserChecked(user.userId)} checked={user.isChecked} value={user.userId}/></td>
+                                        <td><input type="checkbox" 
+                                            onChange={() => handleUserChecked(user.userId)} 
+                                            checked={user.isChecked} value={user.userId}/></td>
                                         <td>{user.userId}</td>
                                         <td>{user.phoneNumber}</td>
                                         <td>{user.starCount}</td>

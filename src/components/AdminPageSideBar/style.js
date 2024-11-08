@@ -49,11 +49,11 @@ export const buttonContainer = css`
         cursor: pointer;
 
         &:hover {
-            background-color: #dbdbdb;
+            background-color: ${COLORS.buttonHoverColor};
         }
 
         &:active{
-            background-color: #0c0c0c;
+            background-color: ${COLORS.buttonActiverColor};
         }
     }
 `;

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom"; 
 import * as s from "./style";
 import ReactSelect from "react-select";
 import { useMutation, useQuery } from "react-query";
@@ -9,7 +9,7 @@ import { storage } from "../../../firebase/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 function AdminMenuDetailPage(props) {
-    const { menuId } = useParams(); // URL에서 menuId 가져오기
+    const { menuId } = useParams(); 
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [initialMenuData, setInitialMenuData] = useState({
@@ -30,6 +30,8 @@ function AdminMenuDetailPage(props) {
         optionIds: [],
         categoryIds: []
     });
+
+    // 메뉴 상세 조회
     const menu = useQuery(
         ["menuQuery", menuId],
         async () => await instance.get(`/admin/menu/detail/${menuId}`),
@@ -47,15 +49,15 @@ function AdminMenuDetailPage(props) {
                 const categoryIds = categories.split(',').map(category => {
                     const trimmedCategory = category.trim();
                     const matchedCategory = selectCategory.find(selectCat => selectCat.categoryName === trimmedCategory);
-                    return matchedCategory ? matchedCategory.categoryId : null; // 일치하는 ID 또는 null
-                }).filter(id => id !== null); // null 값 제거
+                    return matchedCategory ? matchedCategory.categoryId : null;
+                }).filter(id => id !== null); 
     
                 // 옵션 ID 매핑
                 const optionIds = options.split(',').map(option => {
                     const trimmedOption = option.trim();
                     const matchedOption = selectOption.find(selectOpt => selectOpt.optionName === trimmedOption);
-                    return matchedOption ? matchedOption.optionId : null; // 일치하는 ID 또는 null
-                }).filter(id => id !== null); // null 값 제거
+                    return matchedOption ? matchedOption.optionId : null; 
+                }).filter(id => id !== null); 
     
                 // 수정할 메뉴 데이터에 ID 설정
                 setModifyMenuData(modifyMenuData => ({
@@ -66,9 +68,8 @@ function AdminMenuDetailPage(props) {
             }
         }
     );
-    console.log(initialMenuData);
-    console.log(modifyMenuData);
 
+    // 메뉴 수정 시 카테고리, 옵션 리스트 조회
     const selectList = useQuery(
         ["selectListQuery"],
         async () => await instance.get("/admin/menu/values"),
@@ -77,37 +78,31 @@ function AdminMenuDetailPage(props) {
             refetchOnWindowFocus: false,
         }
     )
-    console.log(modifyMenuData)
-    console.log(selectList)
 
     const selectCategory = selectList?.data?.data.categories || [];
     const selectOption = selectList?.data?.data.options || [];
 
-    const categoryArray = initialMenuData.categories.split(',').map(category => {
+    const categoryArray = initialMenuData.categories.split(",").map(category => {
         const categoryName = category.trim();
         const matchedCategory = selectCategory.find(selectCat => selectCat.categoryName === categoryName)
 
         return {
-            value: matchedCategory ? matchedCategory.categoryId : categoryName, // ID 또는 원래 이름
+            value: matchedCategory ? matchedCategory.categoryId : categoryName,
             label: categoryName,
         };
     });
 
-    const optionArray = initialMenuData.options.split(',').map(option => {
+    const optionArray = initialMenuData.options.split(",").map(option => {
         const optionName = option.trim();
         const matchedOption = selectOption.find(selectOpt => selectOpt.optionName === optionName);
 
         return {
-            value: matchedOption ? matchedOption.optionId : optionName, // ID 또는 원래 이름
+            value: matchedOption ? matchedOption.optionId : optionName,
             label: optionName
         };
     });
 
-    console.log(categoryArray.map(category => category.value));
-    console.log(optionArray.map(option => option.value));
-
-    console.log(modifyMenuData);
-
+    // 메뉴 삭제
     const deleteMenuMutation = useMutation(
         async () => await instance.delete(`/admin/menu?ids=${menuId}`),
         {
@@ -119,7 +114,7 @@ function AdminMenuDetailPage(props) {
     )
 
     const handleImageClick = () => {
-        document.getElementById('fileInput').click();
+        document.getElementById("fileInput").click();
     };
 
     const handleBackOnClick = () => {
@@ -129,11 +124,6 @@ function AdminMenuDetailPage(props) {
     const handleEditOnClick = () => {
         setIsEditing(true);
         menu.refetch();
-    }
-
-    const handleConfirmOnClick = () => {
-        // modifyMenuMutaion.mutateAsync();
-        console.log(modifyMenuData);
     }
 
     const handleCancleOnClick = () => {
@@ -146,7 +136,7 @@ function AdminMenuDetailPage(props) {
             deleteMenuMutation.mutateAsync();
         }
     }
-    // 메뉴 데이터 업데이트 함수
+    // 메뉴 업데이트 
     const submitMenuData = async (data) => {
         try {
             const response = await instance.patch(`/admin/modify/${menuId}`, data);
@@ -194,7 +184,7 @@ function AdminMenuDetailPage(props) {
                 );
             } else {
                 // 이미지가 선택되지 않았을 경우 기존 URL 유지
-                updatedData.imgUrl = modifyMenuData.imgUrl || ""; // 기존 URL 유지
+                updatedData.imgUrl = modifyMenuData.imgUrl || "";
                 await submitMenuData(updatedData);
             }
         } catch (error) {
@@ -209,12 +199,11 @@ function AdminMenuDetailPage(props) {
             categoryName: option.label
         }));
 
-        const categoryNames = newCategories.map(cat => cat.categoryName).join(', ');
-        const categoryIds = newCategories.map(cat => cat.categoryId); // ID 리스트로 저장
+        const categoryIds = newCategories.map(cat => cat.categoryId);
 
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
-            categoryIds: categoryIds // ID 리스트 저장
+            categoryIds: categoryIds 
         }));
     };
 
@@ -224,25 +213,19 @@ function AdminMenuDetailPage(props) {
             optionName: option.label
         }));
 
-        const optionNames = newOptions.map(opt => opt.optionName).join(', ');
-        const optionIds = newOptions.map(opt => opt.optionId); // ID 리스트로 저장
-
+        const optionIds = newOptions.map(opt => opt.optionId);
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
-            optionIds: optionIds // ID 리스트 저장
+            optionIds: optionIds 
         }));
     };
 
-
     const handleModifyInputOnChange = (e) => {
-
         setModifyMenuData(modifyMenuData => ({
             ...modifyMenuData,
             [e.target.name]: e.target.value
         }))
     }
-
-
 
     return (
         <>
@@ -265,7 +248,9 @@ function AdminMenuDetailPage(props) {
                                         <div css={s.img}>
                                             <img src={modifyMenuData.imgUrl} alt="" onClick={handleImageClick} />
                                         </div>
-                                        <input type="file" accept="image/*" id="fileInput" name="imgUrl" onChange={handleModifyInputOnChange} />
+                                        <input type="file" accept="image/*" 
+                                            id="fileInput" name="imgUrl" 
+                                            onChange={handleModifyInputOnChange} />
                                         <input type="text" value={modifyMenuData.imgUrl} readOnly />
                                     </>
                             }
@@ -280,7 +265,8 @@ function AdminMenuDetailPage(props) {
                                         {
                                             !isEditing ?
                                                 <>
-                                                    <input type="text" css={s.input} readOnly value={initialMenuData.categories} />
+                                                    <input type="text" css={s.input} readOnly 
+                                                    value={initialMenuData.categories} />
                                                 </>
                                                 :
                                                 <ReactSelect
@@ -290,8 +276,8 @@ function AdminMenuDetailPage(props) {
                                                     onChange={handleSelectCategoryChange}
                                                     options={selectCategory.map(category => ({
                                                         value: category.categoryId,
-                                                        label: category.categoryName // 오타 수정
-                                                    })) || []} // options에도 변환된 데이터 사용
+                                                        label: category.categoryName 
+                                                    })) || []} 
                                                     className="basic-multi-select"
                                                     classNamePrefix="select"
                                                     defaultValue={categoryArray}
@@ -305,7 +291,10 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 이름 : </p>
                                     </div>
-                                    <input type="text" name="menuName" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuName || ""} />
+                                    <input type="text" name="menuName" 
+                                        css={s.input} readOnly={!isEditing} 
+                                        onChange={handleModifyInputOnChange} 
+                                        value={modifyMenuData.menuName || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -313,7 +302,10 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 가격 : </p>
                                     </div>
-                                    <input type="text" name="menuPrice" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.menuPrice || ""} />
+                                    <input type="text" name="menuPrice" 
+                                        css={s.input} readOnly={!isEditing} 
+                                        onChange={handleModifyInputOnChange} 
+                                        value={modifyMenuData.menuPrice || ""} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -354,7 +346,10 @@ function AdminMenuDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메뉴 설명 : </p>
                                     </div>
-                                    <textarea name="comment" css={s.input} readOnly={!isEditing} onChange={handleModifyInputOnChange} value={modifyMenuData.comment || ""}></textarea>
+                                    <textarea name="comment" css={s.input} 
+                                        readOnly={!isEditing} 
+                                        onChange={handleModifyInputOnChange} 
+                                        value={modifyMenuData.comment || ""}></textarea>
                                 </div>
                             </div>
                         </div>

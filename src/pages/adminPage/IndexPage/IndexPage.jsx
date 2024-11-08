@@ -2,7 +2,8 @@
 import { useQuery } from "react-query";
 import * as s from "./style";
 import { instance } from "../../../apis/util/instance";
-import { useState, useTransition } from "react";
+import { v4 as uuidv4 } from 'uuid';
+import { useState } from "react";
 import {
     Chart,
     CategoryScale,
@@ -11,13 +12,15 @@ import {
     Title,
     Tooltip,
     Legend,
-    ArcElement
+    ArcElement,
+    plugins
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 
 Chart.register(LinearScale, CategoryScale, BarElement, ArcElement, Title, Tooltip, Legend);
 function IndexPage(props) {
-    const [selectedOption, setSelectedOption] = useState('totalSales');
+    const [selectedOption, setSelectedOption] = useState("totalSales");
+    const [selectYear, setDateType] = useState(2024);
     const [salse, setData] = useState({
         totalAmount: "",
         orderCount: "",
@@ -29,25 +32,15 @@ function IndexPage(props) {
         todayRefundCount: "",
     });
 
-    console.log(salse);
-
-    const reqData = {
-        page: 1,
-        limit: 13,
-        startDate: "",
-        endDate: "2024-10-31",
-    }
-
+    // 매출 정보 조회
     const saleInfo = useQuery(
-        ["saleIngoQuery"],
-        async () => await instance.get("/admin/sales/manage/dashboard"),
+        ["saleIngoQuery", selectYear],
+        async () => await instance.get(`/admin/sales/manage/${selectYear}/dashboard`),
         {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response)
                 setData(response?.data)
-
             }
         }
     )
@@ -55,70 +48,71 @@ function IndexPage(props) {
     const menuList = salse?.mostMenus?.map(item => item.menuName);
     const rankList = salse?.mostMenus?.map(item => item.rank);
 
-    console.log(saleList);
-    console.log(menuList);
-    console.log(rankList);
-
     const data = {
         labels: [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
         ],
         datasets: [{
-            label: 'Sales',
+            label: "Sales",
             data: saleList,
-            borderColor: 'rgb(12, 7, 8)',
-            backgroundColor: '#036635',
+            borderColor: "rgb(12, 7, 8)",
+            backgroundColor: "#036635",
         }],
-    };
+    }
     const options = {
         scales: {
             y: {
                 beginAtZero: true,
             },
         },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
     }
 
     const doudata = {
         labels: menuList,
         datasets: [{
-            label: 'My First Dataset',
+            label: "My First Dataset",
             data: rankList,
             backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(86, 244, 255)',
-                'rgb(86, 255, 151)',
-                'rgb(255, 205, 86)',
+                "rgb(255, 99, 132)",
+                "rgb(54, 162, 235)",
+                "rgb(86, 244, 255)",
+                "rgb(86, 255, 151)",
+                "rgb(255, 205, 86)",
             ],
             hoverOffset: 4
         }]
     };
     const doughnutOptions = {
         responsive: true,
-        maintainAspectRatio: false, // 비율 유지하지 않음
+        maintainAspectRatio: false, 
         plugins: {
             legend: {
                 display: true,
-                position: 'right', // 범례를 오른쪽에 배치
-                align: 'center',
+                position: "right", 
+                align: "center",
                 labels: {
                     boxWidth: 25,
                     padding: 25,
                     usePointStyle: true,
                     font: {
-                        size: 16, // 원하는 폰트 크기 설정 (예: 14px)
-                        weight: 500 // 원하는 폰트 두께 설정
+                        size: 16, 
+                        weight: 500 
                     }
                 }
             },
@@ -138,12 +132,26 @@ function IndexPage(props) {
         setSelectedOption(option);
     };
 
+    const handleDateTypeChange = (e) => {
+        setDateType(e.target.value);
+    };
+
     return (
         <>
             <div css={s.layout}>
                 <div css={s.container}>
 
                     <div css={s.salesTableBox}>
+                        <div css={s.selectedYear}>
+                            <select onChange={handleDateTypeChange} value={selectYear}>
+                                {
+                                    saleInfo?.data?.data.yearCount.map(year =>
+                                        <option key={uuidv4()} value={year}>{year}</option>
+                                    )
+
+                                }
+                            </select>
+                        </div>
                         <div css={s.toggleContainer}>
                             <div
                                 css={[s.toggleButton, selectedOption === 'totalSales' ? s.activeButton : s.inactiveButton]}
@@ -201,7 +209,7 @@ function IndexPage(props) {
                         </table>
                     </div>
                     <div css={s.salesInfoBox}>
-                    <img src="/KakaoTalk_Photo_2024-10-17-16-40-07.jpg" alt="" />
+                        <img src="/KakaoTalk_Photo_2024-10-17-16-40-07.jpg" alt="" />
 
                     </div>
                 </div>
@@ -210,7 +218,11 @@ function IndexPage(props) {
                         <Bar data={data} options={options} />
                     </div>
                     <div css={s.menuInfoBox}>
-                        <Doughnut data={doudata} options={doughnutOptions} />
+                        {menuList && menuList.length > 0 ? (
+                            <Doughnut data={doudata} options={doughnutOptions} />
+                        ) : (
+                            <div>?</div>
+                        )}
                     </div>
                 </div>
             </div>
