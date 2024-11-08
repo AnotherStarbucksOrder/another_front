@@ -4,7 +4,8 @@ import * as s from './style';
 
 function OptionList({ options, menuCart, setMenuCart }) {
 
-    const handleOnClick = (menuDetail, optionDetail) => {
+    // 옵션 버튼 클릭 시, (옵션 버튼 클릭 x -> 기본 옵션으로 넣어줌)
+    const handleOptionOnClick = (menuDetail, optionDetail) => {
         setMenuCart(menuCart => ({
             ...menuCart,
             options: menuCart.options.map(option => 
@@ -34,7 +35,7 @@ function OptionList({ options, menuCart, setMenuCart }) {
                                 menuDetail.option.optionDetail.map(optionDetail => 
                                     <button 
                                         key={optionDetail.optionDetailId} 
-                                        onClick={() => handleOnClick(menuDetail, optionDetail)}
+                                        onClick={() => handleOptionOnClick(menuDetail, optionDetail)}
                                         css={menuCart.options.filter(op => op.optionDetailId === optionDetail.optionDetailId).length > 0
                                             ? s.activeButton : ''}
                                         >

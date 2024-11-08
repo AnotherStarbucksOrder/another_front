@@ -18,6 +18,7 @@ export const layout = css`
     }
 
     & > img {
+        margin-bottom: 15px;
         height: 730px;
         border-radius: 15px;
     }
@@ -54,7 +55,7 @@ export const buttons = css`
         border-radius: 10px;
         width: 350px;
         height: 150px;
-        font-size: 30px;
+        font-size: 40px;
         font-weight: 600;
         color: ${COLORS.buttonFontColor};
         background-color: ${COLORS.buttonColor};

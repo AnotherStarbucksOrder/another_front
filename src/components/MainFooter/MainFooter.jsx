@@ -14,6 +14,7 @@ function MainFooter() {
     const navigate = useNavigate();
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
 
+    // prodcuts가 변할 때마다 총 수량, 총 가격 계산하는 useEffect 
     useEffect(() => {
         let totalAmount = 0;
         let totalQuantity = 0;
@@ -86,7 +87,6 @@ function MainFooter() {
 
     // 장바구니 개별 삭제 버튼 클릭 
     const handleDeleteButtonOnClick = (menuId, menuName, options) => {
-
         Swal.fire({
             title: `${menuName}을 삭제하시겠습니까?`,
             color: "#036635",
@@ -111,7 +111,6 @@ function MainFooter() {
 
     // 장바구니 전체 삭제 버튼 클릭 
     const hanldeAlldeleteButtonOnClick = () => {
-
         if(orders.products.length === 0) {
             return;
         }

@@ -24,8 +24,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
             refetchOnWindowFocus: false,
             enabled: false,
             onSuccess: response => {
-                console.log(response);
-                // userId가 존재하면 
+                // userId가 존재하면, atom에 업데이트 후 point 페이지로 이동 
                 if(response.data.userId !== 0) {
                     setOrders(order => ({
                         ...order,
@@ -39,49 +38,28 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                             }))
                         }
                     }))
-                    // userId는 존재 O, 쿠폰이 x 
-                    if(response.data.coupons.length === 0) {
-                        Swal.fire({
-                            title: "사용할 수 있는 쿠폰이 없습니다",
-                            color: "#036635",
-                            showConfirmButton: true,
-                            confirmButtonText: "네",
-                            confirmButtonColor: "#459661"
-                        }).then(result => {
-                            navigate(-1)
-                            setOrders(order => ({
-                                ...order,
-                                paymentType: 0,
-                                user:  {
-                                    userId: 0,            
-                                    phoneNumber: "010-",
-                                    coupons: []
-                                }
-                            }))
-                        })
-                        return;
-                    }
                     navigate("/payment/point");
                 }
             },
-            // 사용자를 찾을 수 없을 때
+            // userId 없는 경우 & 사용가능한 쿠폰이 없는 경우
             onError: e => {
+                setOrders(order => ({
+                    ...order,
+                    paymentType: 0,
+                    user:  {
+                        userId: 0,            
+                        phoneNumber: "010-",
+                        coupons: []
+                    }
+                }))
                 Swal.fire({
                     title: e.response.data,
                     color: "#036635",
                     showConfirmButton: true,
-                    confirmButtonText: "네"
+                    confirmButtonText: "확인",
+                    confirmButtonColor:"#459661"
                 }).then(result => {
                     navigate(-1)
-                    setOrders(order => ({
-                        ...order,
-                        paymentType: 0,
-                        user:  {
-                            userId: 0,            
-                            phoneNumber: "010-",
-                            coupons: []
-                        }
-                    }))
                 })
             }
         }
@@ -91,13 +69,13 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
     const handleConfirmOnClick = () => {
 
         if(inputValue.length !== 13) {
+            updateNewPhoneNumber("010-");
                 Swal.fire({
                 title: "올바르지않은 전화번호입니다.\n다시입력해주세요",
+                color: "#036635",
                 showConfirmButton: true,
-                confirmButtonText: "네",
-                confirmButtonColor: "#036635",
-            }).then(result => {
-                updateNewPhoneNumber("010-")
+                confirmButtonText: "확인",
+                confirmButtonColor: "#459661",
             });
             return;
         }
@@ -167,8 +145,8 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                         clearInterval(timerInterval);  
                     }
                 }).then(result => {
+                    setOrders(defaultOrders);
                     navigate("/");
-                    setOrders(defaultOrders)
                 })
             }
         }

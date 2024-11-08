@@ -29,7 +29,7 @@ function AdminCategoryPage(props) {
             }
         }
     )
-    console.log(categoryList)
+
 
     useEffect(() => {
         if (loadMoreRef.current) {  // loadMoreRef.current가 존재할 때만 observer 연결

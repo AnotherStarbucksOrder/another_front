@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import ReactModal from 'react-modal';
-
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 import { ordersAtom } from '../../atoms/ordersAtom';
@@ -31,6 +30,7 @@ function CouponModal( {isOpenModal, setOpenModal, pointPaymentRef, selectedCoupo
         if (existingCoupon) {
             Swal.fire({
                 icon: 'error',
+                iconColor: "#036635",
                 title: '이 메뉴에는 이미 쿠폰이 적용되었습니다.',
                 showConfirmButton: false,
                 timer: 1500
@@ -52,6 +52,7 @@ function CouponModal( {isOpenModal, setOpenModal, pointPaymentRef, selectedCoupo
     
         Swal.fire({
             icon: 'success',
+            iconColor: "#036635",
             title: '쿠폰 적용 완료',
             text: `${menuName}에 쿠폰 적용이 되었습니다`,
             showConfirmButton: false,
@@ -85,7 +86,6 @@ function CouponModal( {isOpenModal, setOpenModal, pointPaymentRef, selectedCoupo
                     height: "900px",
                     top: "50%",   
                     left: "50%",
-                    // inset: `${pointPaymentRef.current.offsetTop + (pointPaymentRef.current.clientHeight / 2)}px 0px 0px ${pointPaymentRef.current.offsetLeft + (pointPaymentRef.current.clientWidth / 2)}px`,
                     transform: "translate(-50%, -50%)"
                 },
             }}

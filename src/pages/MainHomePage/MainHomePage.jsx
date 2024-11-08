@@ -25,18 +25,15 @@ function MainHomePage() {
 	// 카테고리별 menuList 받아오는 Query
 	const menuList = useQuery(
 		["menuListQuery", selectedCategoryId, searchParams.get("page")],
-		async () => {
-			const response = await instance.get(`/home/category/menus?categoryId=${selectedCategoryId}&page=${currentPage}&limit=${limit}`)
-			return response.data
-		},
+		async () => await instance.get(`/home/category/menus?categoryId=${selectedCategoryId}&page=${currentPage}&limit=${limit}`),
 		{
 			retry: 0,
 			refetchOnWindowFocus: false,
-			onSuccess: data => {
+			onSuccess: response => {
 				setTotalPageCount(
-					data.totalCount % limit === 0
-					? data.totalCount / limit
-					: Math.floor(data.totalCount / limit) + 1
+					response.data.totalCount % limit === 0
+					? response.data.totalCount / limit
+					: Math.floor(response.data.totalCount / limit) + 1
 				)
 			},
 		}
@@ -53,7 +50,7 @@ function MainHomePage() {
 			setSearchParams({ page: 1, categoryId });
 		}
 	}
-	
+
 	return (
 		<>
 			<MainTop />
@@ -66,13 +63,13 @@ function MainHomePage() {
 						:
 						<div css={s.menuContainer}>
 							{
-								menuList.data?.menus?.map(menu =>
+								menuList?.data?.data?.menus.map(menu =>
 									<div css={s.menuBox} key={menu.menuId} onClick={() => navigate(`/menu/detail/${menu.menuId}`)}>
 											<div>
 												<img src={menu.imgUrl} alt="" />
 											</div>
 											<p>{menu.menuName}</p>
-											<p>{menu.menuPrice}</p>
+											<p>{(menu.menuPrice).toLocaleString()} 원</p>
 									</div>
 								)
 							}

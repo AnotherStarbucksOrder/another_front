@@ -122,11 +122,13 @@ export const totalCount = css`
         width: 600px;
         font-size: 40px;
         font-weight: 600;
+        padding-left: 10px;
     }
 
     & > div {
         justify-content: space-between;
         width: 370px;
+        padding-right: 10px;
 
         & > p {
             font-size: 35px;

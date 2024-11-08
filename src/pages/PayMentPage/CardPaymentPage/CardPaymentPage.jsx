@@ -81,7 +81,7 @@ function CardPaymentPage() {
         PortOne.requestPayment(newPortoneData)
         .then(response => {
             // 포트원 성공 시
-            if(response.transactionType === "PAYMENT" && !response.code) { 
+            if(!response.code) { 
                 setOrders(orders => ({
                     ...orders,
                     paymentId: response.paymentId
@@ -149,7 +149,7 @@ function CardPaymentPage() {
     });
 }
 
-    // *결제완료데이터 Mutation (관리자 필요 데이터)
+    // 결제완료데이터 Mutation (관리자 필요 데이터 백엔드드로 post 요청)
     const orderMutation = useMutation(
         async (orderData) => await instance.post('/order', orderData),
         {
@@ -162,7 +162,7 @@ function CardPaymentPage() {
                     color: "#036635",
                     html: "<b>5</b>초 뒤 자동으로 홈화면으로 이동합니다!",
                     timer: 5000,
-                    timerProgressBar: false,
+                    timerProgressBar: true,
                     showConfirmButton: false,
                     didOpen: () => {
                         const b = Swal.getHtmlContainer().querySelector('b');
@@ -174,8 +174,8 @@ function CardPaymentPage() {
                         clearInterval(timerInterval);  
                     }
                 }).then(result => {
+                    setOrders(defaultOrders);
                     navigate("/");
-                    setOrders(defaultOrders)
                 })
             }
         }
@@ -189,12 +189,12 @@ function CardPaymentPage() {
             <div css={s.totalCount}>
                 <p>카드를 넣어주세요</p>
                 <p>기기하단에 있는 카드리더기에 카드를 넣어주세요</p>
-                <p>결제금액: {(orders.amount).toLocaleString()}원</p>
+                <p>결제 금액: {(orders.amount).toLocaleString()}원</p>
             </div>
-            <img src="/cardImg.jpg" alt="" />
+            <img src="/cardImg.gif" alt="" />
             <div css={s.buttons}>
                 <button onClick={beforeOnClick}>이전</button>
-                <button onClick={payMentCompletedOnClick}>결제하기</button>
+                <button onClick={payMentCompletedOnClick}>결제 하기</button>
             </div>
         </div>
     </>

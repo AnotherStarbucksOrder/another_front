@@ -62,29 +62,29 @@ export const paginateContainer = css`
         list-style: none;
 
         & > li {
-        margin: 0px 35px;
+            margin: 0px 35px;
         }
 
         & a {
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid #dbdbdb;
-        padding: 0px 5px;
-        border-radius: 35px;
-        min-width: 50px;
-        height: 50px;
-        line-height: 10px;
-        font-size: 20px;
-        font-weight: 600;
-        cursor: pointer;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #dbdbdb;
+            padding: 0px 5px;
+            border-radius: 35px;
+            min-width: 50px;
+            height: 50px;
+            line-height: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         & .active {
-        border-radius: 32px;
-        background-color: #dbdbdb;
-        color: #ffffff;
+            border-radius: 32px;
+            background-color: #dbdbdb;
+            color: #ffffff;
         }
     }
 `;
