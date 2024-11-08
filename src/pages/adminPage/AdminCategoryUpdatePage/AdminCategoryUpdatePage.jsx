@@ -21,6 +21,7 @@ function AdminCategoryUpdatePage(props) {
         categoryStatus: 0,
     })
 
+    // 카테고리 상세 조회
     const category = useQuery(
         ["categoryQuery", categoryId],
         async () => await instance.get(`/admin/category/${categoryId}`),
@@ -28,25 +29,22 @@ function AdminCategoryUpdatePage(props) {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response?.data)
                 const categoryData = response?.data;
-                const { menuList, ...rest } = categoryData
+                const { menuList, ...rest } = categoryData;
 
                 setInitailCategoryData(rest.category);
                 setModifyCategoryData(rest.category); 
             }
         }
     );
-    console.log(modifyCategoryData);
-    console.log(category)
-    console.log(category?.data?.data.menuList)
 
+    // 카테고리 수정
     const modifyCategoryMutation = useMutation(
         async () => await instance.patch(`/admin/category/${categoryId}`, modifyCategoryData),
         {
             onSuccess: () => {
                 alert("수정되었습니다.");
-                navigate("/admin/category")
+                navigate("/admin/category");
             }
         }
     )
@@ -54,23 +52,21 @@ function AdminCategoryUpdatePage(props) {
     const handleModifyDataInputOnChange = (e) => {
         setModifyCategoryData(modifyCategoryData =>({
             ...modifyCategoryData,
-
-                [e.target.name]: e.target.value
-           
-        }))
+            [e.target.name]: e.target.value
+        }));
     }
+
+    // categoryStatus만 업데이트
     const handleCategoryStatusChange = (e) => {
         setModifyCategoryData(modifyCategoryData => ({
             ...modifyCategoryData,
-
-                categoryStatus: Number(e.target.value) // categoryStatus만 업데이트
+            categoryStatus: Number(e.target.value)
             
         }));
     }
 
     const handleModifyCategoryOnClick = () => {
         modifyCategoryMutation.mutateAsync();
-        console.log(modifyCategoryData);
     }
 
     const handleBackOnClick = () => {

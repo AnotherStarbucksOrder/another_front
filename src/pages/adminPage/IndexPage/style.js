@@ -3,10 +3,11 @@ import { COLORS } from "../../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
+    padding-top: 40px;
     padding-left: 300px;
     width: 100%;
     height: 100%;
@@ -49,6 +50,15 @@ export const salesTableBox = css`
     height: 420px;
     border: 1px solid #ddd;
     padding: 20px; /* 내부 여백 추가 */
+`;
+
+export const selectedYear = css`
+    & select {
+        width: 85px;
+        height: 40px;
+        border-radius: 15px;
+        text-align: center;
+    }
 `;
 
 export const toggleContainer = css`
@@ -107,6 +117,11 @@ export const menuInfoBox = css`
     &:nth-of-type(2) {
         padding: 15px;
         margin-left: 30px;
+    }
+
+    & img {
+        width: 100%;
+        height: 100%;
     }
 
 `;

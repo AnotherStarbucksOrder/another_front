@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
+import { useNavigate, useParams } from "react-router-dom";
 import * as s from "./style";
 import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 
 function AdminUserDetailPage(props) {
-    const { userId } = useParams(); // URL에서 menuId 가져오기
+    const { userId } = useParams();
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
     const [ initialUserData, setInitialUserData ] = useState({
@@ -24,6 +24,7 @@ function AdminUserDetailPage(props) {
         memo: ""
     })
 
+    // 유저 상세 조회
     const user = useQuery(
         ["userQuery", userId],
         async () => await instance.get(`/admin/user/${userId}`),
@@ -32,14 +33,13 @@ function AdminUserDetailPage(props) {
             refetchOnWindowFocus: false,
             onSuccess: response => {
                 const userData = response?.data;
-                // const { userId, registerDate, ...rest} = userData
-                console.log(response.data);
                 setInitialUserData(userData);
                 setModifyUserData(userData);
             }
         }
     )
 
+    // 회원 수정
     const modifyUserMutation = useMutation(
         async () => await instance.patch(`/admin/user/modify/${userId}`, modifyUserData),
         {
@@ -51,6 +51,7 @@ function AdminUserDetailPage(props) {
         }
     )
 
+    // 회원 삭제
     const deleteUserMutation = useMutation(
         async () => await instance.delete(`/admin/user?ids=${userId}`),
         {
@@ -85,7 +86,6 @@ function AdminUserDetailPage(props) {
     }
     const handleConfirmOnClick = () => {
         modifyUserMutation.mutateAsync();
-        console.log(modifyUserData);
     }
     const handleCancleOnClick = () => {
         setModifyUserData(initialUserData);
@@ -105,7 +105,8 @@ function AdminUserDetailPage(props) {
                                 <div>
                                     <div css={s.option}>
                                         <p css={s.optionTitle}>고유 번호 : </p>
-                                        <input type="text" css={s.selectContainer} disabled value={initialUserData.userId} />
+                                        <input type="text" css={s.selectContainer} disabled 
+                                            value={initialUserData.userId} />
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +115,10 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>전화번호 : </p>
                                     </div>
-                                    <input type="text" name="phoneNumber" css={s.selectContainer} readOnly={!isEditing} onChange={handleModifyChange} value={modifyUserData.phoneNumber} />
+                                    <input type="text" name="phoneNumber" 
+                                        css={s.selectContainer} readOnly={!isEditing} 
+                                        onChange={handleModifyChange} 
+                                        value={modifyUserData.phoneNumber} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -122,7 +126,10 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>포인트 : </p>
                                     </div>
-                                    <input type="text" name="starCount" css={s.selectContainer} readOnly={!isEditing} onChange={handleModifyChange} value={modifyUserData.starCount} />
+                                    <input type="text" name="starCount" 
+                                        css={s.selectContainer} readOnly={!isEditing} 
+                                        onChange={handleModifyChange} 
+                                        value={modifyUserData.starCount} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -130,7 +137,8 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>가입일 : </p>
                                     </div>
-                                    <input type="text" css={s.selectContainer} readOnly value={(initialUserData.registerDate).split("T")[0]} />
+                                    <input type="text" css={s.selectContainer} 
+                                        readOnly value={(initialUserData.registerDate).split("T")[0]} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -138,7 +146,9 @@ function AdminUserDetailPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메모 : </p>
                                     </div>
-                                    <textarea name="memo" css={s.selectContainer} readOnly={!isEditing} onChange={handleModifyChange} value={modifyUserData.memo}></textarea>
+                                    <textarea name="memo" css={s.selectContainer} 
+                                        readOnly={!isEditing} onChange={handleModifyChange} 
+                                        value={modifyUserData.memo}></textarea>
                                 </div>
                             </div>
                         </div>

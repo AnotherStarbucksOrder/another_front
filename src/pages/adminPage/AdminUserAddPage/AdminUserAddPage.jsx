@@ -13,6 +13,7 @@ function AdminUserAddPage(props) {
         memo: ""
     })
 
+    // 회원 추가
     const addUserMutation = useMutation(
         async () => await instance.post("/admin/user", inputUser),
         {
@@ -32,13 +33,11 @@ function AdminUserAddPage(props) {
 
     const handleInputUserSubmitClick = () => {
         addUserMutation.mutateAsync();
-        console.log(inputUser);
     }
 
     const handleBackOnClick = () => {
         window.history.back();
     }
-
 
     return (
         <>
@@ -54,7 +53,8 @@ function AdminUserAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>전화번호 : </p>
                                     </div>
-                                    <input type="text" name="phoneNumber" css={s.input} onChange={handleUserInputChange} />
+                                    <input type="text" name="phoneNumber" 
+                                        css={s.input} onChange={handleUserInputChange} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>
@@ -62,7 +62,8 @@ function AdminUserAddPage(props) {
                                     <div css={s.optionTitle}>
                                         <p>메모 : </p>
                                     </div>
-                                    <textarea name="memo" css={s.input} onChange={handleUserInputChange}></textarea>
+                                    <textarea name="memo" css={s.input} 
+                                        onChange={handleUserInputChange}></textarea>
                                 </div>
                             </div>
                         </div>

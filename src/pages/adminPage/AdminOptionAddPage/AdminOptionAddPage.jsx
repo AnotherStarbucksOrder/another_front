@@ -17,6 +17,7 @@ function AdminOptionAddPage(props) {
         }]
     })
 
+    // 옵션 추가
     const addOptionMutation = useMutation(
         async () => await instance.post("/admin/option", inputOptionData),
         {
@@ -34,6 +35,7 @@ function AdminOptionAddPage(props) {
         })
     }
 
+    // 옵션 디테일 추가 시 인덱스 추가
     const handleDetailInputOnChange = (index, e) => {
         const newValue = [...inputOptionData.optionDetail];
         newValue[index][e.target.name] = e.target.value;
@@ -53,6 +55,7 @@ function AdminOptionAddPage(props) {
         });
     };
 
+    // 선택된 인덱스 삭제
     const handleRemoveDetail = (index) => {
         const newValue = inputOptionData.optionDetail.filter((_, i) => i !== index);
         setInputOptionData({
@@ -63,7 +66,6 @@ function AdminOptionAddPage(props) {
 
     const handleSubmitOptionOnClick = () => {
         addOptionMutation.mutateAsync();
-        console.log(inputOptionData)
     }
 
 
@@ -82,7 +84,9 @@ function AdminOptionAddPage(props) {
                         <div css={s.infoBox}>
                             <div css={s.option}>
                                 <p css={s.optionTitle}>옵션 명 : </p>
-                                <input type="text" name="optionName" css={s.selectContainer} onChange={handleOptionInputOnChange} />
+                                <input type="text" name="optionName" 
+                                    css={s.selectContainer} 
+                                    onChange={handleOptionInputOnChange} />
                             </div>
                             <div css={s.option}>
                                 <div css={s.optionTitle}>

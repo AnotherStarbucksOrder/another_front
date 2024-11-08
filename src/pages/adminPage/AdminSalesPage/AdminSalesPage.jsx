@@ -1,19 +1,41 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
 import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import ReactPaginate from "react-paginate";
+import { useQuery } from "react-query";
+import { instance } from "../../../apis/util/instance";
 
 function AdminSalespage(props) {
     const [searchParams, setSearchParams] = useSearchParams();   //주소:포트/페이지URL?KEY=VALUE(쿼리스트링, 파람스)
     const [totalPageCount, setTotalPageCount] = useState(1);
-    const limit = 12;
-    const [searchOption, setSearchOption] = useState(searchParams.get("option") ?? "month");
+    const [searchStartDate, setSearchStartDate] = useState(searchParams.get("startDate") ?? "");
+    const [searchEndDate, setSearchEndDate] = useState(searchParams.get("endDate") ?? "");
+    const limit = 13;
+    const navigate = useNavigate();
 
-    const handleSearchOptionOnChange = (e) => {
-        setSearchOption(e.target.value);
-    }
+    // const salesList = useQuery(
+    //     ["salesListQuery", searchParams.get("page")],
+    //     async () => await instance.get(`/admin/sales?page=${searchParams.get("page")}&limit=${limit}&startDate=${searchStartDate}&endDate=${searchEndDate}`),
+    //     {
+    //         retry: 0,
+    //         refetchOnWindowFocus: false,
+    //         onSuccess: response => {
+    //             console.log(response);
+    //             setTotalPageCount(
+    //                 response.data.totalCount % limit === 0
+    //                     ? response.data.totalCount / limit
+    //                     : Math.floor(response.data.totalCount / limit) + 1
+    //             );
+    //         }
+    //     }
+    // )
+
+
+    // const handlePageOnChange = (e) => {
+    //     navigate(`/admin/sales?page=${e.selected + 1}&startDate=${searchStartDate}&endDate=${searchEndDate}`)
+    // }
 
     return (
         <>
@@ -23,7 +45,7 @@ function AdminSalespage(props) {
                 </div>
                 <div css={s.functionBox}>
                     <div css={s.searchBox}>
-                        <select onChange={handleSearchOptionOnChange} value={searchOption}>
+                        <select >
                             <option value="month">월별</option>
                             <option value="day">일별</option>
                         </select>
@@ -71,8 +93,8 @@ function AdminSalespage(props) {
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}
                         activeClassName='active'
-                    // onPageChange={handlePageOnChange}
-                    // forcePage={parseInt(searchParams.get("page")) - 1} 
+                        // onPageChange={handlePageOnChange}
+                        forcePage={parseInt(searchParams.get("page") || 1) - 1}
                     />
                 </div>
             </div>
