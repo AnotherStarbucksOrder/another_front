@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
+import { useNavigate, useParams } from "react-router-dom";
 import * as s from "./style";
 import { Radio } from "pretty-checkbox-react";
 import { useState } from "react";
@@ -28,6 +28,7 @@ function AdminOptionUpdatePage(props) {
         }]
     })
 
+    // 옵션 상세 조회
     const option = useQuery(
         ["optionQuery", optionId],
         async () => await instance.get(`/admin/option/${optionId}`),
@@ -35,7 +36,6 @@ function AdminOptionUpdatePage(props) {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: (response) => {
-                console.log(response);
                 setInitailData(response?.data);
                 const { optionDetail, ...rest } = response?.data;
 
@@ -46,9 +46,8 @@ function AdminOptionUpdatePage(props) {
             }
         }
     )
-    console.log(initailData);
-    console.log(modifyOptionData);
 
+    // 옵션 수정
     const modifyOptionMutation = useMutation(
         async (data) => await instance.patch(`/admin/option/${optionId}`, data),
         {
@@ -70,7 +69,6 @@ function AdminOptionUpdatePage(props) {
         setModifyOptionData(modifyOptionData => ({
             ...modifyOptionData,
             optionStatus: Number(e.target.value)
-
         }));
     }
 
@@ -100,6 +98,7 @@ function AdminOptionUpdatePage(props) {
         }));
     };
 
+    // 해당 인덱스 삭제
     const handleRemoveDetail = (index) => {
         const newValue = modifyOptionData.optionDetail.filter((_, i) => i !== index);
         setModifyOptionData(modifyOptionData => ({
@@ -110,7 +109,6 @@ function AdminOptionUpdatePage(props) {
 
     const handleModifySubmitOnClick = () => {
         modifyOptionMutation.mutateAsync(modifyOptionData);
-        console.log(modifyOptionData);
     }
 
     const handleBackOnClick = () => {
@@ -129,7 +127,8 @@ function AdminOptionUpdatePage(props) {
                         <div css={s.infoBox}>
                             <div css={s.option}>
                                 <p css={s.optionTitle}>코드 번호 : </p>
-                                <input type="text" css={s.selectContainer} value={modifyOptionData.optionId} disabled />
+                                <input type="text" css={s.selectContainer} 
+                                    value={modifyOptionData.optionId} disabled />
                             </div>
                             <div css={s.option}>
                                 <p css={s.optionTitle}>옵션 명 : </p>
@@ -143,8 +142,12 @@ function AdminOptionUpdatePage(props) {
                                     <p>노출 여부</p>
                                 </div>
                                 <div css={s.radioBox}>
-                                    <Radio css={s.radio} name="optionStatus" value={1} checked={modifyOptionData.optionStatus === 1} onChange={handleOptionStatusChange}>사용</Radio>
-                                    <Radio name="optionStatus" value={0} checked={modifyOptionData.optionStatus === 0} onChange={handleOptionStatusChange} bigger>미사용</Radio>
+                                    <Radio css={s.radio} name="optionStatus" 
+                                        value={1} checked={modifyOptionData.optionStatus === 1} 
+                                        onChange={handleOptionStatusChange}>사용</Radio>
+                                    <Radio name="optionStatus" value={0} 
+                                        checked={modifyOptionData.optionStatus === 0} 
+                                        onChange={handleOptionStatusChange} bigger>미사용</Radio>
                                 </div>
                             </div>
                             <div css={s.registerContainer}>

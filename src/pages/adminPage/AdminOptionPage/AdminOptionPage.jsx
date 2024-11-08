@@ -12,6 +12,7 @@ function AdminOptionPage(props) {
     const navigate = useNavigate();
     const [options, setOptions] = useState([]);
 
+    // 옵션 리스트 조회, 무한 스크롤
     const optionList = useInfiniteQuery(
         ["optionListQuery"],
         async ({ pageParam = 1 }) => await instance.get(`/admin/option?page=${pageParam}`),
@@ -28,7 +29,6 @@ function AdminOptionPage(props) {
             }
         }
     )
-    console.log(optionList);
 
     //카테고리 상태관리
     const optionStatusUpdateMutation = useMutation(
@@ -50,6 +50,7 @@ function AdminOptionPage(props) {
         optionStatusUpdateMutation.mutateAsync(optionId);
     };
 
+    // 옵션 삭제
     const optionDeleteMutation = useMutation(
         async (optionId) => await instance.delete(`/admin/option/${optionId}`),
         {
@@ -59,12 +60,12 @@ function AdminOptionPage(props) {
             }
         }
     )
+
     const handleOptionDeleteOnClick = (optionId) => {
         if(window.confirm("삭제하시겠습니까?")) {
             optionDeleteMutation.mutateAsync(optionId);
         }
     }
-
 
     return (
         <>
@@ -101,8 +102,17 @@ function AdminOptionPage(props) {
                                                     checked={option.optionStatus === 1} 
                                                     onChange={() => handleOptionStatusChekcked(option.optionId)} />
                                             </td>
-                                            <td><button css={s.tableButton} onClick={() => navigate(`/admin/option/update/${option.optionId}`)}>수정</button></td>
-                                            <td><button css={s.tableButton} onClick={() => handleOptionDeleteOnClick(option.optionId)}>삭제</button></td>
+                                            <td>
+                                                <button css={s.tableButton} 
+                                                    onClick={() => navigate(`/admin/option/update/${option.optionId}`)}>
+                                                    수정
+                                                </button>
+                                            </td>
+                                            <td><button css={s.tableButton} 
+                                                onClick={() => handleOptionDeleteOnClick(option.optionId)}>
+                                                삭제
+                                                </button>
+                                            </td>
                                         </tr>
 
                                     ))
