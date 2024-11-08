@@ -20,17 +20,21 @@ function RewardPage() {
 
     // 상단에 x 버튼 클릭 시
     const handleOrderCancleOnClick = () => {
-        setOrders(orders => ({
-            ...orders,
-            paymentType: 0,
-            user: {
-                ...orders.user,
-                phoneNumber: "010-"
-            }
-        }))
-        navigate("/payment");
+        if(orders.paymentId === "") {
+            setOrders(orders => ({
+                ...orders,
+                paymentType: 0,
+                user: {
+                    ...orders.user,
+                    phoneNumber: "010-"
+                }
+            }))
+            navigate("/payment");
+        }
+        return;
     }
 
+    // 010으로 시작하는 경우, 앞부분을 유지하고 나머지를 -로 구분된 형태로 포맷팅
     const formatPhoneNumber = (number) => {
         number = number.replace(/^010/g, "");
         if (number.length < 4) {
@@ -59,7 +63,6 @@ function RewardPage() {
     }
 
     const handleKeyPadOnClick = (value) => {
-
         if(value === "backspace") {
             if(inputValue.length > 4) { 
                 const newValue = inputValue.slice(0, -1); 
@@ -69,13 +72,16 @@ function RewardPage() {
             return
         }
 
-        const onlyNumbers = inputValue.replace(/[^0-9]/g, "");  // 숫자만 남기기
-        const newValue = onlyNumbers + value;                   // 숫자만 추가
-        updateNewPhoneNumber(formatPhoneNumber(newValue));      // 포맷된 값으로 업데이트
+        // 숫자만 남기기
+        const onlyNumbers = inputValue.replace(/[^0-9]/g, "");  
+
+        // 숫자만 추가
+        const newValue = onlyNumbers + value;       
+        
+        // 포맷된 값으로 업데이트
+        updateNewPhoneNumber(formatPhoneNumber(newValue));      
     }
 
-
-    
     return (
     <>
         <MainTop/>

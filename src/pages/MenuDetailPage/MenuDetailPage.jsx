@@ -14,7 +14,6 @@ import { useRecoilState } from 'recoil';
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 
-
 function MenuDetailPage() {
 
     const navigate = useNavigate();
@@ -33,13 +32,10 @@ function MenuDetailPage() {
 
     const [ orders, setOrders ]  = useRecoilState(ordersAtom);
 
-    // 각 메뉴 정보 Query 
+    // 각 메뉴 정보 menuInfoQuery 
     const menuInfo = useQuery(
         ["menuInfoQuery", menuId],
-        async () => {
-            const response = await instance.get(`/menu/${menuId}`);
-            return response.data;
-        },
+        async () => await instance.get(`/menu/${menuId}`),
         { 
             retry: 0,
             refetchOnWindowFocus: false,
@@ -47,10 +43,10 @@ function MenuDetailPage() {
                 // 기본값 넣어줌
                 setMenuCart(menuCart => ({  
                     ...menuCart,
-                    menuName: response.menuName,
-                    menuPrice: response.menuPrice,
-                    totalPrice: response.menuPrice,
-                    options: response.menuDetailList.map(detail => ({
+                    menuName: response.data.menuName,
+                    menuPrice: response.data.menuPrice,
+                    totalPrice: response.data.menuPrice,
+                    options: response.data.menuDetailList.map(detail => ({
                         optionId: detail?.option.optionId,
                         optionName: detail?.option.optionName,
                         optionDetailId: detail?.option.optionDetail[0].optionDetailId,
@@ -62,6 +58,7 @@ function MenuDetailPage() {
         }
     )
 
+    // 상단 x 버튼 클릭 시 
     const handleOrderCancleOnClick = () => {
         navigate(-1);
     }
@@ -148,14 +145,14 @@ function MenuDetailPage() {
                     menuInfo.isLoading ? <></> :
                     <>
                         <div css={s.menuInfoContainer}>
-                                <img src={menuInfo.data.imgUrl} alt="" />
+                                <img src={menuInfo.data.data.imgUrl} alt="" />
                             <div css={s.menuInfoDetail}>
                                 <div css={s.productNameInfo}>
-                                    <p>{menuInfo.data.menuName}</p>
-                                    <p>{menuInfo.data.comment}</p>
+                                    <p>{menuInfo.data.data.menuName}</p>
+                                    <p>{menuInfo.data.data.comment}</p>
                                 </div>
                                 <div css={s.productPriceInfo}>
-                                    <p>{(menuInfo.data.menuPrice).toLocaleString()} 원</p>
+                                    <p>{(menuInfo.data.data.menuPrice).toLocaleString()} 원</p>
                                     <div css={s.productCount}>
                                         <button onClick={handleCountMinusButtonOnClick} ><FaCircleMinus /></button>
                                         <p>{menuCart.count}</p>
@@ -167,7 +164,7 @@ function MenuDetailPage() {
                     
                         <div css={s.optionInfoContainer}>
                             <OptionList
-                                options={menuInfo.data.menuDetailList}
+                                options={menuInfo.data.data.menuDetailList}
                                 menuCart={menuCart}
                                 setMenuCart={setMenuCart}
                             />

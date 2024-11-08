@@ -34,7 +34,7 @@ function PointPaymentPage() {
         setOrders(orders => ({
             ...orders,
             paymentType: 0,
-            user:  {
+            user: {
                 userId: 0,
                 usedCoupon: [],            
                 phoneNumber: "010-",
@@ -55,7 +55,7 @@ function PointPaymentPage() {
                 title: '사용할 수 있는 음료가 부족합니다.',
                 text: `장바구니에 담은 음료 수만큼 쿠폰을 사용할 수 있습니다.`,
                 showConfirmButton: true,
-                confirmButtonText: "네",
+                confirmButtonText: "확인",
                 confirmButtonColor: "#3EA270"
             });
             return;
@@ -98,6 +98,8 @@ function PointPaymentPage() {
 
         navigate("/payment/card");
     };
+
+
 
     return (
         <>

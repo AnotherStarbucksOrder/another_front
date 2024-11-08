@@ -7,34 +7,29 @@ import { instance } from '../../apis/util/instance';
 
 function MainTopBar({ handleCategoryOnChange }) {
 
-    const [ categories, setCategories] = useState([]);
     const [ currentMenuIndex, setCurrentMenuIndex ] = useState(0); 
     const [ isActiveCategory, setIsActiveCategory] = useState(0);
 
-    // 카테고리 list Query
+    // 카테고리 List 받아오는 Query
     const categoryList = useQuery(
         ["categoryList"],
-        async () => {
-            const response = await instance.get("/category")
-            return response.data
-        },
+        async () => await instance.get("/category"),
         {
             retry: 0,
             refetchOnWindowFocus: false,
-            onSuccess: data => {
-                setCategories(data.categories)
-            },
         }
     )
 
+    // < 화살표 클릭 시 
     const handlePrevOnClick = () => {
         if (currentMenuIndex > 0) {
         setCurrentMenuIndex(currentMenuIndex - 1);
         }
     };
 
+    // > 화살 표 클릭 시 
     const handleNextOnClick = () => {
-        if (currentMenuIndex < categories.length - 4) {
+        if (currentMenuIndex < categoryList?.data?.data?.categories.length - 4) {
         setCurrentMenuIndex(currentMenuIndex + 1);
         }
     };
@@ -52,7 +47,7 @@ function MainTopBar({ handleCategoryOnChange }) {
                 <button css={s.button("right")} onClick={handlePrevOnClick}><IoIosArrowBack/></button>
                 <div css={s.menuButtons}>
                     {
-                        categories.slice(currentMenuIndex, currentMenuIndex + 4).map((category) => (
+                        categoryList?.data?.data?.categories.slice(currentMenuIndex, currentMenuIndex + 4).map(category => (
                         <button 
                             key={category.categoryId} 
                             onClick={() => handleSelectedCategoryId(category.categoryId)}
