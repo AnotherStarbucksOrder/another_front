@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 function AdminUserAddPage(props) {
     const navigate = useNavigate();
     const [inputUser, setInputUser ] = useState({
-        phoneNumber: "",
+        phoneNumber: "010-",
         starCount: 0,
         memo: ""
     })
@@ -23,6 +23,31 @@ function AdminUserAddPage(props) {
             }
         }
     )
+
+    const formatPhoneNumber = (number) => {
+        // 숫자가 아닌 문자는 제거
+        number = number.replace(/[^0-9]/g, "").replace(/^010/g, "");
+
+        if (number.length <= 3) {
+            return `010-${number}`; 
+        } else if (number.length <= 7) {
+            return `010-${number.slice(0, 3)}-${number.slice(3)}`; 
+        } else {
+            return `010-${number.slice(0, 4)}-${number.slice(4, 8)}`; 
+        }
+    };
+
+    const updateNewPhoneNumber = (newPhoneNumber) => {
+        setInputUser(inputUser => ({
+            ...inputUser,
+            phoneNumber: newPhoneNumber
+        }));
+    };
+
+    const handleUserPhoneNumberInputChange = (e) => {
+        const value = e.target.value;
+        updateNewPhoneNumber(formatPhoneNumber(value));
+    };
 
     const handleUserInputChange = (e) => {
         setInputUser({
@@ -54,7 +79,8 @@ function AdminUserAddPage(props) {
                                         <p>전화번호 : </p>
                                     </div>
                                     <input type="text" name="phoneNumber" 
-                                        css={s.input} onChange={handleUserInputChange} />
+                                        css={s.input} value={inputUser.phoneNumber} 
+                                        onChange={handleUserPhoneNumberInputChange} />
                                 </div>
                             </div>
                             <div css={s.infoBox}>

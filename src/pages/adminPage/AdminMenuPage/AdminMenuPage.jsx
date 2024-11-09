@@ -25,7 +25,6 @@ function AdminMenuPage(props) {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response)
                 setMenus(response?.data?.data);
                 setTotalPageCount(
                     response?.data.totalCount % limit === 0
@@ -92,7 +91,7 @@ function AdminMenuPage(props) {
         setMenus(menus =>
             menus.map(menu =>
                 menu.menuId === menuId
-                    ? { ...menu, menuStatus:  1 ? 0 : 1 }
+                    ? { ...menu, menuStatus: 1 ? 0 : 1 }
                     : menu
             )
         );
@@ -129,7 +128,8 @@ function AdminMenuPage(props) {
                 <div css={s.functionBox}>
                     <div css={s.searchBox}>
                         <input type="text" placeholder="카테고리명, 상품명" 
-                            onChange={handleSearchInputOnChange} value={searchValue} />
+                            onChange={handleSearchInputOnChange} 
+                            value={searchValue} />
                         <button onClick={handleSearchButtonOnClick}>🔍</button>
                     </div>
                     <div css={s.buttonBox}>
@@ -163,10 +163,11 @@ function AdminMenuPage(props) {
                                             onChange={() => handleMenuChecked(menu.menuId)} 
                                             checked={menu.isChecked} value={menu.menuId} /></td>
                                         <td>{menu.menuName}</td>
-                                        <td>{menu.menuPrice}</td>
+                                        <td>{(menu.menuPrice.toLocaleString() || 0) + "원"}</td>
                                         <td>{menu.categories}</td>
                                         <td>{menu.options}</td>
-                                        <td><Switch value={menu.menuStatus} checked={menu.menuStatus === 1} 
+                                        <td><Switch value={menu.menuStatus} 
+                                            checked={menu.menuStatus === 1} 
                                             onClick={() => handleMenuStatusChekcked(menu.menuId)} /></td>
                                         <td><Link to={`/admin/menu/detail/${menu.menuId}`}>상세보기</Link></td>
                                     </tr>
@@ -177,11 +178,11 @@ function AdminMenuPage(props) {
                 </div>
                 <div css={s.paginateContainer}>
                     <ReactPaginate
-                        breakLabel="..."
+                        breakLabel=""
                         previousLabel={<><IoMdArrowDropleft /></>}
                         nextLabel={<><IoMdArrowDropright /></>}
                         pageCount={totalPageCount}
-                        marginPagesDisplayed={2}
+                        marginPagesDisplayed={0}
                         pageRangeDisplayed={5}
                         activeClassName='active'
                         onPageChange={handlePageOnChange}

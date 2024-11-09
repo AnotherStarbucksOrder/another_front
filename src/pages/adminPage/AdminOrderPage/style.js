@@ -13,7 +13,7 @@ export const titleBox = css`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: 150px;
+    height: 125px;
     border-bottom: 1px solid ${COLORS.lineColor};
 
     & p {

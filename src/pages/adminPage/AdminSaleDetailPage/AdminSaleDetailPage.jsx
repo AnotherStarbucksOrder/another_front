@@ -46,7 +46,7 @@ function AdminSaleDetailPage(props) {
                             </div>
                         </div>
                         <div css={s.buttonBox}>
-                            <button>정산</button>
+                            <button>확인</button>
                         </div>
                     </div>
                 </div>

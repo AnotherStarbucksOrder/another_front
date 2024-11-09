@@ -93,8 +93,6 @@ function AdminCategoryPage(props) {
                 <div css={s.functionBox}>
                     <div css={s.buttonBox}>
                         <button onClick={() => navigate("/admin/category/add")}>추가</button>
-                        <div />
-                        <button>순서 편집</button>
                     </div>
                 </div>
                 <div css={s.tableContainer}>

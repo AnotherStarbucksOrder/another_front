@@ -13,7 +13,7 @@ export const titleBox = css`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: 150px;
+    height: 125px;
     border-bottom: 1px solid ${COLORS.lineColor};
 
     & p {
@@ -106,7 +106,7 @@ export const tableLatout = css`
         background-color: #f4f4f4;
         font-weight: bold;
         &:nth-of-type(1) {
-            width: 20%;
+            width: 10%;
         }
         &:nth-of-type(2) {
             width: 15%;
@@ -118,7 +118,7 @@ export const tableLatout = css`
             width: 15%;
         }
         &:nth-of-type(5) {
-            width: 15%;
+            width: 10%;
         }
     }
 

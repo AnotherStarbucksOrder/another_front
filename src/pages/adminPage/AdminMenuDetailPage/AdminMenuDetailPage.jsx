@@ -193,6 +193,19 @@ function AdminMenuDetailPage(props) {
         }
     };
 
+    const handleImageChange = (e) => {
+        const imgFile = e.target.files[0];
+        if (imgFile) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setModifyMenuData(modifyMenuData => ({
+                    ...modifyMenuData,
+                    imgUrl: reader.result // 미리보기 URL 설정
+                }));
+            };
+            reader.readAsDataURL(imgFile);
+        }
+    };
     const handleSelectCategoryChange = (selectedOptions) => {
         const newCategories = selectedOptions.map(option => ({
             categoryId: option.value,
@@ -250,7 +263,7 @@ function AdminMenuDetailPage(props) {
                                         </div>
                                         <input type="file" accept="image/*" 
                                             id="fileInput" name="imgUrl" 
-                                            onChange={handleModifyInputOnChange} />
+                                            onChange={handleImageChange} />
                                         <input type="text" value={modifyMenuData.imgUrl} readOnly />
                                     </>
                             }
@@ -305,7 +318,7 @@ function AdminMenuDetailPage(props) {
                                     <input type="text" name="menuPrice" 
                                         css={s.input} readOnly={!isEditing} 
                                         onChange={handleModifyInputOnChange} 
-                                        value={modifyMenuData.menuPrice || ""} />
+                                        value={ !isEditing ? (modifyMenuData.menuPrice.toLocaleString() || "0") + "원" : (modifyMenuData.menuPrice) } />
                                 </div>
                             </div>
                             <div css={s.infoBox}>

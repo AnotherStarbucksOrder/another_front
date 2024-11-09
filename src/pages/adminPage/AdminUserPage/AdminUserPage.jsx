@@ -144,11 +144,11 @@ function AdminUserPage(props) {
                 </div>
                 <div css={s.paginateContainer}>
                 <ReactPaginate
-                    breakLabel="..."
+                    breakLabel=""
                     previousLabel={<><IoMdArrowDropleft /></>}
                     nextLabel={<><IoMdArrowDropright /></>}
                     pageCount={totalPageCount}
-                    marginPagesDisplayed={2}
+                    marginPagesDisplayed={0}
                     pageRangeDisplayed={5}
                     activeClassName='active'
                     onPageChange={handlePageOnChange}
