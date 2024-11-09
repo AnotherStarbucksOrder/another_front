@@ -10,7 +10,7 @@ function AdminPageSideBar(props) {
         navigate("/admin/menus?page=1");
     }
     const handleSalesClick = () => {
-        navigate("/admin/sales");
+        navigate("/admin/sales?page=1");
     }
     const handleOrderClick = () => {
         navigate("/admin/order?page=1");

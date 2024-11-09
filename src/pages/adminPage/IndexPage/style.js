@@ -17,14 +17,14 @@ export const container = css`
     box-sizing: border-box;
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     width: 1550px;
     height: 450px;
 `;
 export const salesInfoBox = css`
     box-sizing: border-box;
-    width: 740px;
-    height: 420px;
+    width: 200px;
+    height: 200px;
     /* border: 1px solid #ddd; */
     margin-left: 30px;
     & img {
@@ -34,19 +34,12 @@ export const salesInfoBox = css`
     }
 
 `;
-// export const salesTableBox = css`
-//     box-sizing: border-box;
-//     display: flex;
-//     flex-direction: column;
-//     width: 740px;
-//     height: 420px;
-//     border: 1px solid #ddd;
-// `;
+
 export const salesTableBox = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: 740px;
+    width: 1510px;
     height: 420px;
     border: 1px solid #ddd;
     padding: 20px; /* 내부 여백 추가 */
@@ -111,17 +104,24 @@ export const menuInfoBox = css`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 740px;
+    width: 940px;
     height: 420px;
     border: 1px solid #ddd;
-    &:nth-of-type(2) {
-        padding: 15px;
-        margin-left: 30px;
-    }
 
+`;
+export const chartInfoBox = css`
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 540px;
+    height: 420px;
+    border: 1px solid #ddd;
+    /* padding: 15px; */
+    margin-left: 30px;
+    
     & img {
         width: 100%;
         height: 100%;
     }
-
 `;

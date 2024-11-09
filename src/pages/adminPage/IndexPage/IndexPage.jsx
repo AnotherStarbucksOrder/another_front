@@ -2,7 +2,7 @@
 import { useQuery } from "react-query";
 import * as s from "./style";
 import { instance } from "../../../apis/util/instance";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import {
     Chart,
@@ -12,10 +12,9 @@ import {
     Title,
     Tooltip,
     Legend,
-    ArcElement,
-    plugins
-} from 'chart.js';
-import { Bar, Doughnut } from 'react-chartjs-2';
+    ArcElement
+} from "chart.js";
+import { Bar, Doughnut } from "react-chartjs-2";
 
 Chart.register(LinearScale, CategoryScale, BarElement, ArcElement, Title, Tooltip, Legend);
 function IndexPage(props) {
@@ -79,6 +78,14 @@ function IndexPage(props) {
         plugins: {
             legend: {
                 display: false
+            },
+            title: {
+                display: true,
+                text: "월별 매출 현황",
+                font: {
+                    size: 20, 
+                    weight: "bold",
+                },
             }
         }
     }
@@ -111,19 +118,27 @@ function IndexPage(props) {
                     padding: 25,
                     usePointStyle: true,
                     font: {
-                        size: 16, 
-                        weight: 500 
+                        size: 15, 
+                        weight: 600 
                     }
                 }
             },
             tooltip: {
                 callbacks: {
                     label: (tooltipItem) => {
-                        const label = tooltipItem.label || '';
+                        const label = tooltipItem.label || "";
                         const value = tooltipItem.raw || 0;
                         return `${label}: ${value}`;
                     }
                 }
+            },
+            title: {
+                display: true,
+                text: "메뉴별 판매 현황",
+                font: {
+                    size: 20,
+                    weight: "bold" 
+                },
             }
         }
     };
@@ -154,14 +169,14 @@ function IndexPage(props) {
                         </div>
                         <div css={s.toggleContainer}>
                             <div
-                                css={[s.toggleButton, selectedOption === 'totalSales' ? s.activeButton : s.inactiveButton]}
-                                onClick={() => handleToggle('totalSales')}
+                                css={[s.toggleButton, selectedOption === "totalSales" ? s.activeButton : s.inactiveButton]}
+                                onClick={() => handleToggle("totalSales")}
                             >
                                 총 매출
                             </div>
                             <div
-                                css={[s.toggleButton, selectedOption === 'dailySales' ? s.activeButton : s.inactiveButton]}
-                                onClick={() => handleToggle('dailySales')}
+                                css={[s.toggleButton, selectedOption === "dailySales" ? s.activeButton : s.inactiveButton]}
+                                onClick={() => handleToggle("dailySales")}
                             >
                                 금일 매출
                             </div>
@@ -170,7 +185,7 @@ function IndexPage(props) {
                         <table css={s.tableLayout}>
                             <thead>
                                 <tr>
-                                    {selectedOption === 'totalSales' ? (
+                                    {selectedOption === "totalSales" ? (
                                         <>
                                             <th>총 매출</th>
                                             <th>총 결제 완료 건</th>
@@ -189,7 +204,7 @@ function IndexPage(props) {
                             </thead>
                             <tbody>
                                 <tr>
-                                    {selectedOption === 'totalSales' ? (
+                                    {selectedOption === "totalSales" ? (
                                         <>
                                             <td>{(salse?.respSaleDto?.totalAmount.toLocaleString() || 0) + "원"}</td>
                                             <td>{salse?.respSaleDto?.orderCount}건</td>
@@ -208,20 +223,20 @@ function IndexPage(props) {
                             </tbody>
                         </table>
                     </div>
-                    <div css={s.salesInfoBox}>
+                    {/* <div css={s.salesInfoBox}>
                         <img src="/KakaoTalk_Photo_2024-10-17-16-40-07.jpg" alt="" />
 
-                    </div>
+                    </div> */}
                 </div>
                 <div css={s.container}>
                     <div css={s.menuInfoBox}>
                         <Bar data={data} options={options} />
                     </div>
-                    <div css={s.menuInfoBox}>
+                    <div css={s.chartInfoBox}>
                         {menuList && menuList.length > 0 ? (
                             <Doughnut data={doudata} options={doughnutOptions} />
                         ) : (
-                            <div>?</div>
+                            <img src="/ggg.jpg" alt="" />
                         )}
                     </div>
                 </div>

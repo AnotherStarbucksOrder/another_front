@@ -11,7 +11,7 @@ function AdminUserDetailPage(props) {
     const navigate = useNavigate();
     const [ initialUserData, setInitialUserData ] = useState({
         userId: 0,
-        phoneNumber: "",
+        phoneNumber: "010-",
         starCount: 0,
         registerDate: "",
         memo: ""
@@ -19,7 +19,7 @@ function AdminUserDetailPage(props) {
 
     const [ modifyUserData, setModifyUserData] = useState({
         userId: 0,
-        phoneNumber: "",
+        phoneNumber: "010-",
         starCount: 0,
         memo: ""
     })
@@ -62,6 +62,31 @@ function AdminUserDetailPage(props) {
         }
     )
 
+    const formatPhoneNumber = (number) => {
+        // 숫자가 아닌 문자는 제거
+        number = number.replace(/[^0-9]/g, "").replace(/^010/g, "");
+
+        if (number.length <= 3) {
+            return `010-${number}`; 
+        } else if (number.length <= 7) {
+            return `010-${number.slice(0, 3)}-${number.slice(3)}`; 
+        } else {
+            return `010-${number.slice(0, 4)}-${number.slice(4, 8)}`; 
+        }
+    };
+
+    const updateNewPhoneNumber = (newPhoneNumber) => {
+        setModifyUserData(modifyUserData => ({
+            ...modifyUserData,
+            phoneNumber: newPhoneNumber
+        }));
+    };
+
+    const handleUserPhoneNumberInputChange = (e) => {
+        const value = e.target.value;
+        updateNewPhoneNumber(formatPhoneNumber(value));
+    };
+
     const handleModifyChange = (e) => {
         const updatedValue = e.target.name === "starCount" ? Number(e.target.value) : e.target.value;
 
@@ -96,7 +121,7 @@ function AdminUserDetailPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>메뉴 관리</p>
+                    <p>회원 관리</p>
                 </div>
                 <div>
                     <div css={s.imgContainer}>
@@ -117,7 +142,7 @@ function AdminUserDetailPage(props) {
                                     </div>
                                     <input type="text" name="phoneNumber" 
                                         css={s.selectContainer} readOnly={!isEditing} 
-                                        onChange={handleModifyChange} 
+                                        onChange={handleUserPhoneNumberInputChange} 
                                         value={modifyUserData.phoneNumber} />
                                 </div>
                             </div>

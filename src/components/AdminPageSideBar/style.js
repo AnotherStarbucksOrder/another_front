@@ -18,7 +18,7 @@ export const titleBox = css`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 175px;
+    height: 270px;
 
     & p {
         margin: 0;

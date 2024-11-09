@@ -86,6 +86,20 @@ function AdminMenuAddPage(props) {
         }
     };
 
+    const handleImageChange = (e) => {
+        const imgFile = e.target.files[0];
+        if (imgFile) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setInputMenu(inputMenu => ({
+                    ...inputMenu,
+                    imgUrl: reader.result // 미리보기 URL 설정
+                }));
+            };
+            reader.readAsDataURL(imgFile);
+        }
+    };
+
     const handleInputMenuOnChange = (e) => {
         setInputMenu({
             ...inputMenu,
@@ -138,7 +152,7 @@ function AdminMenuAddPage(props) {
                                 <img src={inputMenu.imgUrl} alt="" onClick={handleImageClick} />
                             </div>
                             <input type="file" accept="image/*"  id="fileInput" 
-                                name="imgUrl" onChange={handleInputMenuOnChange} />
+                                name="imgUrl" onChange={handleImageChange} />
                             <input type="text" value={inputMenu.imgUrl} readOnly />
                         </div>
                         <div css={s.infoContainer}>

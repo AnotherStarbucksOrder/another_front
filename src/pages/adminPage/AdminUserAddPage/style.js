@@ -13,7 +13,7 @@ export const titleBox = css`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: 150px;
+    height: 125px;
     border-bottom: 1px solid ${COLORS.lineColor};
 
     & p {
@@ -83,6 +83,7 @@ export const buttonBox = css`
         height: 35px;
         font-size: 17px;
         font-weight: 600;
+        cursor: pointer;
 
         &:hover {
             background-color: #f0f0f0;
