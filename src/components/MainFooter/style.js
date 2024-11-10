@@ -91,7 +91,8 @@ export const countButtons = css`
     width: 300px;
 
     & > p {
-        width: 130px;
+        width: 180px;
+        text-align: end;
     }
 
     & > div {
