@@ -49,7 +49,7 @@ export const selectedYear = css`
     & select {
         width: 85px;
         height: 40px;
-        border-radius: 15px;
+        border-radius: 10px;
         text-align: center;
     }
 `;

@@ -17,6 +17,7 @@ export const layout = css`
     & svg {
         font-size: 60px;
         color: ${COLORS.main};
+        cursor: pointer;
     }
 `;
 
