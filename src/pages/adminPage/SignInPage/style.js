@@ -3,7 +3,8 @@ import { css } from "@emotion/react";
 export const layout = css`
     display: flex;
     flex-direction: column;
-    margin: 350px auto 0;
+    margin: 0 auto;
+    padding-top: 300px;
     width: 460px;
 `;
 

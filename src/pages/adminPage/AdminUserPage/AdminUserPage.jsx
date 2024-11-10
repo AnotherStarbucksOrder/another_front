@@ -58,7 +58,7 @@ function AdminUserPage(props) {
     }
 
      // 체크박스 상태 관리 
-     useEffect(() => {
+    useEffect(() => {
         const allChecked = users.every(user => user.isChecked);
         setCheckedAll(allChecked);
     }, [users]);

@@ -57,7 +57,6 @@ function SignInPage(props) {
                 </div>
             </div>
             <button css={s.loginButton} onClick={handleLoginSubmitOnClick}>로그인</button>
-
         </div>
     );
 }
