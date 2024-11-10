@@ -31,6 +31,7 @@ function MenuDetailPage() {
     });
 
     const [ orders, setOrders ]  = useRecoilState(ordersAtom);
+    console.log(orders)
 
     // 각 메뉴 정보 menuInfoQuery 
     const menuInfo = useQuery(
@@ -40,6 +41,7 @@ function MenuDetailPage() {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
+                console.log(response)
                 // 기본값 넣어줌
                 setMenuCart(menuCart => ({  
                     ...menuCart,
@@ -101,34 +103,30 @@ function MenuDetailPage() {
     const handleSelectCompleteOnClick = () => {
         const newMenuCart = {...menuCart};
 
-        if(orders.products.filter(menuCart => {
-            const preMenuCart = {
-                menuId: menuCart.menuId,
-                menuName: menuCart.menuName,
-                options: menuCart.options,
-            };
-            
-            const sufMenuCart = {
-                menuId: newMenuCart.menuId,
-                menuName: newMenuCart.menuName,
-                options: newMenuCart.options,
-            };
-
-            return JSON.stringify(preMenuCart) === JSON.stringify(sufMenuCart);
-        }).length > 0) { 
-            // menuId, options가 같으면 totalPrice, count만 올려짐 
+        // menuId와 options가 같은 항목이 있는지 확인
+        if (orders.products.filter(menuCart => 
+                menuCart.menuId === newMenuCart.menuId &&
+                JSON.stringify(menuCart.options) === JSON.stringify(newMenuCart.options)
+        ).length > 0) { 
+            // menuId와 options가 같은 항목이 있다면 totalPrice와 count만 업데이트 
             setOrders(order => ({
                 ...order,
-                products: order.products.map(menuCart => ({
-                    ...menuCart, 
-                    totalPrice: !menuCart.totalPrice ? 0 : menuCart.totalPrice + newMenuCart.totalPrice, 
-                    count: menuCart.count + newMenuCart.count,
-                }))
+                products: order.products.map(menuCart => {
+                    if (menuCart.menuId === newMenuCart.menuId && JSON.stringify(menuCart.options) === JSON.stringify(newMenuCart.options)) {
+                        return {
+                            ...menuCart,
+                            totalPrice: menuCart.totalPrice + newMenuCart.totalPrice,
+                            count: menuCart.count + newMenuCart.count,
+                        };
+                    }
+                    return menuCart;
+                }),
             }));
-        }else {
+        } else {
+            // 새로운 항목을 추가
             setOrders(order => ({
                 ...order,
-                products: [...order.products, newMenuCart]
+                products: [...order.products, newMenuCart],
             }));
         }
         navigate(-1);

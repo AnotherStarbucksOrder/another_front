@@ -69,6 +69,7 @@ export const selectContainer = css`
     flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
     margin-left: 10px; /* p 태그와의 간격 설정 */
     padding-left: 10px;
+    resize: none;
 `;
 
 

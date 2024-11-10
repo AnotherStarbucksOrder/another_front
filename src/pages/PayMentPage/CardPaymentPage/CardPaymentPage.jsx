@@ -97,7 +97,7 @@ function CardPaymentPage() {
                     customer: {
                         userId: orders.user.userId,
                         phoneNumber: orders.user.phoneNumber,
-                        usedCoupon: orders.user.usedCoupon.map(coupon => coupon.couponId) 
+                        usedCoupon: (orders.user.usedCoupon || []).map(coupon => coupon.couponId)
                     },
                     products: newPortoneData.products,
                 }
