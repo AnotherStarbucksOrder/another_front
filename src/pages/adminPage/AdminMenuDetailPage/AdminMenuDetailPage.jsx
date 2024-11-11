@@ -47,7 +47,7 @@
 
             // 카테고리 ID 매핑
             const categoryIds = categories
-            .split(",")
+            ? categories.split(",")
             .map((category) => {
                 const trimmedCategory = category.trim();
                 const matchedCategory = selectCategory.find(
@@ -55,11 +55,12 @@
                 );
                 return matchedCategory ? matchedCategory.categoryId : null;
             })
-            .filter((id) => id !== null);
+            .filter((id) => id !== null)
+            : [];
 
             // 옵션 ID 매핑
             const optionIds = options
-            .split(",")
+            ? options.split(",")
             .map((option) => {
                 const trimmedOption = option.trim();
                 const matchedOption = selectOption.find(
@@ -67,7 +68,8 @@
                 );
                 return matchedOption ? matchedOption.optionId : null;
             })
-            .filter((id) => id !== null);
+            .filter((id) => id !== null)
+            : [];
 
             // 수정할 메뉴 데이터에 ID 설정
             setModifyMenuData((modifyMenuData) => ({
@@ -93,7 +95,7 @@
     const selectOption = selectList?.data?.data.options || [];
 
     const categoryArray = initialMenuData.categories
-        .split(",")
+        ? initialMenuData.categories.split(",")
         .map((category) => {
         const categoryName = category.trim();
         const matchedCategory = selectCategory.find(
@@ -104,9 +106,11 @@
             value: matchedCategory ? matchedCategory.categoryId : categoryName,
             label: categoryName,
         };
-        });
+        })
+        : [] ;
 
-    const optionArray = initialMenuData.options.split(",").map((option) => {
+    const optionArray = initialMenuData.options
+    ? initialMenuData.options.split(",").map((option) => {
         const optionName = option.trim();
         const matchedOption = selectOption.find(
         (selectOpt) => selectOpt.optionName === optionName
@@ -116,7 +120,8 @@
         value: matchedOption ? matchedOption.optionId : optionName,
         label: optionName,
         };
-    });
+    })
+    : [];
 
     // 메뉴 삭제
     const deleteMenuMutation = useMutation(
