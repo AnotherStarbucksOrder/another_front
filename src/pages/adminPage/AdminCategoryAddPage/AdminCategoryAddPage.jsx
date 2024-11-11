@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as s from "./style";
 import { Radio } from "pretty-checkbox-react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { instance } from "../../../apis/util/instance";
 import { useNavigate } from "react-router-dom";
 
@@ -62,11 +62,11 @@ function AdminCategoryAddPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <div css={s.Container}>
+                    <div css={s.container}>
                         <div css={s.infoContainer}>
                             <div css={s.infoBox}>
                                 <div css={s.option}>
-                                    <p css={s.optionTitle}>카테고리 명 : </p>
+                                    <p css={s.optionTitle}>카테고리 명</p>
                                     <input 
                                         type="text" 
                                         name="categoryName" 
@@ -80,7 +80,6 @@ function AdminCategoryAddPage(props) {
                                     </div>
                                     <div css={s.radioBox}>
                                         <Radio 
-                                            css={s.radio} 
                                             name="categoryStatus" 
                                             value={1} 
                                             checked={inputCategory.categoryStatus === 1} 
@@ -92,8 +91,7 @@ function AdminCategoryAddPage(props) {
                                             name="categoryStatus" 
                                             value={0} 
                                             checked={inputCategory.categoryStatus === 0} 
-                                            onChange={handleCategoryStatusChange} 
-                                            bigger
+                                            onChange={handleCategoryStatusChange}
                                             >
                                             미사용
                                         </Radio>

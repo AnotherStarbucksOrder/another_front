@@ -268,7 +268,7 @@
         ...modifyMenuData,
         [e.target.name]: e.target.value,
         }));
-    };
+    }; 
 
     return (
         <>
@@ -337,7 +337,7 @@
                             />
                         )}
                         </div>
-                    </div>
+                    </div> 
                     </div>
                     <div css={s.infoBox}>
                         <div css={s.option}>

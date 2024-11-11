@@ -8,8 +8,6 @@ export const layout = css`
     height: 100%;
 `;
 
-
-
 export const titleBox = css`
     box-sizing: border-box;
     display: flex;

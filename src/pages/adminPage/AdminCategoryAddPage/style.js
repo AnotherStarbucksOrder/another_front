@@ -15,19 +15,18 @@ export const titleBox = css`
     height: 100%;
 `;
 
-export const Container = css`
+export const container = css`
     box-sizing: border-box;
     flex-grow: 1;
     width: 100%;
     height: 800px;
 `;
 
-
 export const infoContainer = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 0 auto;
     padding-top: 80px;
     width: 800px;
@@ -49,11 +48,31 @@ export const option = css`
     align-items: center;
     width: 100%; /* 부모의 너비를 모두 사용 */
     margin-bottom: 50px;
+
+    & > p {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+        width: 100px;
+    }
+
+    & > input {
+        border: 1px solid ${COLORS.main};
+        border-radius: 5px;
+        height: 35px;
+        outline: none;
+    }
 `;
 
 export const optionTitle = css`
     box-sizing: border-box;
     width: 90px;
+
+    & > p {
+        text-align: end;
+        font-size: 20px;
+        font-weight: 600;
+    }
 `;
 
 export const selectContainer = css`
@@ -64,20 +83,15 @@ export const selectContainer = css`
 
 export const radioBox = css`
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
-    padding-right: 90px;  
-`;
-export const radio = css`
-    margin-right: 100px;
+    width: 550px;
 `;
 
 export const registerContainer = css`
     & button {
         cursor: pointer;
     }
-
 `;
 
 export const registerMenu = css`
@@ -134,32 +148,21 @@ export const menuBox = css`
 export const buttonBox = css`
     box-sizing: border-box;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    margin: 0 auto;
     align-items: center;
-    width: 100%;
+    width: 400px;
 
     & button {
         margin-top: 20px;
-        background-color: #fff;
         border-radius: 4px;
-        width: 60px;
-        height: 35px;
+        border: none;
+        width: 100px;
+        height: 40px;
         font-size: 17px;
         font-weight: 600;
+        background-color: ${COLORS.buttonColor};
+        color: ${COLORS.buttonFontColor};
         cursor: pointer;
-
-        &:hover {
-            background-color: #f0f0f0;
-        }
-        &:active{
-            background-color: #c0c0c0;
-        }
-
-        &:nth-of-type(1) {
-            margin-right: 30px;
-        }
-        &:nth-of-type(2) {
-            margin-right: 30px;
-        }
     }
 `;

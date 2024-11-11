@@ -157,94 +157,93 @@ function AdminMenuAddPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>메뉴 관리</p>
-                </div>
-                <div>
-                    <div css={s.imgContainer}>
-                        <div css={s.imgBox}>
-                            <div css={s.img}>
-                                <img src={inputMenu.imgUrl} alt="" onClick={handleImageClick} />
+                    <div>
+                        <div css={s.imgContainer}>
+                            <div css={s.imgBox}>
+                                <div css={s.img}>
+                                    <img src={inputMenu.imgUrl} alt="" onClick={handleImageClick} />
+                                </div>
+                                <input type="file" accept="image/*"  id="fileInput" 
+                                    name="imgUrl" onChange={handleImageChange} />
+                                <input type="text" value={inputMenu.imgUrl} readOnly />
                             </div>
-                            <input type="file" accept="image/*"  id="fileInput" 
-                                name="imgUrl" onChange={handleImageChange} />
-                            <input type="text" value={inputMenu.imgUrl} readOnly />
-                        </div>
-                        <div css={s.infoContainer}>
-                            <div css={s.infoBox}>
-                                <div>
+                            <div css={s.infoContainer}>
+                                <div css={s.infoBox}>
+                                    <div>
+                                        <div css={s.option}>
+                                            <div css={s.optionTitle}>
+                                                <p>카테고리 : </p>
+                                            </div>
+                                            <ReactSelect
+                                                isMulti
+                                                css={s.select}
+                                                name="categories"
+                                                onChange={handleSelectCategoryChange}
+                                                options={categories.map(category => ({
+                                                    value: category.categoryId,
+                                                    label: category.categoryName
+                                                })) || []} 
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div css={s.infoBox}>
                                     <div css={s.option}>
                                         <div css={s.optionTitle}>
-                                            <p>카테고리 : </p>
+                                            <p>메뉴 이름 : </p>
+                                        </div>
+                                        <input type="text" css={s.input} 
+                                            name="menuName" 
+                                            onChange={handleInputMenuOnChange}/>
+                                    </div>
+                                </div>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>메뉴 가격 : </p>
+                                        </div>
+                                        <input type="text" css={s.input}
+                                            name="menuPrice" 
+                                            onChange={handleInputMenuOnChange}/>
+                                    </div>
+                                </div>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>메뉴 옵션 : </p>
                                         </div>
                                         <ReactSelect
                                             isMulti
                                             css={s.select}
-                                            name="categories"
-                                            onChange={handleSelectCategoryChange}
-                                            options={categories.map(category => ({
-                                                value: category.categoryId,
-                                                label: category.categoryName
+                                            name="options"
+                                            onChange={handleSelectOptionChange}
+                                            options={options.map(option => ({
+                                                value: option.optionId,
+                                                label: option.optionName 
                                             })) || []} 
                                             className="basic-multi-select"
                                             classNamePrefix="select"
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>메뉴 이름 : </p>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>메뉴 설명 : </p>
+                                        </div>
+                                        <textarea  css={s.input} name="comment" 
+                                            onChange={handleInputMenuOnChange}></textarea>
                                     </div>
-                                    <input type="text" css={s.input} 
-                                        name="menuName" 
-                                        onChange={handleInputMenuOnChange}/>
-                                </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>메뉴 가격 : </p>
-                                    </div>
-                                    <input type="text" css={s.input}
-                                        name="menuPrice" 
-                                        onChange={handleInputMenuOnChange}/>
-                                </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>메뉴 옵션 : </p>
-                                    </div>
-                                    <ReactSelect
-                                        isMulti
-                                        css={s.select}
-                                        name="options"
-                                        onChange={handleSelectOptionChange}
-                                        options={options.map(option => ({
-                                            value: option.optionId,
-                                            label: option.optionName 
-                                        })) || []} 
-                                        className="basic-multi-select"
-                                        classNamePrefix="select"
-                                    />
-                                </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>메뉴 설명 : </p>
-                                    </div>
-                                    <textarea  css={s.input} name="comment" 
-                                        onChange={handleInputMenuOnChange}></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div css={s.buttonBox}>
-                    <button onClick={handleBackOnClick}>취소</button>
-                    <button onClick={handleSubmitOnClick}>확인</button>
+                    <div css={s.buttonBox}>
+                        <button onClick={handleBackOnClick}>취소</button>
+                        <button onClick={handleSubmitOnClick}>확인</button>
+                    </div>
                 </div>
             </div>
         </>
