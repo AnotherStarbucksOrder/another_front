@@ -56,8 +56,16 @@ function AdminUserAddPage(props) {
         });
     }
 
-    const handleInputUserSubmitClick = () => {
-        addUserMutation.mutateAsync();
+    const handleInputUserSubmitClick = async () => {
+        try {
+            await addUserMutation.mutateAsync();
+        }catch (e) {
+            if(e.status === 401) {
+                alert(e.response.data.defaultMessage.phoneNumber);
+            } else {
+                alert(e.response.data);
+            }
+        }
     }
 
     const handleBackOnClick = () => {

@@ -22,7 +22,6 @@ function AdminCategoryAddPage(props) {
                 navigate("/admin/category")
             },
             onError: (e) => {
-                console.error(e);
             }
         }
     )
@@ -46,7 +45,11 @@ function AdminCategoryAddPage(props) {
             await addCategoryMutation.mutateAsync();
             console.log(inputCategory);
         }catch (e) {
-            alert(e.response.data);
+            if(e.status === 401) {
+                alert(e.response.data.defaultMessage.categoryName);
+            } else {
+                alert(e.response.data);
+            }
         }
     }
 
