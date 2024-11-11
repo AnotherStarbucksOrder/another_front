@@ -78,18 +78,20 @@ export const option = css`
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    width: 100%; /* 부모의 너비를 모두 사용 */
+    width: 100%; 
 
     & > input {
         border: 1px solid ${COLORS.main};
         border-radius: 5px;
         outline: none;
+        height: 40px;
     }
 
     & > textarea {
         border: 1px solid ${COLORS.main};
         border-radius: 5px;
         outline: none;
+        height: 60px;
     }
 `;
 

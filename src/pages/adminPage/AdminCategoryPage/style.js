@@ -52,7 +52,7 @@ export const buttonBox = css`
         }
     }
 
-    & div{
+    & div { 
         width: 1px;
         height: 30px;
         background-color: #ccc;
