@@ -119,6 +119,13 @@ function AdminMenuPage(props) {
     const handleMenuAddOnClick = () => {
         navigate("/admin/menu/add")
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            handleSearchButtonOnClick();
+        }
+    }
+
     const handleSearchButtonOnClick = () => {
         navigate(`/admin/menus?page=1&searchName=${searchValue}`);
         menuList.refetch();
@@ -134,6 +141,7 @@ function AdminMenuPage(props) {
                     <div css={s.searchBox}>
                         <input type="text" placeholder="카테고리명, 상품명" 
                             onChange={handleSearchInputOnChange} 
+                            onKeyDown={handleKeyDown}
                             value={searchValue} />
                         <button onClick={handleSearchButtonOnClick}>🔍</button>
                     </div>

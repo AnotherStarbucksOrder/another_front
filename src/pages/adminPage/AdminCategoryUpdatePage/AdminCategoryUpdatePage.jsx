@@ -65,8 +65,16 @@ function AdminCategoryUpdatePage(props) {
         }));
     }
 
-    const handleModifyCategoryOnClick = () => {
-        modifyCategoryMutation.mutateAsync();
+    const handleModifyCategoryOnClick = async () => {
+        try {
+            await modifyCategoryMutation.mutateAsync();
+        }catch (e) {
+            if(e.status === 401) {
+                alert(e.response.data.defaultMessage.categoryName);
+            } else {
+                alert(e.response.data);
+            }
+        }
     }
 
     const handleBackOnClick = () => {
