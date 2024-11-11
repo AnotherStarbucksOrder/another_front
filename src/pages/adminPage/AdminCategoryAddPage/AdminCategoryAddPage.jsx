@@ -21,8 +21,8 @@ function AdminCategoryAddPage(props) {
                 alert("등록되었습니다.")
                 navigate("/admin/category")
             },
-            onError: (error) => {
-                alert(error.response.data);
+            onError: (e) => {
+                console.error(e);
             }
         }
     )
@@ -41,9 +41,13 @@ function AdminCategoryAddPage(props) {
         });
     }
 
-    const handleCategorySubmitOnClick = () => {
-        addCategoryMutation.mutateAsync();
-        console.log(inputCategory);
+    const handleCategorySubmitOnClick = async () => {
+        try {
+            await addCategoryMutation.mutateAsync();
+            console.log(inputCategory);
+        }catch (e) {
+            alert(e.response.data);
+        }
     }
 
     const handleBackOnClick = () => {

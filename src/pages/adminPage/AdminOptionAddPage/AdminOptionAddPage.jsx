@@ -64,8 +64,16 @@ function AdminOptionAddPage(props) {
         });
     };
 
-    const handleSubmitOptionOnClick = () => {
-        addOptionMutation.mutateAsync();
+    const handleSubmitOptionOnClick = async () => {
+        if (!inputOptionData.optionName) {
+            alert("옵션 명을 입력해주세요.");
+            return;
+        }
+        try{
+            await addOptionMutation.mutateAsync();
+        } catch (e) {
+            alert(e.response.data);
+        }
     }
 
 

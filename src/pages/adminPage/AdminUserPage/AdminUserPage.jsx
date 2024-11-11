@@ -49,6 +49,11 @@ function AdminUserPage(props) {
         }
     )
 
+    useEffect(() => {
+        setSearchValue("");
+        userList.refetch();
+    }, [searchParams]);
+
     const handleSearchInputChange = (e) => {
         setSearchValue(e.target.value);
     }
