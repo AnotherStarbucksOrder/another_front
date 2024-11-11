@@ -63,7 +63,6 @@ function AdminUserDetailPage(props) {
     )
 
     const formatPhoneNumber = (number) => {
-        // 숫자가 아닌 문자는 제거
         number = number.replace(/[^0-9]/g, "").replace(/^010/g, "");
 
         if (number.length <= 3) {
@@ -73,19 +72,19 @@ function AdminUserDetailPage(props) {
         } else {
             return `010-${number.slice(0, 4)}-${number.slice(4, 8)}`; 
         }
-    };
+    }
 
     const updateNewPhoneNumber = (newPhoneNumber) => {
         setModifyUserData(modifyUserData => ({
             ...modifyUserData,
             phoneNumber: newPhoneNumber
         }));
-    };
+    }
 
     const handleUserPhoneNumberInputChange = (e) => {
         const value = e.target.value;
         updateNewPhoneNumber(formatPhoneNumber(value));
-    };
+    }
 
     const handleModifyChange = (e) => {
         const updatedValue = e.target.name === "starCount" ? Number(e.target.value) : e.target.value;
@@ -109,9 +108,21 @@ function AdminUserDetailPage(props) {
     const handleEditOnClick = () => {
         setIsEditing(true);
     }
-    const handleConfirmOnClick = () => {
-        modifyUserMutation.mutateAsync();
+
+    const handleConfirmOnClick = async () => {
+        try {
+            await modifyUserMutation.mutateAsync();
+        }catch (e) {
+            if(e.status === 400) {
+                alert(e.response.data);
+                return;
+            }
+            if(e.response.data.defaultMessage.phoneNumber) {
+                alert(e.response.data.defaultMessage.phoneNumber);
+            }
+        }
     }
+
     const handleCancleOnClick = () => {
         setModifyUserData(initialUserData);
         setIsEditing(false);

@@ -85,7 +85,7 @@ function AdminOptionUpdatePage(props) {
             ...modifyOptionData,
             optionDetail: newValue
         }));
-    };
+    }
 
     const handleAddDetail = () => {
         setModifyOptionData(modifyOptionData => ({
@@ -96,7 +96,7 @@ function AdminOptionUpdatePage(props) {
                     optionDetailPrice: 0
                 }]
         }));
-    };
+    }
 
     // 해당 인덱스 삭제
     const handleRemoveDetail = (index) => {
@@ -105,7 +105,7 @@ function AdminOptionUpdatePage(props) {
             ...modifyOptionData,
             optionDetail: newValue
         }));
-    };
+    }
 
     const handleModifySubmitOnClick = async () => {
         console.log(modifyOptionData);
@@ -113,8 +113,9 @@ function AdminOptionUpdatePage(props) {
             await modifyOptionMutation.mutateAsync(modifyOptionData);
         }catch (e) {
             console.error(e);
-            if(e.status === 401) {
+            if(e.response.data.defaultMessage.optionName) {
                 alert(e.response.data.defaultMessage.optionName);
+                return;
             } else {
                 alert("중복된 옵션 이름 입니다.");
             }

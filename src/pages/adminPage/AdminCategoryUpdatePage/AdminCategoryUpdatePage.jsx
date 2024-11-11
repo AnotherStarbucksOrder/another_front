@@ -71,6 +71,7 @@ function AdminCategoryUpdatePage(props) {
         }catch (e) {
             if(e.status === 401) {
                 alert(e.response.data.defaultMessage.categoryName);
+                return;
             } else {
                 alert(e.response.data);
             }

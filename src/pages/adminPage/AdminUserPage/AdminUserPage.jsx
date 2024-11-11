@@ -8,13 +8,13 @@ import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 
 function AdminUserPage(props) {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [totalPageCount, setTotalPageCount] = useState(1);
+    const limit = 13;
+    const [searchValue, setSearchValue] = useState(searchParams.get("searchName") ?? "");
     const [ checkedAll, setCheckedAll ] = useState(false);
     const [ users, setUsers ] = useState([]);
-    const navigate = useNavigate();
-    const [searchValue, setSearchValue] = useState(searchParams.get("searchName") ?? "");
-    const limit = 13;
 
     // 회원 리스트 수정, 페이지네이션
     const userList = useQuery(
