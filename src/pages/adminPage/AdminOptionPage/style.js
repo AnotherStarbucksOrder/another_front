@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;
@@ -85,7 +84,6 @@ box-sizing: border-box;
     padding: 0 20px;
     height: 694px; 
     width: 100%;
-    
 
     & table {
         width: 100%;

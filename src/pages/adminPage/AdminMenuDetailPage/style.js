@@ -8,7 +8,6 @@ export const layout = css`
     height: 100%;
 `;
 
-
 export const titleBox = css`
     display: flex;
     flex-direction: column;
@@ -36,6 +35,7 @@ export const imgBox = css`
     & input:nth-of-type(1) {
         display: none;
     }
+
     & input:nth-of-type(2) {
         box-sizing: border-box;
         border: none;
@@ -46,10 +46,11 @@ export const imgBox = css`
     }
 `;
 
-export const img = css`
+export const img = (isEditing) => css`
     box-sizing: border-box;
     width: 250px;
     height: 250px;
+    cursor: ${isEditing ? "pointer" : "defualt"};
 
     & img {
         width: 100%;
@@ -82,11 +83,13 @@ export const option = css`
     & > input {
         border: 1px solid ${COLORS.main};
         border-radius: 5px;
+        outline: none;
     }
 
     & > textarea {
         border: 1px solid ${COLORS.main};
         border-radius: 5px;
+        outline: none;
     }
 `;
 

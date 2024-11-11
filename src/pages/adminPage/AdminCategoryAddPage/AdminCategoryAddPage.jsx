@@ -62,36 +62,48 @@ function AdminCategoryAddPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>카테고리 관리</p>
-                </div>
-                <div css={s.Container}>
-                    <div css={s.infoContainer}>
-                        <div css={s.infoBox}>
-                            <div css={s.option}>
-                                <p css={s.optionTitle}>카테고리 명 : </p>
-                                <input type="text" name="categoryName" css={s.selectContainer} onChange={handleInputOnChange}  />
-                            </div>
-                            <div css={s.option}>
-                                <div css={s.optionTitle}>
-                                    <p>노출 여부</p>
+                    <div css={s.Container}>
+                        <div css={s.infoContainer}>
+                            <div css={s.infoBox}>
+                                <div css={s.option}>
+                                    <p css={s.optionTitle}>카테고리 명 : </p>
+                                    <input 
+                                        type="text" 
+                                        name="categoryName" 
+                                        css={s.selectContainer} 
+                                        onChange={handleInputOnChange}  
+                                    />
                                 </div>
-                                <div css={s.radioBox}>
-                                    <Radio css={s.radio} name="categoryStatus" value={1} 
-                                        checked={inputCategory.categoryStatus === 1} 
-                                        onChange={handleCategoryStatusChange}>
+                                <div css={s.option}>
+                                    <div css={s.optionTitle}>
+                                        <p>노출 여부</p>
+                                    </div>
+                                    <div css={s.radioBox}>
+                                        <Radio 
+                                            css={s.radio} 
+                                            name="categoryStatus" 
+                                            value={1} 
+                                            checked={inputCategory.categoryStatus === 1} 
+                                            onChange={handleCategoryStatusChange}
+                                        >
                                             사용
-                                    </Radio>
-                                    <Radio name="categoryStatus" value={0} 
-                                        checked={inputCategory.categoryStatus === 0} 
-                                        onChange={handleCategoryStatusChange} bigger>
+                                        </Radio>
+                                        <Radio 
+                                            name="categoryStatus" 
+                                            value={0} 
+                                            checked={inputCategory.categoryStatus === 0} 
+                                            onChange={handleCategoryStatusChange} 
+                                            bigger
+                                            >
                                             미사용
-                                    </Radio>
+                                        </Radio>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div css={s.buttonBox}>
-                            <button onClick={handleBackOnClick}>취소</button>
-                            <button onClick={handleCategorySubmitOnClick}>등록</button>
+                            <div css={s.buttonBox}>
+                                <button onClick={handleBackOnClick}>취소</button>
+                                <button onClick={handleCategorySubmitOnClick}>등록</button>
+                            </div>
                         </div>
                     </div>
                 </div>

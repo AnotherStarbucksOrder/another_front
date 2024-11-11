@@ -8,22 +8,11 @@ export const layout = css`
     height: 100%;
 `;
 
-
-
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 125px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-
-    }
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
 `;
 
 export const imgContainer = css`
@@ -35,7 +24,6 @@ export const imgContainer = css`
     width: 100%;
     height: 100%;
 `;
-
 
 export const infoContainer = css`
     box-sizing: border-box;
@@ -58,6 +46,20 @@ export const option = css`
     display: flex;
     align-items: center;
     width: 100%; /* 부모의 너비를 모두 사용 */
+
+    & > input {
+        border: 1px solid ${COLORS.main};
+        border-radius: 5px;
+        outline: none;
+        height: 40px;
+    }
+
+    & > textarea {
+        border: 1px solid ${COLORS.main};
+        border-radius: 5px;
+        outline: none;
+        height: 50px;
+    }
 `;
 
 export const optionTitle = css`
@@ -89,19 +91,5 @@ export const buttonBox = css`
         font-size: 17px;
         font-weight: 600;
         cursor: pointer;
-
-        &:hover {
-            background-color: #f0f0f0;
-        }
-        &:active{
-            background-color: #c0c0c0;
-        }
-
-        &:nth-of-type(1) {
-            margin-right: 30px;
-        }
-        &:nth-of-type(2) {
-            margin-right: 30px;
-        }
     }
 `;

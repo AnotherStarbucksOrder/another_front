@@ -107,71 +107,70 @@ function AdminOrderpage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>주문 관리</p>
-                </div>
-                <div css={s.functionBox}>
-                    <div css={s.searchBox}>
-                        <select onChange={handleDateTypeChange} value={dateType}>
-                            <option value="day">일별</option>
-                            <option value="month" >월별</option>
-                        </select>
+                    <div css={s.functionBox}>
+                        <div css={s.searchBox}>
+                            <select onChange={handleDateTypeChange} value={dateType}>
+                                <option value="day">일별</option>
+                                <option value="month" >월별</option>
+                            </select>
+                        </div>
+                        <div css={s.buttonBox}>
+                            <input
+                                type={dateType === "month" ? "month" : "date"}
+                                value={searchStartDate}
+                                onChange={handleInputStartDate}
+                            />
+                            <input
+                                type={dateType === "month" ? "month" : "date"}
+                                value={searchEndDate}
+                                onChange={handleInputEndDate}
+                            />
+                            <button onClick={handleDateResetClick}>지우기</button>
+                        </div>
                     </div>
-                    <div css={s.buttonBox}>
-                        <input
-                            type={dateType === "month" ? "month" : "date"}
-                            value={searchStartDate}
-                            onChange={handleInputStartDate}
-                        />
-                        <input
-                            type={dateType === "month" ? "month" : "date"}
-                            value={searchEndDate}
-                            onChange={handleInputEndDate}
-                        />
-                        <button onClick={handleDateResetClick}>지우기</button>
+                    <div css={s.tableLatout}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>주문 날짜</th>
+                                    <th>주문 번호</th>
+                                    <th>주문 방식</th>
+                                    <th>결제 방식</th>
+                                    <th>주문 상태</th>
+                                    <th>결제 금액</th>
+                                    <th>--</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    orders.map(order =>
+                                        <tr key={order.orderId}>
+                                            <td>{order.createDate.split("T")[0]}</td>
+                                            <td>{order.orderId}</td>
+                                            <td>{getOrderType(order.orderType)}</td>
+                                            <td>{getPaymentType(order.paymentType)}</td>
+                                            <td>{getOrderState(order.orderState)}</td>
+                                            <td>{(order.orderAmount.toLocaleString() || 0) + "원"}</td>
+                                            <td><Link to={`/admin/order/detail/${order.orderId}`}>상세보기</Link></td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                <div css={s.tableLatout}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>주문 날짜</th>
-                                <th>주문 번호</th>
-                                <th>주문 방식</th>
-                                <th>결제 방식</th>
-                                <th>주문 상태</th>
-                                <th>결제 금액</th>
-                                <th>--</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                orders.map(order =>
-                                    <tr key={order.orderId}>
-                                        <td>{order.createDate.split("T")[0]}</td>
-                                        <td>{order.orderId}</td>
-                                        <td>{getOrderType(order.orderType)}</td>
-                                        <td>{getPaymentType(order.paymentType)}</td>
-                                        <td>{getOrderState(order.orderState)}</td>
-                                        <td>{(order.orderAmount.toLocaleString() || 0) + "원"}</td>
-                                        <td><Link to={`/admin/order/detail/${order.orderId}`}>상세보기</Link></td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div css={s.paginateContainer}>
-                    <ReactPaginate
-                        breakLabel=""
-                        previousLabel={<><IoMdArrowDropleft /></>}
-                        nextLabel={<><IoMdArrowDropright /></>}
-                        pageCount={totalPageCount}
-                        marginPagesDisplayed={0}
-                        pageRangeDisplayed={5}
-                        activeClassName='active'
-                        onPageChange={handlePageOnChange}
-                        forcePage={parseInt(searchParams.get("page") || 1) - 1}
-                    />
+                    <div css={s.paginateContainer}>
+                        <ReactPaginate
+                            breakLabel=""
+                            previousLabel={<><IoMdArrowDropleft /></>}
+                            nextLabel={<><IoMdArrowDropright /></>}
+                            pageCount={totalPageCount}
+                            marginPagesDisplayed={0}
+                            pageRangeDisplayed={5}
+                            activeClassName='active'
+                            onPageChange={handlePageOnChange}
+                            forcePage={parseInt(searchParams.get("page") || 1) - 1}
+                        />
+                    </div>
                 </div>
             </div>
         </>

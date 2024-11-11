@@ -8,21 +8,11 @@ export const layout = css`
     height: 100%;
 `;
 
-
-
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 150px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-    }
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
 `;
 
 export const Container = css`

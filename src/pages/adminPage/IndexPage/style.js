@@ -22,7 +22,7 @@ export const salesTableBox = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: 95%;
+    width: 1540px;
     height: 420px;
     border: 1px solid #ddd;
     padding: 20px; /* 내부 여백 추가 */
@@ -101,7 +101,7 @@ export const tableLayout = css`
 export const bottomContainer = css`
     display: flex;
     justify-content: space-between;
-    width: 95%;
+    width: 1540px;
 `;
 
 export const menuInfoBox = css`
@@ -112,6 +112,7 @@ export const menuInfoBox = css`
     width: 900px;
     height: 420px;
     border: 1px solid #ddd;
+    
 `;
 
 

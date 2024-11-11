@@ -132,77 +132,76 @@ function AdminUserDetailPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>회원 관리</p>
-                </div>
-                <div>
-                    <div css={s.imgContainer}>
-                        <div css={s.infoContainer}>
-                            <div css={s.infoBox}>
-                                <div>
+                    <div>
+                        <div css={s.imgContainer}>
+                            <div css={s.infoContainer}>
+                                <div css={s.infoBox}>
+                                    <div>
+                                        <div css={s.option}>
+                                            <p css={s.optionTitle}>고유 번호</p>
+                                            <input type="text" css={s.selectContainer} disabled 
+                                                value={initialUserData.userId} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div css={s.infoBox}>
                                     <div css={s.option}>
-                                        <p css={s.optionTitle}>고유 번호 : </p>
-                                        <input type="text" css={s.selectContainer} disabled 
-                                            value={initialUserData.userId} />
+                                        <div css={s.optionTitle}>
+                                            <p>전화번호</p>
+                                        </div>
+                                        <input type="text" name="phoneNumber" 
+                                            css={s.selectContainer} readOnly={!isEditing} 
+                                            onChange={handleUserPhoneNumberInputChange} 
+                                            value={modifyUserData.phoneNumber} />
                                     </div>
                                 </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>전화번호 : </p>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>포인트</p>
+                                        </div>
+                                        <input type="text" name="starCount" 
+                                            css={s.selectContainer} readOnly={!isEditing} 
+                                            onChange={handleModifyChange} 
+                                            value={modifyUserData.starCount} />
                                     </div>
-                                    <input type="text" name="phoneNumber" 
-                                        css={s.selectContainer} readOnly={!isEditing} 
-                                        onChange={handleUserPhoneNumberInputChange} 
-                                        value={modifyUserData.phoneNumber} />
                                 </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>포인트 : </p>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>가입일</p>
+                                        </div>
+                                        <input type="text" css={s.selectContainer} 
+                                            readOnly value={(initialUserData.registerDate).split("T")[0]} />
                                     </div>
-                                    <input type="text" name="starCount" 
-                                        css={s.selectContainer} readOnly={!isEditing} 
-                                        onChange={handleModifyChange} 
-                                        value={modifyUserData.starCount} />
                                 </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>가입일 : </p>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>메모</p>
+                                        </div>
+                                        <textarea name="memo" css={s.selectContainer} 
+                                            readOnly={!isEditing} onChange={handleModifyChange} 
+                                            value={modifyUserData.memo}></textarea>
                                     </div>
-                                    <input type="text" css={s.selectContainer} 
-                                        readOnly value={(initialUserData.registerDate).split("T")[0]} />
-                                </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>메모 : </p>
-                                    </div>
-                                    <textarea name="memo" css={s.selectContainer} 
-                                        readOnly={!isEditing} onChange={handleModifyChange} 
-                                        value={modifyUserData.memo}></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div css={s.buttonBox}>
-                    {!isEditing ? (
-                        <>
-                            <button onClick={handleBackOnClick}>확인</button>
-                            <button onClick={handleEditOnClick}>수정</button>
-                            <button onClick={handleDeleteButtonOnClick}>삭제</button>
-                        </>
-                    ) : (
-                        <>
-                            <button onClick={handleCancleOnClick}>취소</button>
-                            <button onClick={handleConfirmOnClick}>수정</button>
-                        </>
-                    )}
+                    <div css={s.buttonBox}>
+                        {!isEditing ? (
+                            <>
+                                <button onClick={handleBackOnClick}>확인</button>
+                                <button onClick={handleEditOnClick}>수정</button>
+                                <button onClick={handleDeleteButtonOnClick}>삭제</button>
+                            </>
+                        ) : (
+                            <>
+                                <button onClick={handleCancleOnClick}>취소</button>
+                                <button onClick={handleConfirmOnClick}>수정</button>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </>

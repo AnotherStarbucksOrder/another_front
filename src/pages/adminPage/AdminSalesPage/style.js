@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;
@@ -9,19 +8,10 @@ export const layout = css`
 `;
 
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 125px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-
-    }
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
 `;
 
 export const functionBox = css`
@@ -132,6 +122,8 @@ export const paginateContainer = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
+
 
     & > ul {
         list-style-type: none;
