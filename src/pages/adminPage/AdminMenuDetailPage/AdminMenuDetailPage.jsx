@@ -165,8 +165,6 @@
                 alert("수정되었습니다.");
                 setIsEditing(false);
                 menu.refetch();
-            } else {
-                alert("업데이트 실패");
             }
         } catch (e) {
             console.error(e);
@@ -185,6 +183,11 @@
     };
 
     const handleSubmitOnClick = async () => {
+        if(modifyMenuData.categoryIds.length === 0) {
+            alert("카테고리는 1개 이상 선택하여야 합니다.")
+            return;
+        }
+        
         try {
         const input = document.getElementById("fileInput");
         const imgFile = input.files[0];

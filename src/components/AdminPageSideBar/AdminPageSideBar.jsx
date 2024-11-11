@@ -25,11 +25,11 @@ function AdminPageSideBar(props) {
     }
 
     const handleCategoryClick = () => {
-        navigate("/admin/category");
+        navigate("/admin/category?page=1");
     }
 
     const handleOptionClick = () => {
-        navigate("/admin/option");
+        navigate("/admin/option?page=1");
     }
 
     const handleLogOutClick = () => {
