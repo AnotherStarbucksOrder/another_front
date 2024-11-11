@@ -16,11 +16,12 @@ function MainHomePage() {
 	const navigate = useNavigate();
 
 	const [ searchParams, setSearchParams ] = useSearchParams();
-	const [ totalPageCount, setTotalPageCount ] = useState(1);
 	const selectedCategoryId = searchParams.get("categoryId") || 11;
-	const limit = 9;
 	const currentPage = searchParams.get("page") || 1;
-
+	
+	const [ totalPageCount, setTotalPageCount ] = useState(1);
+	
+	const limit = 9;
 
 	// 카테고리별 menuList 받아오는 Query
 	const menuList = useQuery(

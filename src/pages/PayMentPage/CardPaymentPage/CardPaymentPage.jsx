@@ -57,7 +57,7 @@ function CardPaymentPage() {
 
         // 결제금액이 0원일 때
         if(orders.paymentType === 3) {
-            orderMutation.mutateAsync(orderData);
+            orderMutation.mutateAsync(orderData).catch(() => {});
             return;
         }
 
@@ -117,17 +117,17 @@ function CardPaymentPage() {
                         if (result.isConfirmed) {
                             navigate("/reward"); 
                         } else {
-                            orderMutation.mutateAsync(orderData);
+                            orderMutation.mutateAsync(orderData).catch(() => {});
                         }
                     })
                 } else {
-                    orderMutation.mutateAsync(orderData);
+                    orderMutation.mutateAsync(orderData).catch(() => {});
                 }
 
             // 카카오페이 x 버튼 클릭 시 (결제 취소)
             }  else if(response.code === "FAILURE_TYPE_PG" && response.pgCode === "CANCEL") { 
                 Swal.fire({
-                    title: "결제가 취소되었습니다.",
+                    title: response.message,
                     color: "#036635",
                     confirmButtonColor: "#3EA270",
                     confirmButtonText: "확인"
@@ -155,7 +155,7 @@ function CardPaymentPage() {
         {
             retry: 0,
             refetchOnWindowFocus: false,
-            onSuccess: response => {
+            onSuccess: () => {
                 let timerInterval;
                 Swal.fire({
                     title: "결제가 완료되었습니다!",

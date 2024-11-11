@@ -31,7 +31,6 @@ function MenuDetailPage() {
     });
 
     const [ orders, setOrders ]  = useRecoilState(ordersAtom);
-    console.log(orders)
 
     // 각 메뉴 정보 menuInfoQuery 
     const menuInfo = useQuery(
@@ -41,7 +40,6 @@ function MenuDetailPage() {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response)
                 // 기본값 넣어줌
                 setMenuCart(menuCart => ({  
                     ...menuCart,

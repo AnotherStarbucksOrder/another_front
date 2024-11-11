@@ -57,7 +57,7 @@ function AdminUserPage(props) {
         navigate(`/admin/user?page=${e.selected + 1}&searchName=${searchValue}`);
     }
 
-     // 체크박스 상태 관리 
+    // 체크박스 상태 관리 
     useEffect(() => {
         const allChecked = users.every(user => user.isChecked);
         setCheckedAll(allChecked);
@@ -71,6 +71,7 @@ function AdminUserPage(props) {
         );
     }
 
+    // 체크박스 전체 선택 
     const handleCheckedAllChange = () => {
         const newCheckedState = !checkedAll;
         setUsers(users.map(user => ({ ...user, isChecked: newCheckedState })));
