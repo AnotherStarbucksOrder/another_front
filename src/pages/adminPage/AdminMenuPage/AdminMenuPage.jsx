@@ -9,13 +9,13 @@ import { instance } from "../../../apis/util/instance";
 import { Switch } from "pretty-checkbox-react";
 
 function AdminMenuPage(props) {
-    const [searchParams] = useSearchParams(); 
-    const [checkedAll, setCheckedAll] = useState(false);
-    const [totalPageCount, setTotalPageCount] = useState(1);
-    const [menus, setMenus] = useState([]);
     const navigate = useNavigate();
-    const [searchValue, setSearchValue] = useState(searchParams.get("searchName") ?? "");
+    const [searchParams] = useSearchParams(); 
+    const [totalPageCount, setTotalPageCount] = useState(1);
     const limit = 13;
+    const [searchValue, setSearchValue] = useState(searchParams.get("searchName") ?? "");
+    const [checkedAll, setCheckedAll] = useState(false);
+    const [menus, setMenus] = useState([]);
 
     // 메뉴 리스트 조회, 페이지네이션
     const menuList = useQuery(
@@ -140,7 +140,8 @@ function AdminMenuPage(props) {
                             <input 
                                 type="text" 
                                 placeholder="카테고리명, 상품명" 
-                                onChange={handleSearchInputOnChange} 
+                                onChange={handleSearchInputOnChange}
+                                onKeyDown={handleKeyDown} 
                                 value={searchValue} 
                             />
                             <button onClick={handleSearchButtonOnClick}>🔍</button>

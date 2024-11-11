@@ -164,11 +164,17 @@
                 alert("업데이트 실패");
             }
         } catch (e) {
+            console.error(e);
+            if(e.status === 400) {
+                alert(e.response.data);
+                return;
+            }
             if(e.response.data.defaultMessage.menuName) {
                 alert("메뉴 이름은 " + e.response.data.defaultMessage.menuName);
+                return;
             }
             if(e.response.data.defaultMessage.menuPrice) {
-                alert(e.response.data.defaultMessage.menuName);
+                alert(e.response.data.defaultMessage.menuPrice);
             }
         }
     };
@@ -209,7 +215,6 @@
         }
         } catch (error) {
         console.error("수정 중 에러 발생:", error);
-        alert("수정 중 에러가 발생했습니다.");
         }
     };
 

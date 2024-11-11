@@ -8,14 +8,14 @@ import { useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 
 function AdminOrderpage(props) {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [totalPageCount, setTotalPageCount] = useState(1);
-    const navigate = useNavigate();
     const limit = 13;
+    const [dateType, setDateType] = useState("day");
     const [searchStartDate, setSearchStartDate] = useState(searchParams.get("startDate") ?? "");
     const [searchEndDate, setSearchEndDate] = useState(searchParams.get("endDate") ?? "");
     const [orders, setOrders] = useState([]);
-    const [dateType, setDateType] = useState("day");
 
     // 주문 리스트 조회, 페이지네이션
     const orderList = useQuery(

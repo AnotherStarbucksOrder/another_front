@@ -9,19 +9,10 @@ export const layout = css`
 `;
 
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 125px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-
-    }
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
 `;
 
 export const functionBox = css`
@@ -51,6 +42,7 @@ export const tableButton = css`
     box-sizing: border-box;
     border: none;
     cursor: pointer;
+    padding: 0;
     width: 100%;
     background-color: white;
 
@@ -89,48 +81,30 @@ export const tableContainer = css`
 `;
 
 export const tableLayout = css`
-position: relative;
 box-sizing: border-box;
-border: 1px solid #ddd; /* 셀 테두리 추가 */
-width: 100%;
-max-height: 660px;
-overflow-y: auto;
-
-& table {
-    box-sizing: border-box;
+    padding: 0 20px;
+    height: 694px; 
     width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-
     
-}
 
-& thead {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: #f4f4f4; /* 헤더 배경 색상 */
-
-
-}
-
-& th, & td {
-    box-sizing: border-box;
-    height: 25px;
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #ddd; /* 셀 테두리 추가 */
-    border-right: 1px solid #ddd;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    &:nth-last-of-type(1) {
-        border-right: none; 
+    & table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed; 
     }
-}
 
-& th {
+    & th, & td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        /* border-bottom: 1px solid #ddd; */
+    }
+
+    & th {
+    background-color: #f4f4f4;
     font-weight: bold;
 
     &:nth-of-type(1) {
@@ -149,4 +123,42 @@ overflow-y: auto;
         width: 5%;
     }
 }
+`;
+
+
+export const paginateContainer = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > ul {
+        list-style-type: none;
+        display: flex;
+        padding: 0;
+
+        & > li {
+            margin: 0px 5px;
+        }
+
+        & a {
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #dbdbdb;
+            border-radius: 32px;
+            padding: 0px 5px;
+            min-width: 32px;
+            height: 32px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        & .active {
+            border-radius: 32px;
+            background-color: #bbbbbb;
+            color: #ffffff;
+        }
+    }
 `;

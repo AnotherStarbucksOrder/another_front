@@ -60,10 +60,12 @@ function AdminUserAddPage(props) {
         try {
             await addUserMutation.mutateAsync();
         }catch (e) {
-            if(e.status === 401) {
-                alert(e.response.data.defaultMessage.phoneNumber);
-            } else {
+            if(e.status === 400) {
                 alert(e.response.data);
+                return;
+            }
+            if(e.response.data.defaultMessage.phoneNumber) {
+                alert(e.response.data.defaultMessage.phoneNumber);
             }
         }
     }

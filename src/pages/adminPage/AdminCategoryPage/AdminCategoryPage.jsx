@@ -1,51 +1,40 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Switch } from "pretty-checkbox-react";
+import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import '@djthoms/pretty-checkbox';
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
+import ReactPaginate from "react-paginate";
 
 function AdminCategoryPage(props) {
-    const limit = 10;
-    const loadMoreRef = useRef(null);
-    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [totalPageCount, setTotalPageCount] = useState(1);
+    const limit = 13;
+    const [categories, setCategories] = useState([]);
 
-    // 카테고리 리스트 조회, 무한 스크롤 
-    const categoryList = useInfiniteQuery(
-        ["categoryListQuery"],
-        async ({ pageParam = 1}) => await instance.get(`/admin/category?page=${pageParam}`),
+    // 카테고리 리스트 조회
+    const categoryList = useQuery(
+        ["categoryListQuery", searchParams.get("page")],
+        async () => await instance.get(`/admin/category?page=${searchParams.get("page")}&limit=${limit}`),
         {
-            getNextPageParam: ( lastPage, allPage ) => {
-                const totalPageCount = lastPage.data.totalCount % limit === 0
-                ? lastPage.data.totalCount / limit
-                : Math.floor(lastPage.data.totalCount/ limit) + 1;
-
-                return totalPageCount !== allPage.length ? allPage.length + 1 : null;
-            },
+            retry:0,
+            refetchOnWindowFocus: false,
             onSuccess: response => {
-                setCategories(response?.data?.pages.map(categories => categories.data))
+                setCategories(response?.data?.data);
+                setTotalPageCount(
+                    response.data.totalCount % limit === 0
+                    ? response.data.totalCount / limit
+                    : Math.floor(response.data.totalCount / limit) + 1
+                );
             }
         }
     )
+    console.log(categoryList);
 
-    // loadMoreRef.current가 존재할 때만 observer 연결
-    useEffect(() => {
-        if (loadMoreRef.current) {  
-            const observer = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting) {
-                    categoryList.fetchNextPage();
-                }
-            }, { threshold: 1.0 });
-    
-            observer.observe(loadMoreRef.current);
-    
-            return () => observer.disconnect();  
-        }
-    }, [categoryList.hasNextPage]);
-    
     //카테고리 상태관리
     const categoryStatusUpdateMutation = useMutation(
         async (categoryId) => await instance.patch(`/admin/category/status/${categoryId}`),
@@ -55,16 +44,16 @@ function AdminCategoryPage(props) {
             }
         }
     )
-    
+
     const handleCategoryStatusChekcked = (categoryId) => {
         setCategories(categories =>
             categories?.data.map(category =>
                 category.categoryId === categoryId
-                    ? { ...category, categoryStatus:  1 ? 0 : 1 }
+                    ? { ...category, categoryStatus: 1 ? 0 : 1 }
                     : category
             )
         );
-        categoryStatusUpdateMutation.mutateAsync(categoryId).catch(() => {});
+        categoryStatusUpdateMutation.mutateAsync(categoryId).catch(() => { });
     };
 
     // 카테고리 삭제
@@ -79,67 +68,82 @@ function AdminCategoryPage(props) {
     )
 
     const handleCategoryDeleteOnClick = (categoryId) => {
-        if(window.confirm("삭제하시겠습니까?")) {
+        if (window.confirm("삭제하시겠습니까?")) {
             handleCategoryDeleteMutation.mutateAsync(categoryId);
         }
+    }
+
+    // 페이지 이동
+    const handlePageOnChange = (e) => {
+        navigate(`/admin/category?page=${e.selected + 1}`);
     }
 
     return (
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                <div css={s.functionBox}>
-                    <div css={s.buttonBox}>
-                        <button onClick={() => navigate("/admin/category/add")}>추가</button>
+                    <div css={s.functionBox}>
+                        <div css={s.buttonBox}>
+                            <button onClick={() => navigate("/admin/category/add")}>추가</button>
+                        </div>
                     </div>
-                </div>
-                <div css={s.tableContainer}>
-                    <div css={s.tableLayout}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>코드</th>
-                                    <th>카테고리 명</th>
-                                    <th>노출 여부</th>
-                                    <th>수정</th>
-                                    <th>삭제</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    categoryList?.data?.pages.map(categories => categories?.data.map(category =>
-                                        <tr key={category.categoryId}>
-                                            <td>{category.categoryId}</td>
-                                            <td>{category.categoryName}</td>
-                                            <td>
-                                                <Switch 
-                                                    value={category.categoryStatus} 
-                                                    checked={category.categoryStatus === 1} 
-                                                    onChange={() => handleCategoryStatusChekcked(category.categoryId)} 
-                                                />
-                                            </td>
-                                            <td>
-                                                <button 
-                                                    css={s.tableButton}  
-                                                    onClick={() => navigate(`/admin/category/update/${category.categoryId}`)}>
-                                                    수정
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button 
-                                                    css={s.tableButton} 
-                                                    onClick={() => handleCategoryDeleteOnClick(category.categoryId)}>
-                                                    삭제
-                                                </button>
-                                            </td>
-                                        </tr>
+                        <div css={s.tableLatout}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>코드</th>
+                                        <th>카테고리 명</th>
+                                        <th>노출 여부</th>
+                                        <th>수정</th>
+                                        <th>삭제</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        categoryList?.data?.data.map(category =>
+                                            <tr key={category.categoryId}>
+                                                <td>{category.categoryId}</td>
+                                                <td>{category.categoryName}</td>
+                                                <td>
+                                                    <Switch
+                                                        value={category.categoryStatus}
+                                                        checked={category.categoryStatus === 1}
+                                                        onChange={() => handleCategoryStatusChekcked(category.categoryId)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        css={s.tableButton}
+                                                        onClick={() => navigate(`/admin/category/update/${category.categoryId}`)}>
+                                                        수정
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        css={s.tableButton}
+                                                        onClick={() => handleCategoryDeleteOnClick(category.categoryId)}>
+                                                        삭제
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         )
-                                    )
-                                }
-                            </tbody>
-                        </table>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    <div css={s.paginateContainer}>
+                        <ReactPaginate
+                            breakLabel=""
+                            previousLabel={<><IoMdArrowDropleft /></>}
+                            nextLabel={<><IoMdArrowDropright /></>}
+                            pageCount={totalPageCount}
+                            marginPagesDisplayed={0}
+                            pageRangeDisplayed={5}
+                            activeClassName='active'
+                            onPageChange={handlePageOnChange}
+                            forcePage={parseInt(searchParams.get("page") || 1) - 1}
+                        />
                     </div>
-                </div>
                 </div>
             </div>
         </>
