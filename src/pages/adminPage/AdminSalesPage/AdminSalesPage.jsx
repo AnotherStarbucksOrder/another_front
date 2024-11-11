@@ -80,67 +80,66 @@ function AdminSalespage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>매출 관리</p>
-                </div>
-                <div css={s.functionBox}>
-                    <div css={s.searchBox}>
-                    <select onChange={handleDateTypeChange} value={dateMode}>
-                            <option value="day">일별</option>
-                            <option value="month" >월별</option>
-                        </select>
-                    </div>
-                    <div css={s.buttonBox}>
-                    <input
-                            type={dateMode === "month" ? "month" : "date"}
-                            value={searchStartDate}
-                            onChange={handleInputStartDate}
-                        />
+                    <div css={s.functionBox}>
+                        <div css={s.searchBox}>
+                        <select onChange={handleDateTypeChange} value={dateMode}>
+                                <option value="day">일별</option>
+                                <option value="month" >월별</option>
+                            </select>
+                        </div>
+                        <div css={s.buttonBox}>
                         <input
-                            type={dateMode === "month" ? "month" : "date"}
-                            value={searchEndDate}
-                            onChange={handleInputEndDate}
-                        />
-                        <button onClick={handleDateResetClick}>지우기</button>
+                                type={dateMode === "month" ? "month" : "date"}
+                                value={searchStartDate}
+                                onChange={handleInputStartDate}
+                            />
+                            <input
+                                type={dateMode === "month" ? "month" : "date"}
+                                value={searchEndDate}
+                                onChange={handleInputEndDate}
+                            />
+                            <button onClick={handleDateResetClick}>지우기</button>
+                        </div>
                     </div>
-                </div>
-                <div css={s.tableLatout}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>날짜</th>
-                                <th>주문 건수</th>
-                                <th>총 판매금액</th>
-                                <th>환불 내역</th>
-                                <th>--</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                salesList?.data?.data?.data.map(sales =>
-                                    <tr key={sales.date}>
-                                        <td>{sales.date.split(" ")[0]}</td>
-                                        <td>{sales.totalOrderCount}</td>
-                                        <td>{(sales.totalAmount.toLocaleString() || 0) + "원"}</td>
-                                        <td>{sales.totalRefundCount}</td>
-                                        <td><Link to={`/admin/sale/detail/${sales.date}`}>상세보기</Link></td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div css={s.paginateContainer}>
-                    <ReactPaginate
-                        breakLabel=""
-                        previousLabel={<><IoMdArrowDropleft /></>}
-                        nextLabel={<><IoMdArrowDropright /></>}
-                        pageCount={totalPageCount}
-                        marginPagesDisplayed={0}
-                        pageRangeDisplayed={5}
-                        activeClassName='active'
-                        onPageChange={handlePageOnChange}
-                        forcePage={parseInt(searchParams.get("page") || 1) - 1}
-                    />
+                    <div css={s.tableLatout}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>날짜</th>
+                                    <th>주문 건수</th>
+                                    <th>총 판매금액</th>
+                                    <th>환불 내역</th>
+                                    <th>--</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    salesList?.data?.data?.data.map(sales =>
+                                        <tr key={sales.date}>
+                                            <td>{sales.date.split(" ")[0]}</td>
+                                            <td>{sales.totalOrderCount}</td>
+                                            <td>{(sales.totalAmount.toLocaleString() || 0) + "원"}</td>
+                                            <td>{sales.totalRefundCount}</td>
+                                            <td><Link to={`/admin/sale/detail/${sales.date}`}>상세보기</Link></td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div css={s.paginateContainer}>
+                        <ReactPaginate
+                            breakLabel=""
+                            previousLabel={<><IoMdArrowDropleft /></>}
+                            nextLabel={<><IoMdArrowDropright /></>}
+                            pageCount={totalPageCount}
+                            marginPagesDisplayed={0}
+                            pageRangeDisplayed={5}
+                            activeClassName='active'
+                            onPageChange={handlePageOnChange}
+                            forcePage={parseInt(searchParams.get("page") || 1) - 1}
+                        />
+                    </div>
                 </div>
             </div>
         </>

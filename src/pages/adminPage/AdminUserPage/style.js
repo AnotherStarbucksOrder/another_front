@@ -9,19 +9,10 @@ export const layout = css`
 `;
 
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 125px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-
-    }
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
 `;
 
 export const functionBox = css`
@@ -37,12 +28,12 @@ export const searchBox = css`
     align-items: center;
 
     & input {
-        border: 1px solid ${COLORS.lineColor};
+        border: 1px solid ${COLORS.main};
         border-radius: 4px;
         padding: 10px;
         padding-right: 40px;
         width: 200px;
-        background-color: #f0f0f0;
+        outline: none;
     }
 
     & button {
@@ -102,7 +93,6 @@ export const tableLatout = css`
     height: 694px; 
     width: 100%;
     
-
     & table {
         width: 100%;
         border-collapse: collapse;
@@ -151,6 +141,7 @@ export const paginateContainer = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
 
     & > ul {
         list-style-type: none;

@@ -71,54 +71,53 @@ function AdminOptionPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>옵션 관리</p>
-                </div>
-                <div css={s.functionBox}>
-                    <div css={s.buttonBox}>
-                        <button onClick={() => navigate("/admin/option/add")}>추가</button>
+                    <div css={s.functionBox}>
+                        <div css={s.buttonBox}>
+                            <button onClick={() => navigate("/admin/option/add")}>추가</button>
+                        </div>
                     </div>
-                </div>
-                <div css={s.tableContainer}>
-                    <div css={s.tableLayout}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>코드</th>
-                                    <th>옵션 명</th>
-                                    <th>노출 여부</th>
-                                    <th>수정</th>
-                                    <th>삭제</th>
+                    <div css={s.tableContainer}>
+                        <div css={s.tableLayout}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>코드</th>
+                                        <th>옵션 명</th>
+                                        <th>노출 여부</th>
+                                        <th>수정</th>
+                                        <th>삭제</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    optionList?.data?.pages.map(options => options?.data.map(option =>
-                                        <tr key={option.optionId}>
-                                            <td>{option.optionId}</td>
-                                            <td>{option.optionName}</td>
-                                            <td>
-                                                <Switch value={option.optionStatus} 
-                                                    checked={option.optionStatus === 1} 
-                                                    onChange={() => handleOptionStatusChekcked(option.optionId)} />
-                                            </td>
-                                            <td>
-                                                <button css={s.tableButton} 
-                                                    onClick={() => navigate(`/admin/option/update/${option.optionId}`)}>
-                                                    수정
-                                                </button>
-                                            </td>
-                                            <td><button css={s.tableButton} 
-                                                onClick={() => handleOptionDeleteOnClick(option.optionId)}>
-                                                삭제
-                                                </button>
-                                            </td>
-                                        </tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        optionList?.data?.pages.map(options => options?.data.map(option =>
+                                            <tr key={option.optionId}>
+                                                <td>{option.optionId}</td>
+                                                <td>{option.optionName}</td>
+                                                <td>
+                                                    <Switch value={option.optionStatus} 
+                                                        checked={option.optionStatus === 1} 
+                                                        onChange={() => handleOptionStatusChekcked(option.optionId)} />
+                                                </td>
+                                                <td>
+                                                    <button css={s.tableButton} 
+                                                        onClick={() => navigate(`/admin/option/update/${option.optionId}`)}>
+                                                        수정
+                                                    </button>
+                                                </td>
+                                                <td><button css={s.tableButton} 
+                                                    onClick={() => handleOptionDeleteOnClick(option.optionId)}>
+                                                    삭제
+                                                    </button>
+                                                </td>
+                                            </tr>
 
-                                    ))
-                                }
-                            </tbody>
-                        </table>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

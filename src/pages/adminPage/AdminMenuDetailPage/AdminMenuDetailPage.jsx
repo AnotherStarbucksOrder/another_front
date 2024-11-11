@@ -269,7 +269,7 @@
                 <div css={s.imgBox}>
                     {!isEditing ? (
                     <>
-                        <div css={s.img}>
+                        <div css={s.img(isEditing)}>
                         <img src={modifyMenuData.imgUrl} alt="" />
                         </div>
                     </>
@@ -283,11 +283,11 @@
                         />
                         </div>
                         <input
-                        type="file"
-                        accept="image/*"
-                        id="fileInput"
-                        name="imgUrl"
-                        onChange={handleImageChange}
+                            type="file"
+                            accept="image/*"
+                            id="fileInput"
+                            name="imgUrl"
+                            onChange={handleImageChange}
                         />
                         <input type="text" value={modifyMenuData.imgUrl} readOnly />
                     </>
@@ -311,38 +311,38 @@
                             </>
                         ) : (
                             <ReactSelect
-                            isMulti
-                            css={s.select}
-                            name="categories"
-                            onChange={handleSelectCategoryChange}
-                            options={
-                                selectCategory.map((category) => ({
-                                value: category.categoryId,
-                                label: category.categoryName,
-                                })) || []
-                            }
-                            className="basic-multi-select"
-                            classNamePrefix="select"
-                            defaultValue={categoryArray}
+                                isMulti
+                                css={s.select}
+                                name="categories"
+                                onChange={handleSelectCategoryChange}
+                                options={
+                                    selectCategory.map((category) => ({
+                                    value: category.categoryId,
+                                    label: category.categoryName,
+                                    })) || []
+                                }
+                                className="basic-multi-select"
+                                classNamePrefix="select"
+                                defaultValue={categoryArray}
                             />
                         )}
                         </div>
                     </div>
                     </div>
                     <div css={s.infoBox}>
-                    <div css={s.option}>
-                        <div css={s.optionTitle}>
-                        <p>메뉴 이름</p>
+                        <div css={s.option}>
+                            <div css={s.optionTitle}>
+                                <p>메뉴 이름</p>
+                            </div>
+                                <input
+                                type="text"
+                                name="menuName"
+                                css={s.input}
+                                readOnly={!isEditing}
+                                onChange={handleModifyInputOnChange}
+                                value={modifyMenuData.menuName || ""}
+                                />
                         </div>
-                        <input
-                        type="text"
-                        name="menuName"
-                        css={s.input}
-                        readOnly={!isEditing}
-                        onChange={handleModifyInputOnChange}
-                        value={modifyMenuData.menuName || ""}
-                        />
-                    </div>
                     </div>
                     <div css={s.infoBox}>
                     <div css={s.option}>
@@ -399,19 +399,20 @@
                     </div>
                     </div>
                     <div css={s.infoBox}>
-                    <div css={s.option}>
-                        <div css={s.optionTitle}>
-                            <p>메뉴 설명</p>
+                        <div css={s.option}>
+                            <div css={s.optionTitle}>
+                                <p>메뉴 설명</p>
+                            </div>
+                            <textarea
+                                name="comment"
+                                css={s.input}
+                                readOnly={!isEditing}
+                                onChange={handleModifyInputOnChange}
+                                value={modifyMenuData.comment || ""}
+                            >
+                            </textarea>
                         </div>
-                        <textarea
-                            name="comment"
-                            css={s.input}
-                            readOnly={!isEditing}
-                            onChange={handleModifyInputOnChange}
-                            value={modifyMenuData.comment || ""}
-                        ></textarea>
-                    </div>
-                    </div>
+                        </div>
                 </div>
                 </div>
             </div>
@@ -419,9 +420,9 @@
                 {!isEditing ? 
                 (
                     <>
-                    <button onClick={handleBackOnClick}>확인</button>
-                    <button onClick={handleEditOnClick}>수정</button>
-                    <button onClick={handleDeleteMenuOnClick}>삭제</button>
+                        <button onClick={handleBackOnClick}>확인</button>
+                        <button onClick={handleEditOnClick}>수정</button>
+                        <button onClick={handleDeleteMenuOnClick}>삭제</button>
                     </>
                 ) 
                 : 

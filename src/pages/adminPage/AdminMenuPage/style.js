@@ -33,6 +33,7 @@ export const searchBox = css`
         padding: 10px;
         padding-right: 40px;
         width: 200px;
+        outline: none;
     }
 
     & > button {

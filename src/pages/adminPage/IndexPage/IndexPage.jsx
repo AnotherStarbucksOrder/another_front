@@ -142,7 +142,7 @@ function IndexPage(props) {
                     size: 20,
                     weight: "bold" 
                 },
-                padding: 0
+                align: "center",
             }
         }
     };
@@ -233,7 +233,7 @@ function IndexPage(props) {
                         </div>
                         <div css={s.chartInfoBox}>
                             {menuList && menuList.length > 0 ? (
-                                <Doughnut data={doudata} options={doughnutOptions} style={{ width: "500px", height: "300px" }} />
+                                <Doughnut data={doudata} options={doughnutOptions} />
                             ) : (
                                 <></>
                             )}
