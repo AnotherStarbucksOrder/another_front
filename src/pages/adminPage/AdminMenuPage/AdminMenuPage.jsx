@@ -49,6 +49,11 @@ function AdminMenuPage(props) {
         }
     );
 
+    useEffect(() => {
+        setSearchValue("");
+        menuList.refetch();
+    }, [searchParams]);
+
     const handleSearchInputOnChange = (e) => {
         setSearchValue(e.target.value);
     }

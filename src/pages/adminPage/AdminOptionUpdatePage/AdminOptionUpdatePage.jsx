@@ -107,8 +107,13 @@ function AdminOptionUpdatePage(props) {
         }));
     };
 
-    const handleModifySubmitOnClick = () => {
-        modifyOptionMutation.mutateAsync(modifyOptionData);
+    const handleModifySubmitOnClick = async () => {
+        try {
+            await modifyOptionMutation.mutateAsync(modifyOptionData);
+        }catch (e) {
+            console.error(e);
+            alert(e.response.data);
+        };
     }
 
     const handleBackOnClick = () => {
