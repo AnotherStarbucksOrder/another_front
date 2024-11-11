@@ -54,7 +54,7 @@ export const option = css`
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    width: 100%; /* 부모의 너비를 모두 사용 */
+    width: 100%; 
 `;
 
 export const optionTitle = css`

@@ -102,12 +102,15 @@ function IndexPage(props) {
                 "rgb(86, 255, 151)",
                 "rgb(255, 205, 86)",
             ],
-            hoverOffset: 4
+            hoverOffset: 4,
+            borderWidth: 5,
         }]
     };
+
     const doughnutOptions = {
         responsive: true,
-        maintainAspectRatio: false, 
+        maintainAspectRatio: true, 
+        aspectRatio: 1.8,
         plugins: {
             legend: {
                 display: true,
@@ -139,6 +142,7 @@ function IndexPage(props) {
                     size: 20,
                     weight: "bold" 
                 },
+                padding: 0
             }
         }
     };
@@ -155,7 +159,6 @@ function IndexPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.container}>
-
                     <div css={s.salesTableBox}>
                         <div css={s.selectedYear}>
                             <select onChange={handleDateTypeChange} value={selectYear}>
@@ -181,7 +184,6 @@ function IndexPage(props) {
                                 금일 매출
                             </div>
                         </div>
-
                         <table css={s.tableLayout}>
                             <thead>
                                 <tr>
@@ -223,21 +225,19 @@ function IndexPage(props) {
                             </tbody>
                         </table>
                     </div>
-                    {/* <div css={s.salesInfoBox}>
-                        <img src="/KakaoTalk_Photo_2024-10-17-16-40-07.jpg" alt="" />
-
-                    </div> */}
                 </div>
                 <div css={s.container}>
-                    <div css={s.menuInfoBox}>
-                        <Bar data={data} options={options} />
-                    </div>
-                    <div css={s.chartInfoBox}>
-                        {menuList && menuList.length > 0 ? (
-                            <Doughnut data={doudata} options={doughnutOptions} />
-                        ) : (
-                            <img src="/ggg.jpg" alt="" />
-                        )}
+                    <div css={s.bottomContainer}>
+                        <div css={s.menuInfoBox}>
+                            <Bar data={data} options={options} />
+                        </div>
+                        <div css={s.chartInfoBox}>
+                            {menuList && menuList.length > 0 ? (
+                                <Doughnut data={doudata} options={doughnutOptions} style={{ width: "500px", height: "300px" }} />
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

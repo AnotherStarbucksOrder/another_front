@@ -117,7 +117,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                 quantity: item.count,
             })) 
         };
-        orderMutation.mutateAsync(orderData);
+        orderMutation.mutateAsync(orderData).catch(() => {});
     };
 
     // 결제 완료 데이터 저장 mutation

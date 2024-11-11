@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { COLORS } from "../../constants/colors";
+import { Colors } from "chart.js";
 
 export const layout = css`
     position: absolute;
@@ -9,7 +10,7 @@ export const layout = css`
     flex-direction: column;
     width: 300px;
     height: 100%;
-    background-color: #dbdbdb;
+    border-right: 1px solid #03663555;
 `;
 
 export const titleBox = css`
@@ -20,10 +21,11 @@ export const titleBox = css`
     width: 100%;
     height: 270px;
 
-    & p {
-        margin: 0;
-        font-size: 35px;
-        font-weight: 600;
+    & > a {
+        & > img {
+            width: 200px;
+            height: 150px;
+        }
     }
 `;
 
@@ -38,7 +40,7 @@ export const buttonContainer = css`
     height: 100%;
     
 
-    & button {
+    & > button {
         box-sizing: border-box;
         border: 1px solid ${COLORS.main};
         border-radius: 8px;
@@ -46,14 +48,14 @@ export const buttonContainer = css`
         height: 80px;
         font-size: 20px;
         font-weight: 600;
+        background-color: ${COLORS.mainBackground};
+        box-shadow: 5px 5px 5px #dddddd;
         cursor: pointer;
-
-        &:hover {
-            background-color: ${COLORS.buttonHoverColor};
-        }
-
-        &:active{
-            background-color: ${COLORS.buttonActiverColor};
-        }
     }
+`;
+
+export const activeButton = css`
+    border: none;
+    color: ${COLORS.buttonFontColor};
+    background-color: ${COLORS.main} !important;
 `;

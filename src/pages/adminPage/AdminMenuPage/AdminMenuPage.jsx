@@ -37,7 +37,7 @@ function AdminMenuPage(props) {
     // 메뉴 삭제
     const deleteMenuMutation = useMutation(
         async (menuIds) => {
-            for (const menuId of menuIds ) {
+            for (const menuId of menuIds) {
                 await instance.delete(`/admin/menu?ids=${menuId}`)
             }
         },
@@ -117,7 +117,7 @@ function AdminMenuPage(props) {
     };
 
     const handleMenuAddOnClick = () => {
-        navigate("/admin/menu/add")
+        navigate("/admin/menu/add");
     }
 
     const handleKeyDown = (e) => {
@@ -135,72 +135,81 @@ function AdminMenuPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>메뉴 관리</p>
-                </div>
-                <div css={s.functionBox}>
-                    <div css={s.searchBox}>
-                        <input type="text" placeholder="카테고리명, 상품명" 
-                            onChange={handleSearchInputOnChange} 
-                            onKeyDown={handleKeyDown}
-                            value={searchValue} />
-                        <button onClick={handleSearchButtonOnClick}>🔍</button>
+                    <div css={s.functionBox}>
+                        <div css={s.searchBox}>
+                            <input 
+                                type="text" 
+                                placeholder="카테고리명, 상품명" 
+                                onChange={handleSearchInputOnChange} 
+                                value={searchValue} 
+                            />
+                            <button onClick={handleSearchButtonOnClick}>🔍</button>
+                        </div>
+                        <div css={s.buttonBox}>
+                            <button onClick={handleMenuAddOnClick}>등록</button>
+                            <div />
+                            <button onClick={handleDeleteMenuOnClick}>삭제</button>
+                        </div>
                     </div>
-                    <div css={s.buttonBox}>
-                        <button onClick={handleMenuAddOnClick}>등록</button>
-                        <div />
-                        <button onClick={handleDeleteMenuOnClick}>삭제</button>
+                    <div css={s.tableLatout}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" 
+                                            onChange={handleCheckedAllChange} 
+                                            checked={checkedAll} />
+                                    </th>
+                                    <th>상품명</th>
+                                    <th>가격</th>
+                                    <th>카테고리</th>
+                                    <th>옵션</th>
+                                    <th>노출 여부</th>
+                                    <th>--</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    menus.map(menu =>
+                                        <tr key={menu.menuId}>
+                                            <td>
+                                                <input 
+                                                    type="checkbox" 
+                                                    onChange={() => handleMenuChecked(menu.menuId)} 
+                                                    checked={menu.isChecked} value={menu.menuId} 
+                                                />
+                                            </td>
+                                            <td>{menu.menuName}</td>
+                                            <td>{(menu.menuPrice.toLocaleString() || 0) + "원"}</td>
+                                            <td>{menu.categories}</td>
+                                            <td>{menu.options}</td>
+                                            <td>
+                                                <Switch 
+                                                    value={menu.menuStatus} 
+                                                    checked={menu.menuStatus === 1} 
+                                                    onClick={() => handleMenuStatusChekcked(menu.menuId)} 
+                                                />
+                                            </td>
+                                            <td><Link to={`/admin/menu/detail/${menu.menuId}`}>상세보기</Link></td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                <div css={s.tableLatout}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" 
-                                        onChange={handleCheckedAllChange} 
-                                        checked={checkedAll} />
-                                </th>
-                                <th>상품명</th>
-                                <th>가격</th>
-                                <th>카테고리</th>
-                                <th>옵션</th>
-                                <th>노출 여부</th>
-                                <th>--</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                menus.map(menu =>
-                                    <tr key={menu.menuId}>
-                                        <td><input type="checkbox" 
-                                            onChange={() => handleMenuChecked(menu.menuId)} 
-                                            checked={menu.isChecked} value={menu.menuId} /></td>
-                                        <td>{menu.menuName}</td>
-                                        <td>{(menu.menuPrice.toLocaleString() || 0) + "원"}</td>
-                                        <td>{menu.categories}</td>
-                                        <td>{menu.options}</td>
-                                        <td><Switch value={menu.menuStatus} 
-                                            checked={menu.menuStatus === 1} 
-                                            onClick={() => handleMenuStatusChekcked(menu.menuId)} /></td>
-                                        <td><Link to={`/admin/menu/detail/${menu.menuId}`}>상세보기</Link></td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div css={s.paginateContainer}>
-                    <ReactPaginate
-                        breakLabel=""
-                        previousLabel={<><IoMdArrowDropleft /></>}
-                        nextLabel={<><IoMdArrowDropright /></>}
-                        pageCount={totalPageCount}
-                        marginPagesDisplayed={0}
-                        pageRangeDisplayed={5}
-                        activeClassName='active'
-                        onPageChange={handlePageOnChange}
-                        forcePage={parseInt(searchParams.get("page") || 1) - 1}
-                    />
+                    <div css={s.paginateContainer}>
+                        <ReactPaginate
+                            breakLabel=""
+                            previousLabel={<><IoMdArrowDropleft /></>}
+                            nextLabel={<><IoMdArrowDropright /></>}
+                            pageCount={totalPageCount}
+                            marginPagesDisplayed={0}
+                            pageRangeDisplayed={5}
+                            activeClassName='active'
+                            onPageChange={handlePageOnChange}
+                            forcePage={parseInt(searchParams.get("page") || 1) - 1}
+                        />
+                    </div>
                 </div>
             </div>
         </>

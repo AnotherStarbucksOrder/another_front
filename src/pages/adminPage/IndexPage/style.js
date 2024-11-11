@@ -3,10 +3,6 @@ import { COLORS } from "../../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
     padding-top: 40px;
     padding-left: 300px;
     width: 100%;
@@ -18,28 +14,15 @@ export const container = css`
     display: flex;
     justify-content: center;
     /* align-items: center; */
-    width: 1550px;
+    width: 100%;
     height: 450px;
-`;
-export const salesInfoBox = css`
-    box-sizing: border-box;
-    width: 200px;
-    height: 200px;
-    /* border: 1px solid #ddd; */
-    margin-left: 30px;
-    & img {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-
 `;
 
 export const salesTableBox = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: 1510px;
+    width: 95%;
     height: 420px;
     border: 1px solid #ddd;
     padding: 20px; /* 내부 여백 추가 */
@@ -63,6 +46,22 @@ export const toggleContainer = css`
     border-radius: 20px; /* 둥근 모서리 */
     overflow: hidden; /* 둥근 모서리 효과 */
 `;
+
+
+export const salesInfoBox = css`
+    box-sizing: border-box;
+    width: 200px;
+    height: 200px;
+    /* border: 1px solid #ddd; */
+    margin-left: 30px;
+    & img {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+`;
+
 
 export const toggleButton = css`
     flex: 1; /* 버튼이 동일한 크기로 확장 */
@@ -99,29 +98,30 @@ export const tableLayout = css`
     }
 `;
 
+export const bottomContainer = css`
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+`;
+
 export const menuInfoBox = css`
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 940px;
+    width: 900px;
     height: 420px;
     border: 1px solid #ddd;
-
 `;
+
+
 export const chartInfoBox = css`
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 540px;
+    width: 600px;
     height: 420px;
     border: 1px solid #ddd;
-    /* padding: 15px; */
-    margin-left: 30px;
-    
-    & img {
-        width: 100%;
-        height: 100%;
-    }
+    /* margin-left: 30px; */
 `;

@@ -16,11 +16,13 @@ function PointPaymentPage() {
 
     const navigate = useNavigate();
 
+    const pointPaymentRef = useRef();
+
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
+    
     const [ isOpenModal, setOpenModal ] = useState(false);
     const [ modalElement, setModalElement ] = useState(<></>);
     const [ selectedCouponId ,setSelectedCouponId] = useState(null);
-    const pointPaymentRef = useRef();
 
     // modal 띄우는 거 
     useEffect(() => {
@@ -99,8 +101,6 @@ function PointPaymentPage() {
         navigate("/payment/card");
     };
 
-
-
     return (
         <>
             <MainTop/>
@@ -112,9 +112,7 @@ function PointPaymentPage() {
                     <div>
                         {   
                             orders.user.coupons.map(coupon => {
-                                
                                 const isUsedCoupon = orders.user.usedCoupon.find(used => used.couponId === coupon.couponId);
-
                                 return (
                                     <div key={coupon.couponId} 
                                         css={s.couponInfo}     
