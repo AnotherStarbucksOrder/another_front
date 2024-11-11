@@ -64,8 +64,16 @@ function AdminOptionAddPage(props) {
         });
     };
 
-    const handleSubmitOptionOnClick = () => {
-        addOptionMutation.mutateAsync();
+    const handleSubmitOptionOnClick = async () => {
+        try{
+            await addOptionMutation.mutateAsync();
+        } catch (e) {
+            if(e.status === 401) {
+                alert(e.response.data.defaultMessage.optionName);
+            } else {
+                alert(e.response.data);
+            }
+        }
     }
 
 

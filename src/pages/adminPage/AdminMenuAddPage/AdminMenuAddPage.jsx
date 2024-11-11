@@ -42,9 +42,17 @@ function AdminMenuAddPage(props) {
             } else {
                 alert("등록 실패");
             }
-        } catch (error) {
-            console.error("등록 요청 중 에러 발생:", error);
-            alert("등록 요청 중 에러가 발생했습니다.");
+        } catch (e) {
+            console.error(e);
+            if(e.status === 400) {
+                alert(e.response.data);
+            }
+            if(e.response.data.defaultMessage.menuName) {
+                alert("메뉴 이름은 " + e.response.data.defaultMessage.menuName);
+            }
+            if(e.response.data.defaultMessage.menuPrice) {
+                alert(e.response.data.defaultMessage.menuName);
+            }
         }
     };
 
@@ -81,8 +89,8 @@ function AdminMenuAddPage(props) {
                 // 이미지가 선택되지 않았을 경우
                 await submitMenuData(uploaddData);
             }
-        } catch (error) {
-            alert("수정 중 에러가 발생했습니다.");
+        } catch (e) {
+            console.error(e);
         }
     };
 

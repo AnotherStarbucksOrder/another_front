@@ -49,6 +49,11 @@ function AdminUserPage(props) {
         }
     )
 
+    useEffect(() => {
+        setSearchValue("");
+        userList.refetch();
+    }, [searchParams]);
+
     const handleSearchInputChange = (e) => {
         setSearchValue(e.target.value);
     }
@@ -85,6 +90,11 @@ function AdminUserPage(props) {
             deleteUserMutation.mutateAsync(userIds);
         };
     }
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            handleSearchButtonClick();
+        }
+    }
 
     const handleSearchButtonClick = () => {
         navigate(`/admin/user?page=1&searchName=${searchValue}`);
@@ -104,7 +114,9 @@ function AdminUserPage(props) {
                 <div css={s.functionBox}>
                     <div css={s.searchBox}>
                         <input type="text" placeholder="전화번호" 
-                            onChange={handleSearchInputChange} value={searchValue}/>
+                            onChange={handleSearchInputChange} 
+                            onKeyDown={handleKeyDown}
+                            value={searchValue}/>
                         <button onClick={handleSearchButtonClick}>🔍</button>
                     </div>
                     <div css={s.buttonBox}>

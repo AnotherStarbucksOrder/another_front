@@ -155,17 +155,21 @@
     // 메뉴 업데이트
     const submitMenuData = async (data) => {
         try {
-        const response = await instance.patch(`/admin/modify/${menuId}`, data);
-        if (response.status === 200) {
-            alert("수정되었습니다.");
-            setIsEditing(false);
-            menu.refetch();
-        } else {
-            alert("업데이트 실패");
-        }
-        } catch (error) {
-        console.error("업데이트 요청 중 에러 발생:", error);
-        alert("업데이트 요청 중 에러가 발생했습니다.");
+            const response = await instance.patch(`/admin/modify/${menuId}`, data);
+            if (response.status === 200) {
+                alert("수정되었습니다.");
+                setIsEditing(false);
+                menu.refetch();
+            } else {
+                alert("업데이트 실패");
+            }
+        } catch (e) {
+            if(e.response.data.defaultMessage.menuName) {
+                alert("메뉴 이름은 " + e.response.data.defaultMessage.menuName);
+            }
+            if(e.response.data.defaultMessage.menuPrice) {
+                alert(e.response.data.defaultMessage.menuName);
+            }
         }
     };
 

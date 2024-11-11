@@ -49,6 +49,11 @@ function AdminMenuPage(props) {
         }
     );
 
+    useEffect(() => {
+        setSearchValue("");
+        menuList.refetch();
+    }, [searchParams]);
+
     const handleSearchInputOnChange = (e) => {
         setSearchValue(e.target.value);
     }
@@ -114,7 +119,13 @@ function AdminMenuPage(props) {
     const handleMenuAddOnClick = () => {
         navigate("/admin/menu/add");
     }
-    
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            handleSearchButtonOnClick();
+        }
+    }
+
     const handleSearchButtonOnClick = () => {
         navigate(`/admin/menus?page=1&searchName=${searchValue}`);
         menuList.refetch();

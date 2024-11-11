@@ -25,7 +25,6 @@ function AdminOrderpage(props) {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response.data);
                 setOrders(response?.data.data)
                 setTotalPageCount(
                     response.data.totalCount % limit === 0

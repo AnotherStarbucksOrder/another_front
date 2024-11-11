@@ -14,11 +14,12 @@ function AdminSalespage(props) {
     const [searchEndDate, setSearchEndDate] = useState(searchParams.get("endDate") ?? "");
     const limit = 13;
     const navigate = useNavigate();
-    const [dateType, setDateType] = useState("day");
+    const [dateMode, setDateMode] = useState(searchParams.get("dateMode") ?? "day");
 
     const salesList = useQuery(
-        ["salesListQuery", searchParams.get("page")],
-        async () => await instance.get(`/admin/sales?page=${searchParams.get("page")}&limit=${limit}&startDate=${searchStartDate}&endDate=${searchEndDate}`),
+        ["salesListQuery", searchParams.get("page"), dateMode, searchStartDate, searchEndDate], 
+        async () => 
+            await instance.get(`/admin/sales?page=${searchParams.get("page")}&limit=${limit}&dateMode=${dateMode}&startDate=${searchStartDate}&endDate=${searchEndDate}`) ,
         {
             retry: 0,
             refetchOnWindowFocus: false,
@@ -43,30 +44,30 @@ function AdminSalespage(props) {
     }, [searchParams]);
 
     const handleDateTypeChange = (e) => {
-        setDateType(e.target.value);
-
+        setDateMode(e.target.value);
+        
         setSearchStartDate("");
         setSearchEndDate("");
-        navigate("/admin/sales?page=1")
+        navigate("/admin/sales?page=1");
     };
 
     const handleInputStartDate = (e) => {
         const selectedStartDate = e.target.value;
         if (selectedStartDate) {
             setSearchStartDate(selectedStartDate);
-            navigate(`/admin/sales?page=1&startDate=${selectedStartDate}&endDate=${searchEndDate}`);
+            navigate(`/admin/sales?page=1&dateMode=${dateMode}&startDate=${selectedStartDate}&endDate=${searchEndDate}`);
         }
     };
     const handleInputEndDate = (e) => {
         const selectedEndDate = e.target.value;
         if (selectedEndDate) {
             setSearchEndDate(selectedEndDate);
-            navigate(`/admin/order?page=1&startDate=${searchStartDate}&endDate=${selectedEndDate}`);
+            navigate(`/admin/sales?page=1&dateMode=${dateMode}&startDate=${searchStartDate}&endDate=${selectedEndDate}`);
         }
     };
 
     const handlePageOnChange = (e) => {
-        navigate(`/admin/sales?page=${e.selected + 1}&startDate=${searchStartDate}&endDate=${searchEndDate}`)
+        navigate(`/admin/sales?page=${e.selected + 1}&dateMode=${dateMode}&startDate=${searchStartDate}&endDate=${searchEndDate}`)
     }
 
     const handleDateResetClick = () => {
@@ -83,19 +84,19 @@ function AdminSalespage(props) {
                 </div>
                 <div css={s.functionBox}>
                     <div css={s.searchBox}>
-                    <select onChange={handleDateTypeChange} value={dateType}>
+                    <select onChange={handleDateTypeChange} value={dateMode}>
                             <option value="day">일별</option>
                             <option value="month" >월별</option>
                         </select>
                     </div>
                     <div css={s.buttonBox}>
                     <input
-                            type={dateType === "month" ? "month" : "date"}
+                            type={dateMode === "month" ? "month" : "date"}
                             value={searchStartDate}
                             onChange={handleInputStartDate}
                         />
                         <input
-                            type={dateType === "month" ? "month" : "date"}
+                            type={dateMode === "month" ? "month" : "date"}
                             value={searchEndDate}
                             onChange={handleInputEndDate}
                         />
@@ -115,13 +116,13 @@ function AdminSalespage(props) {
                         </thead>
                         <tbody>
                             {
-                                salesList?.data?.data.map(sales =>
-                                    <tr key={sales.salesId}>
-                                        <td>{sales.createDate}</td>
+                                salesList?.data?.data?.data.map(sales =>
+                                    <tr key={sales.date}>
+                                        <td>{sales.date.split(" ")[0]}</td>
                                         <td>{sales.totalOrderCount}</td>
                                         <td>{(sales.totalAmount.toLocaleString() || 0) + "원"}</td>
                                         <td>{sales.totalRefundCount}</td>
-                                        <td><Link to={`/admin/sale/detail/${sales.salesId}`}>상세보기</Link></td>
+                                        <td><Link to={`/admin/sale/detail/${sales.date}`}>상세보기</Link></td>
                                     </tr>
                                 )
                             }

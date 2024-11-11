@@ -107,8 +107,18 @@ function AdminOptionUpdatePage(props) {
         }));
     };
 
-    const handleModifySubmitOnClick = () => {
-        modifyOptionMutation.mutateAsync(modifyOptionData);
+    const handleModifySubmitOnClick = async () => {
+        console.log(modifyOptionData);
+        try {
+            await modifyOptionMutation.mutateAsync(modifyOptionData);
+        }catch (e) {
+            console.error(e);
+            if(e.status === 401) {
+                alert(e.response.data.defaultMessage.optionName);
+            } else {
+                alert("중복된 옵션 이름 입니다.");
+            }
+        };
     }
 
     const handleBackOnClick = () => {
