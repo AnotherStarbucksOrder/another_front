@@ -8,13 +8,13 @@ import { useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 
 function AdminSalespage(props) {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [totalPageCount, setTotalPageCount] = useState(1);
+    const limit = 13;
+    const [dateMode, setDateMode] = useState(searchParams.get("dateMode") ?? "day");
     const [searchStartDate, setSearchStartDate] = useState(searchParams.get("startDate") ?? "");
     const [searchEndDate, setSearchEndDate] = useState(searchParams.get("endDate") ?? "");
-    const limit = 13;
-    const navigate = useNavigate();
-    const [dateMode, setDateMode] = useState(searchParams.get("dateMode") ?? "day");
 
     const salesList = useQuery(
         ["salesListQuery", searchParams.get("page"), dateMode, searchStartDate, searchEndDate], 

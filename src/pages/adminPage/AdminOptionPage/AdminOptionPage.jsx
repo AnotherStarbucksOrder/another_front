@@ -1,36 +1,40 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Switch } from "pretty-checkbox-react";
 import '@djthoms/pretty-checkbox';
-import { useInfiniteQuery, useMutation } from "react-query";
+import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
+import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
+import ReactPaginate from "react-paginate";
 
 function AdminOptionPage(props) {
-    const limit = 12;
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [totalPageCount, setTotalPageCount] = useState(1);
+    const limit = 13;
     const [options, setOptions] = useState([]);
 
-    // 옵션 리스트 조회, 무한 스크롤
-    const optionList = useInfiniteQuery(
-        ["optionListQuery"],
-        async ({ pageParam = 1 }) => await instance.get(`/admin/option?page=${pageParam}`),
+    // 옵션 리스트 조회
+    const optionList = useQuery(
+        ["optionListQuery", searchParams.get("page")],
+        async () => await instance.get(`/admin/option?page=${searchParams.get("page")}&limit=${limit}`),
         {
-            getNextPageParam: (lastPage, allPage) => {
-                const totalPageCount = lastPage.data.totalCount % limit === 0
-                    ? lastPage.data.totalCount / limit
-                    : Math.floor(lastPage.data.totalCount / limit) + 1;
-
-                return totalPageCount !== allPage.length ? allPage.length + 1 : null;
-            },
+            retry: 0,
+            refetchOnWindowFocus: false,
             onSuccess: response => {
-                setOptions(response?.data?.pages.map(options => options.data))
+                setOptions(response?.data?.data);
+                setTotalPageCount(
+                    response.data.totalCount % limit === 0
+                    ? response.data.totalCount / limit
+                    : Math.floor(response.data.totalCount / limit) + 1
+                );
             }
         }
     )
 
-    //카테고리 상태관리
+    //옵션 상태관리
     const optionStatusUpdateMutation = useMutation(
         async (optionId) => await instance.patch(`/admin/option/status/${optionId}`),
         {
@@ -39,6 +43,7 @@ function AdminOptionPage(props) {
             }
         }
     )
+    
     const handleOptionStatusChekcked = (optionId) => {
         setOptions(options =>
             options?.data.map(option =>
@@ -66,19 +71,21 @@ function AdminOptionPage(props) {
             optionDeleteMutation.mutateAsync(optionId);
         }
     }
+    
+    // 페이지 이동
+    const handlePageOnChange = (e) => {
+        navigate(`/admin/option?page=${e.selected + 1}`);
+    }
 
     return (
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>옵션 관리</p>
-                </div>
                 <div css={s.functionBox}>
                     <div css={s.buttonBox}>
                         <button onClick={() => navigate("/admin/option/add")}>추가</button>
                     </div>
                 </div>
-                <div css={s.tableContainer}>
                     <div css={s.tableLayout}>
                         <table>
                             <thead>
@@ -93,7 +100,7 @@ function AdminOptionPage(props) {
                             </thead>
                             <tbody>
                                 {
-                                    optionList?.data?.pages.map(options => options?.data.map(option =>
+                                    optionList?.data?.data.map(option =>
                                         <tr key={option.optionId}>
                                             <td>{option.optionId}</td>
                                             <td>{option.optionName}</td>
@@ -114,11 +121,23 @@ function AdminOptionPage(props) {
                                                 </button>
                                             </td>
                                         </tr>
-
-                                    ))
+                                    )
                                 }
                             </tbody>
                         </table>
+                    </div>
+                    <div css={s.paginateContainer}>
+                        <ReactPaginate
+                            breakLabel=""
+                            previousLabel={<><IoMdArrowDropleft /></>}
+                            nextLabel={<><IoMdArrowDropright /></>}
+                            pageCount={totalPageCount}
+                            marginPagesDisplayed={0}
+                            pageRangeDisplayed={5}
+                            activeClassName='active'
+                            onPageChange={handlePageOnChange}
+                            forcePage={parseInt(searchParams.get("page") || 1) - 1}
+                        />
                     </div>
                 </div>
             </div>
