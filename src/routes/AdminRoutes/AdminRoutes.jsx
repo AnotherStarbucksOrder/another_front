@@ -43,6 +43,12 @@ function AdminRoutes(props) {
                 }
             },
             onError: e => {
+                if (e.message === "Network Error") {
+                    navigate("/");  // "Not Found" 페이지로 이동
+                    alert("Network Error")
+                    return;
+                }
+
                 if(location.pathname !== "/admin/auth/signin" || !localStorage.getItem("accessToken")) {
                     navigate("/admin/auth/signin");
                 }
