@@ -173,7 +173,7 @@
                 return;
             }
             if(e.response.data.defaultMessage.menuName) {
-                alert("메뉴 이름은 " + e.response.data.defaultMessage.menuName);
+                alert(e.response.data.defaultMessage.menuName);
                 return;
             }
             if(e.response.data.defaultMessage.menuPrice) {

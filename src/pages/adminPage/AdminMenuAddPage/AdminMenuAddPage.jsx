@@ -64,10 +64,6 @@ function AdminMenuAddPage(props) {
 
     // 이미지 선택 및 메뉴 등록
     const handleSubmitOnClick = async () => {
-        if(!inputMenu.menuPrice) {
-            alert("메뉴 가격을 입력하세요.");
-        }
-
         try {
             const input = document.getElementById("fileInput");
             const imgFile = input.files[0];
@@ -210,7 +206,9 @@ function AdminMenuAddPage(props) {
                                         </div>
                                         <input type="text" css={s.input}
                                             name="menuPrice" 
-                                            onChange={handleInputMenuOnChange}/>
+                                            onChange={handleInputMenuOnChange}
+                                            defaultValue={0}
+                                        />
                                     </div>
                                 </div>
                                 <div css={s.infoBox}>

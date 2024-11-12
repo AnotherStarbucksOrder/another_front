@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 
+// 장바구니 Atom
 export const ordersAtom = atom({
     key: "ordersState",
     default: {

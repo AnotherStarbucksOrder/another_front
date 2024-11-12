@@ -9,33 +9,24 @@ export const layout = css`
 `;
 
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 125px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-    }
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
 `;
 
-export const Container = css`
+export const container = css`
     box-sizing: border-box;
     flex-grow: 1;
     width: 100%;
     height: 800px;
 `;
 
-
 export const infoContainer = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 0 auto;
     padding-top: 80px;
     width: 800px;
@@ -55,35 +46,42 @@ export const option = css`
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    width: 100%; /* 부모의 너비를 모두 사용 */
+    width: 100%;
     margin-bottom: 50px;
+
+    & > input {
+        padding-left: 15px;
+        border: 1px solid ${COLORS.main};
+        border-radius: 5px;
+        outline: none;
+        height: 35px;
+    }
 `;
 
 export const optionTitle = css`
     box-sizing: border-box;
     width: 90px;
+    font-size: 20px;
+    font-weight: 600;
 `;
 
 export const selectContainer = css`
-    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
-    margin-left: 10px; /* p 태그와의 간격 설정 */
+    flex-grow: 1;
+    margin-left: 10px; 
     padding-left: 10px;
 `;
 
 export const radioBox = css`
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
-    padding-right: 90px;  
-`;
-export const radio = css`
-    padding-right: 80px;
+    width: 550px;
 `;
 
 export const registerContainer = css`
     box-sizing: border-box;
     height: 330px;
+
     & button {
         cursor: pointer;
     }
@@ -115,7 +113,10 @@ export const menuContainer = css`
     box-sizing: border-box;
     border-bottom: 3px solid ${COLORS.lineColor};
     height: 270px;
-    overflow: scroll;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 export const menuBox = css`
@@ -130,14 +131,14 @@ export const menuBox = css`
         margin-bottom: 10px;
     }
 
-
-
-    & button {
-        font-size: 30px;
+    & > button {
         border: none;
-        width: 35px;
-        height: 40px;
-        background-color: white;
+        background-color: inherit;
+
+        & > svg {
+            width: 20px;
+            height: 30px;
+        }
     }
 `;
 
@@ -149,21 +150,20 @@ export const inputBox = css`
     height: 40px;
     margin: 0 60px;
 
-    & input {
+    & > input {
         border: none;
         border-bottom: 1px solid ${COLORS.lineColor};
         text-align: right;
         width: 180px;
         height: 30px;
+        outline: none;
         
         &:nth-of-type(1) {
             text-align: center;
             margin-right: 60px;
         }
     }
-
 `;
-
 
 export const buttonBox = css`
     box-sizing: border-box;

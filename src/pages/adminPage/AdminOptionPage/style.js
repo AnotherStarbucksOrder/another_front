@@ -128,6 +128,7 @@ export const paginateContainer = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 
     & > ul {
         list-style-type: none;

@@ -57,12 +57,14 @@ export const option = css`
         border: 1px solid ${COLORS.main};
         border-radius: 5px;
         height: 40px;
+        outline: none;
     }
 `;
 
 export const optionTitle = css`
     text-align: center;
     width: 90px;
+    font-size: 18px;
 
     & > p {
         font-weight: 600;

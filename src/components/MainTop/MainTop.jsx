@@ -11,7 +11,7 @@ function MainTop() {
     const navigate = useNavigate();
     const location = useLocation();
     const [ orders, setOrders ] = useRecoilState(ordersAtom);
-    const [clickCount, setClickCount] = useState(0);
+    const [ clickCount, setClickCount ] = useState(0);
 
     // 홈 버튼 작동 구간 제한 
     const isHomeButtonEnabled = location.pathname === "/home" || location.pathname.startsWith("/menu/detail");
@@ -26,7 +26,7 @@ function MainTop() {
             products: [],
         }));
         navigate("/home")
-    }
+    };
 
     // 상단에 별 버튼 3번 클릭 시, admin 페이지로 이동
     const handleFaStarOnClick = () => {
@@ -35,7 +35,7 @@ function MainTop() {
         if (clickCount + 1 === 3) {  
             navigate("/admin/auth/signin");
             setClickCount(0); 
-        }
+        };
     };
 
     return (

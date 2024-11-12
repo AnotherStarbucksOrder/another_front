@@ -7,8 +7,11 @@ import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 
 function AdminOptionUpdatePage(props) {
+
     const { optionId } = useParams();
+
     const navigate = useNavigate();
+
     const [initailData, setInitailData] = useState({
         optionId: 0,
         optionName: "",
@@ -17,7 +20,8 @@ function AdminOptionUpdatePage(props) {
             optionDetailValue: "",
             optionDetailPrice: 0
         }]
-    })
+    });
+
     const [modifyOptionData, setModifyOptionData] = useState({
         optionId: 0,
         optionName: "",
@@ -26,7 +30,7 @@ function AdminOptionUpdatePage(props) {
             optionDetailValue: "",
             optionDetailPrice: 0
         }]
-    })
+    });
 
     // 옵션 상세 조회
     const option = useQuery(
@@ -52,8 +56,8 @@ function AdminOptionUpdatePage(props) {
         async (data) => await instance.patch(`/admin/option/${optionId}`, data),
         {
             onSuccess: () => {
-                alert("수정되었습니다.")
-                navigate("/admin/option")
+                alert("수정되었습니다.");
+                navigate("/admin/option");
             }
         }
     )
@@ -62,15 +66,15 @@ function AdminOptionUpdatePage(props) {
         setModifyOptionData(modifyOptionData => ({
             ...modifyOptionData,
             [e.target.name]: e.target.value
-        }))
-    }
+        }));
+    };
 
     const handleOptionStatusChange = (e) => {
         setModifyOptionData(modifyOptionData => ({
             ...modifyOptionData,
             optionStatus: Number(e.target.value)
         }));
-    }
+    };
 
     const handleDetailInputOnChange = (index, e) => {
         const newValue = [...modifyOptionData.optionDetail];
@@ -108,11 +112,9 @@ function AdminOptionUpdatePage(props) {
     }
 
     const handleModifySubmitOnClick = async () => {
-        console.log(modifyOptionData);
         try {
             await modifyOptionMutation.mutateAsync(modifyOptionData);
-        }catch (e) {
-            console.error(e);
+        } catch (e) {
             if(e.response.data.defaultMessage.optionName) {
                 alert(e.response.data.defaultMessage.optionName);
                 return;
@@ -137,12 +139,12 @@ function AdminOptionUpdatePage(props) {
                     <div css={s.infoContainer}>
                         <div css={s.infoBox}>
                             <div css={s.option}>
-                                <p css={s.optionTitle}>코드 번호 : </p>
+                                <p css={s.optionTitle}>코드 번호</p>
                                 <input type="text" css={s.selectContainer} 
                                     value={modifyOptionData.optionId} disabled />
                             </div>
                             <div css={s.option}>
-                                <p css={s.optionTitle}>옵션 명 : </p>
+                                <p css={s.optionTitle}>옵션 명</p>
                                 <input type="text" name="optionName"
                                     value={modifyOptionData.optionName}
                                     css={s.selectContainer}
@@ -153,12 +155,22 @@ function AdminOptionUpdatePage(props) {
                                     <p>노출 여부</p>
                                 </div>
                                 <div css={s.radioBox}>
-                                    <Radio css={s.radio} name="optionStatus" 
-                                        value={1} checked={modifyOptionData.optionStatus === 1} 
-                                        onChange={handleOptionStatusChange}>사용</Radio>
-                                    <Radio name="optionStatus" value={0} 
+                                    <Radio 
+                                        name="optionStatus" 
+                                        value={1} 
+                                        checked={modifyOptionData.optionStatus === 1} 
+                                        onChange={handleOptionStatusChange}
+                                    >
+                                        사용
+                                    </Radio>
+                                    <Radio 
+                                        name="optionStatus" 
+                                        value={0} 
                                         checked={modifyOptionData.optionStatus === 0} 
-                                        onChange={handleOptionStatusChange} bigger>미사용</Radio>
+                                        onChange={handleOptionStatusChange} 
+                                    >
+                                        미사용
+                                    </Radio>
                                 </div>
                             </div>
                             <div css={s.registerContainer}>

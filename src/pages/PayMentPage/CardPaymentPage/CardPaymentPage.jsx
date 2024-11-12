@@ -127,7 +127,7 @@ function CardPaymentPage() {
             // 카카오페이 x 버튼 클릭 시 (결제 취소)
             }  else if(response.code === "FAILURE_TYPE_PG" && response.pgCode === "CANCEL") { 
                 Swal.fire({
-                    title: response.message,
+                    title: "사용자가 결제를 취소하였습니다.",
                     color: "#036635",
                     confirmButtonColor: "#3EA270",
                     confirmButtonText: "확인"

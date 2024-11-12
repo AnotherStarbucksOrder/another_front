@@ -8,8 +8,6 @@ export const layout = css`
     height: 100%;
 `;
 
-
-
 export const titleBox = css`
     box-sizing: border-box;
     display: flex;
@@ -78,9 +76,6 @@ export const radioBox = css`
     align-items: center;
     flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
     padding-right: 90px;  
-`;
-export const radio = css`
-    padding-right: 80px;
 `;
 
 export const registerContainer = css`

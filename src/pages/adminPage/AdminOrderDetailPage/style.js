@@ -10,22 +10,13 @@ export const layout = css`
 `;
 
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 125px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-    background-color: white;
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-    }
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
 `;
 
-export const Container = css`
+export const container = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -49,7 +40,7 @@ export const order = css`
     flex-direction: column;
     align-items: center;
     border: 1px solid ${COLORS.lineColor};
-    width: 100%; /* 부모의 너비를 모두 사용 */
+    width: 100%; 
     height: 100%;
 `;
 
@@ -61,12 +52,12 @@ export const orderDetail = css`
     width: 550px;
     border-bottom: 1px solid #ddd;
     text-align: center;
-    & p{
+
+    & p { 
         margin-top: 0;
         font-size: 18px;
         font-weight: 600;
     }  
-
 `;
 
 export const orderMenu = css`
@@ -82,8 +73,8 @@ export const orderMenu = css`
     ::-webkit-scrollbar{
         display: none;
     }
-    & p{
 
+    & p{
         margin-top: 0;
         font-size: 18px;
         font-weight: 600;
