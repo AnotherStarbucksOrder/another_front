@@ -72,7 +72,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
         if(inputValue.length !== 13) {
             updateNewPhoneNumber("010-");
                 Swal.fire({
-                title: "올바르지않은 전화번호입니다.\n다시입력해주세요",
+                title: "올바르지않은 전화번호입니다!\n다시입력해주세요",
                 color: "#036635",
                 showConfirmButton: true,
                 confirmButtonText: "확인",

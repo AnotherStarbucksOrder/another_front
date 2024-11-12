@@ -22,7 +22,7 @@ function MainTop() {
         if (clickCount > 0) {
             timer = setTimeout(() => {
                 setClickCount(0); 
-            }, 3000);
+            }, 1000);
         }
 
         if (clickCount >= 3) {
