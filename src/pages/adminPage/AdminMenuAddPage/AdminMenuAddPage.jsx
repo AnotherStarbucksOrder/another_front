@@ -64,6 +64,10 @@ function AdminMenuAddPage(props) {
 
     // 이미지 선택 및 메뉴 등록
     const handleSubmitOnClick = async () => {
+        if(!inputMenu.menuPrice) {
+            alert("메뉴 가격을 입력하세요.");
+        }
+
         try {
             const input = document.getElementById("fileInput");
             const imgFile = input.files[0];
@@ -142,10 +146,10 @@ function AdminMenuAddPage(props) {
     };
 
     const handleSelectOptionChange = (selectedOptions) => {
-        const newOptions = selectedOptions.map(option => ({
+        const newOptions = selectedOptions?.map(option => ({
             optionId: option.value,
             optionName: option.label
-        }));
+        })) || [];
 
         setInputMenu({
             ...inputMenu,

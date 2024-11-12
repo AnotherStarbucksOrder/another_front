@@ -2,23 +2,26 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"; // useParams 임포트
 import * as s from "./style";
+import { useQuery } from "react-query";
+import { instance } from "../../../apis/util/instance";
 
 function AdminSaleDetailPage(props) {
-    
-    const navigate = useNavigate();
 
-    const { orderId } = useParams(); // URL에서 menuId 가져오기
+    const { date } = useParams();
 
-    const [orders, setOrders] = useState([
-        { orderId: 1, orderStatus: "완료", orderType: "카드", price: 1000, orderDate: "2024-01-01", orders: "sadsadsa" },
-        { orderId: 2, orderStatus: "취소", orderType: "포인트", price: 2300, orderDate: "2024-01-01", orders: "dasdsada" },
-        { orderId: 3, orderStatus: "완료", orderType: "카드", price: 20000, orderDate: "2024-01-01", orders: "dasdsa" },
-    ]);
+    const salesInfo = useQuery(
+        ["salesInfoQuery"],
+        async () => await instance.get(`/admin/sales/${date}`),
+        {
+            onSuccess: response => {
+                console.log(response);
+            }
+        }
+    )
 
-    const handleSaleButtonOnClick = () => {
-        alert("정산이 완료되었습니다!");
-        navigate(-1);
-    }
+    const handleBackOnClick = () => {
+        window.history.back();
+    };
 
     return (
         <>
@@ -51,7 +54,7 @@ function AdminSaleDetailPage(props) {
                             </div>
                         </div>
                         <div css={s.buttonBox}>
-                            <button onClick={handleSaleButtonOnClick}>확인</button>
+                            <button onClick={handleBackOnClick}>확인</button>
                         </div>
                     </div>
                 </div>

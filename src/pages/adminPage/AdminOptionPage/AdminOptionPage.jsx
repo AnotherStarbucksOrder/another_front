@@ -33,6 +33,7 @@ function AdminOptionPage(props) {
             }
         }
     )
+    console.log(optionList)
 
     //옵션 상태관리
     const optionStatusUpdateMutation = useMutation(
@@ -100,7 +101,7 @@ function AdminOptionPage(props) {
                             </thead>
                             <tbody>
                                 {
-                                    optionList?.data?.data.map(option =>
+                                    optionList?.data?.data?.data.map(option =>
                                         <tr key={option.optionId}>
                                             <td>{option.optionId}</td>
                                             <td>{option.optionName}</td>

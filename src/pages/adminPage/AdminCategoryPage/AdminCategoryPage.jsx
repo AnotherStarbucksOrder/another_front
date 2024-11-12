@@ -100,7 +100,7 @@ function AdminCategoryPage(props) {
                                 </thead>
                                 <tbody>
                                     {
-                                        categoryList?.data?.data.map(category =>
+                                        categoryList?.data?.data?.data.map(category =>
                                             <tr key={category.categoryId}>
                                                 <td>{category.categoryId}</td>
                                                 <td>{category.categoryName}</td>
