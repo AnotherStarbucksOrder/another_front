@@ -5,6 +5,9 @@ import { Radio } from "pretty-checkbox-react";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FaPlus } from "react-icons/fa6";
 
 function AdminOptionUpdatePage(props) {
 
@@ -133,82 +136,88 @@ function AdminOptionUpdatePage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>옵션 관리</p>
-                </div>
-                <div css={s.Container}>
-                    <div css={s.infoContainer}>
-                        <div css={s.infoBox}>
-                            <div css={s.option}>
-                                <p css={s.optionTitle}>코드 번호</p>
-                                <input type="text" css={s.selectContainer} 
-                                    value={modifyOptionData.optionId} disabled />
-                            </div>
-                            <div css={s.option}>
-                                <p css={s.optionTitle}>옵션 명</p>
-                                <input type="text" name="optionName"
-                                    value={modifyOptionData.optionName}
-                                    css={s.selectContainer}
-                                    onChange={handleOptionInputOnChange} />
-                            </div>
-                            <div css={s.option}>
-                                <div css={s.optionTitle}>
-                                    <p>노출 여부</p>
+                    <div css={s.Container}>
+                        <div css={s.infoContainer}>
+                            <div css={s.infoBox}>
+                                <div css={s.option}>
+                                    <p css={s.optionTitle}>코드 번호</p>
+                                    <input 
+                                        type="text" 
+                                        css={s.selectContainer} 
+                                        value={modifyOptionData.optionId} 
+                                        disabled 
+                                    />
                                 </div>
-                                <div css={s.radioBox}>
-                                    <Radio 
-                                        name="optionStatus" 
-                                        value={1} 
-                                        checked={modifyOptionData.optionStatus === 1} 
-                                        onChange={handleOptionStatusChange}
-                                    >
-                                        사용
-                                    </Radio>
-                                    <Radio 
-                                        name="optionStatus" 
-                                        value={0} 
-                                        checked={modifyOptionData.optionStatus === 0} 
-                                        onChange={handleOptionStatusChange} 
-                                    >
-                                        미사용
-                                    </Radio>
+                                <div css={s.option}>
+                                    <p css={s.optionTitle}>옵션 명</p>
+                                    <input 
+                                        type="text" 
+                                        name="optionName"
+                                        value={modifyOptionData.optionName}
+                                        css={s.selectContainer}
+                                        onChange={handleOptionInputOnChange} 
+                                    />
                                 </div>
-                            </div>
-                            <div css={s.registerContainer}>
-                                <div css={s.registerMenu}>
-                                    <p>OptionList</p>
-                                    <button onClick={handleAddDetail}>+</button>
+                                <div css={s.option}>
+                                    <div css={s.optionTitle}>
+                                        <p>노출 여부</p>
+                                    </div>
+                                    <div css={s.radioBox}>
+                                        <Radio 
+                                            name="optionStatus" 
+                                            value={1} 
+                                            checked={modifyOptionData.optionStatus === 1} 
+                                            onChange={handleOptionStatusChange}
+                                        >
+                                            사용
+                                        </Radio>
+                                        <Radio 
+                                            name="optionStatus" 
+                                            value={0} 
+                                            checked={modifyOptionData.optionStatus === 0} 
+                                            onChange={handleOptionStatusChange} 
+                                        >
+                                            미사용
+                                        </Radio>
+                                    </div>
                                 </div>
-                                <div css={s.menuContainer}>
-                                    {
-                                        modifyOptionData.optionDetail.map((detail, index) => {
-                                            return (
-                                                <div key={index} css={s.menuBox}>
-                                                    <div css={s.inputBox}>
-                                                        <input
-                                                            type="text"
-                                                            name="optionDetailValue"
-                                                            value={detail.optionDetailValue}
-                                                            onChange={(e) => handleDetailInputOnChange(index, e)}
-                                                        />
-                                                        <input
-                                                            type="text"
-                                                            name="optionDetailPrice"
-                                                            value={detail.optionDetailPrice}
-                                                            onChange={(e) => handleDetailInputOnChange(index, e)}
-                                                        />
-                                                        <p>원</p>
+                                <div css={s.registerContainer}>
+                                    <div css={s.registerMenu}>
+                                        <p>OptionList</p>
+                                        <button onClick={handleAddDetail}><FaPlus /></button>
+                                    </div>
+                                    <div css={s.menuContainer}>
+                                        {
+                                            modifyOptionData.optionDetail.map((detail, index) => {
+                                                return (
+                                                    <div key={index} css={s.menuBox}>
+                                                        <div css={s.inputBox}>
+                                                            <input
+                                                                type="text"
+                                                                name="optionDetailValue"
+                                                                value={detail.optionDetailValue}
+                                                                onChange={(e) => handleDetailInputOnChange(index, e)}
+                                                            />
+                                                            <input
+                                                                type="text"
+                                                                name="optionDetailPrice"
+                                                                value={detail.optionDetailPrice}
+                                                                onChange={(e) => handleDetailInputOnChange(index, e)}
+                                                            />
+                                                            <p>원</p>
+                                                        </div>
+                                                        <button type="button" onClick={() => handleRemoveDetail(index)}><FontAwesomeIcon icon={faXmark} /></button>
                                                     </div>
-                                                    <button type="button" onClick={() => handleRemoveDetail(index)}>x</button>
-                                                </div>
-                                            );
-                                        })
-                                    }
+                                                );
+                                            })
+                                        }
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div css={s.buttonBox}>
-                            <button onClick={handleBackOnClick}>취소</button>
-                            <button onClick={handleModifySubmitOnClick}>수정</button>
+                            <div css={s.buttonBox}>
+                                <button onClick={handleBackOnClick}>취소</button>
+                                <button onClick={handleModifySubmitOnClick}>수정</button>
+                            </div>
                         </div>
                     </div>
                 </div>

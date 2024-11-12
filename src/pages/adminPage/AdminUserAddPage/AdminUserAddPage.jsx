@@ -78,36 +78,41 @@ function AdminUserAddPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>메뉴 관리</p>
-                </div>
-                <div>
-                    <div css={s.imgContainer}>
-                        <div css={s.infoContainer}>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>전화번호 : </p>
+                    <div>
+                        <div css={s.imgContainer}>
+                            <div css={s.infoContainer}>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>전화번호</p>
+                                        </div>
+                                        <input 
+                                            type="text" 
+                                            name="phoneNumber" 
+                                            css={s.input} value={inputUser.phoneNumber} 
+                                            onChange={handleUserPhoneNumberInputChange} 
+                                        />
                                     </div>
-                                    <input type="text" name="phoneNumber" 
-                                        css={s.input} value={inputUser.phoneNumber} 
-                                        onChange={handleUserPhoneNumberInputChange} />
                                 </div>
-                            </div>
-                            <div css={s.infoBox}>
-                                <div css={s.option}>
-                                    <div css={s.optionTitle}>
-                                        <p>메모 : </p>
+                                <div css={s.infoBox}>
+                                    <div css={s.option}>
+                                        <div css={s.optionTitle}>
+                                            <p>메모</p>
+                                        </div>
+                                        <textarea 
+                                            name="memo" 
+                                            css={s.input} 
+                                            onChange={handleUserInputChange}>
+                                        </textarea>
                                     </div>
-                                    <textarea name="memo" css={s.input} 
-                                        onChange={handleUserInputChange}></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div css={s.buttonBox}>
-                    <button onClick={handleBackOnClick}>취소</button>
-                    <button onClick={handleInputUserSubmitClick}>등록</button>
+                    <div css={s.buttonBox}>
+                        <button onClick={handleBackOnClick}>취소</button>
+                        <button onClick={handleInputUserSubmitClick}>등록</button>
+                    </div>
                 </div>
             </div>
         </>

@@ -29,6 +29,7 @@ export const buttonBox = css`
     background-color: #f0f0f0;
 
     & button {
+        width: 70px;
         padding: 10px;
         border: none;
         cursor: pointer;

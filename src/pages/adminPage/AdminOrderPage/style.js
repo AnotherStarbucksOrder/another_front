@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { COLORS } from "../../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;
@@ -31,7 +32,7 @@ export const searchBox = css`
         flex-grow: 1;
         text-align: center;
         padding: 8px;
-        border: 1px solid #ccc;
+        border: 1px solid ${COLORS.main};
         border-radius: 4px;
         font-size: 16px;
     }
@@ -42,10 +43,10 @@ export const buttonBox = css`
     align-items: center;
     border-radius: 8px;
 
-
     & button {
         padding: 10px;
         border-radius: 8px;
+        width: 70px;
         border: none;
         background-color: #f0f0f0;
         cursor: pointer;

@@ -29,8 +29,9 @@ export const saleContainer = css`
     justify-content: space-around;
     align-items: center;
     margin-top: 40px;
-    width: 500px;
+    width: 700px;
     height: 900px;
+    border: 1px solid #dbdbdb;
 `;
 
 export const saleInfoTitle = css`
@@ -56,9 +57,8 @@ export const saleInfoTitle = css`
 export const totalSales = css`
     display: flex;
     flex-direction: column;
-    border: 1px solid #dbdbdb;
     width: 100%;
-    max-height: 600px; 
+    height: 700px;
     overflow-y: auto;
     ::-webkit-scrollbar {
         display: none;
@@ -66,8 +66,6 @@ export const totalSales = css`
 `; 
 
 export const totalPriceBox = css`
-    padding-top: 30px;
-
     & > p {
         margin: 0;
         text-align: center;
@@ -116,7 +114,6 @@ export const buttonBox = css`
     width: 100%;
 
     & > button {
-        margin-top: 20px;
         border-radius: 4px;
         width: 80px;
         height: 40px;

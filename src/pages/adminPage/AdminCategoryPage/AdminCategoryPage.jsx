@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Switch } from "pretty-checkbox-react";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
@@ -10,6 +10,7 @@ import { instance } from "../../../apis/util/instance";
 import ReactPaginate from "react-paginate";
 
 function AdminCategoryPage(props) {
+
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [totalPageCount, setTotalPageCount] = useState(1);

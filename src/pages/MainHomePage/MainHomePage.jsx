@@ -66,11 +66,11 @@ function MainHomePage() {
 							{
 								menuList?.data?.data?.menus.map(menu =>
 									<div css={s.menuBox} key={menu.menuId} onClick={() => navigate(`/menu/detail/${menu.menuId}`)}>
-											<div>
-												<img src={menu.imgUrl} alt="" />
-											</div>
-											<p>{menu.menuName}</p>
-											<p>{(menu.menuPrice).toLocaleString()} 원</p>
+										<div>
+											<img src={menu.imgUrl} alt="" />
+										</div>
+										<p>{menu.menuName}</p>
+										<p>{(menu.menuPrice).toLocaleString()} 원</p>
 									</div>
 								)
 							}

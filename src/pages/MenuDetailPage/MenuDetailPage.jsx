@@ -157,7 +157,6 @@ function MenuDetailPage() {
                                 </div>
                             </div> 
                         </div>
-                    
                         <div css={s.optionInfoContainer}>
                             <OptionList
                                 options={menuInfo.data.data.menuDetailList}

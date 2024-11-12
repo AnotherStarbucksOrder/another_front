@@ -134,7 +134,7 @@ function AdminOptionAddPage(props) {
                                         <button onClick={handleAddDetail}><FaPlus /></button>
                                     </div>
                                     <div css={s.menuContainer}>
-                                    {
+                                        {
                                             inputOptionData.optionDetail.map((detail, index) => {
                                                 return (
                                                     <div key={index} css={s.menuBox}>

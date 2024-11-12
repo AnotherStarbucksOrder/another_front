@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import * as s from './style';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -16,26 +16,39 @@ function MainTop() {
     // 홈 버튼 작동 구간 제한 
     const isHomeButtonEnabled = location.pathname === "/home" || location.pathname.startsWith("/menu/detail");
 
+    useEffect(() => {
+        let timer;
+
+        if (clickCount > 0) {
+            timer = setTimeout(() => {
+                setClickCount(0); 
+            }, 3000);
+        }
+
+        if (clickCount >= 3) {
+            navigate("/admin/auth/signin");
+        }
+        return () => clearTimeout(timer);
+
+    }, [clickCount]); 
+
     // 상단에 HomeButton 눌렀을 때 
     const handleHomeButtonOnClick = () => {
         setOrders(order => ({
             ...order,
-            orderType: orders.orderType, 
+            orderType: 0, 
             originalAmount: 0,
             paymentType: 0,
             products: [],
         }));
-        navigate("/home")
+        navigate("/")
     };
+
+    console.log(orders)
 
     // 상단에 별 버튼 3번 클릭 시, admin 페이지로 이동
     const handleFaStarOnClick = () => {
         setClickCount(count => count + 1);
-
-        if (clickCount + 1 === 3) {  
-            navigate("/admin/auth/signin");
-            setClickCount(0); 
-        };
     };
 
     return (
