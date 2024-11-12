@@ -60,7 +60,7 @@ function AdminOptionUpdatePage(props) {
         {
             onSuccess: () => {
                 alert("수정되었습니다.");
-                navigate("/admin/option");
+                navigate("/admin/option?page=1");
             }
         }
     )

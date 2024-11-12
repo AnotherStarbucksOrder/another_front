@@ -23,7 +23,7 @@ function AdminCategoryAddPage(props) {
             refetchOnWindowFocus: false,
             onSuccess: () => {
                 alert("등록되었습니다.");
-                navigate("/admin/category");
+                navigate("/admin/category?page=1");
             }
         }
     )

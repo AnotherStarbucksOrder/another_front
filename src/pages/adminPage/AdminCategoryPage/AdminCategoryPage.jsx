@@ -47,7 +47,7 @@ function AdminCategoryPage(props) {
 
     const handleCategoryStatusChekcked = (categoryId) => {
         setCategories(categories =>
-            categories?.data.map(category =>
+            categories?.map(category =>
                 category.categoryId === categoryId
                     ? { ...category, categoryStatus: 1 ? 0 : 1 }
                     : category

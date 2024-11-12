@@ -27,7 +27,7 @@ function AdminOptionAddPage(props) {
         {
             onSuccess: () => {
                 alert("등록되었습니다.");
-                navigate("/admin/option")
+                navigate("/admin/option?page=1")
             }
         }
     )

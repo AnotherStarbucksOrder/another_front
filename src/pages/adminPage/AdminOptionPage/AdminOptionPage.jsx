@@ -47,7 +47,7 @@ function AdminOptionPage(props) {
     
     const handleOptionStatusChekcked = (optionId) => {
         setOptions(options =>
-            options?.data.map(option =>
+            options?.map(option =>
                 option.optionId === optionId
                     ? { ...option, optionStatus:  1 ? 0 : 1 }
                     : option
