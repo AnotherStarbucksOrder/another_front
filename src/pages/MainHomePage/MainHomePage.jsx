@@ -38,19 +38,19 @@ function MainHomePage() {
 				)
 			},
 		}
-	)
+	);
 
 	// 페이지이동할때 마다 + 1
 	const handlePageOnChange = (e) => {
 		setSearchParams({ page: e.selected + 1, categoryId: selectedCategoryId  })
-	}
+	};
 
 	// 카테고리가 변경될때마다 categoryId를 set, page를 1로 초기화
 	const handleCategoryOnChange = (categoryId) => {
 		if(categoryId !== selectedCategoryId) {
 			setSearchParams({ page: 1, categoryId });
-		}
-	}
+		};
+	};
 
 	return (
 		<>

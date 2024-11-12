@@ -4,33 +4,33 @@ import * as s from "./style";
 import Swal from "sweetalert2";
 
 function AdminPageSideBar(props) {
+
     const navigate = useNavigate();
     const location = useLocation(); 
 
-    
     const handleMenuClick = () => {
         navigate("/admin/menus?page=1");
-    }
+    };
 
     const handleSalesClick = () => {
         navigate("/admin/sales?page=1");
-    }
+    };
 
     const handleOrderClick = () => {
         navigate("/admin/order?page=1");
-    }
+    };
 
     const handleUserClick = () => {
         navigate("/admin/user?page=1");
-    }
+    };
 
     const handleCategoryClick = () => {
         navigate("/admin/category?page=1");
-    }
+    };
 
     const handleOptionClick = () => {
         navigate("/admin/option?page=1");
-    }
+    };
 
     const handleLogOutClick = () => {
         Swal.fire({
@@ -42,10 +42,9 @@ function AdminPageSideBar(props) {
             if (result.isConfirmed) {
                 localStorage.removeItem("accessToken");
                 navigate("/");
-            }
-        })
-    }
-
+            };
+        });
+    };
 
     const isActive = (path) => location.pathname.includes(path);
 

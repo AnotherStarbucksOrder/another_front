@@ -46,8 +46,8 @@ function PointPaymentPage() {
         navigate("/payment");
     };
 
-    const selectedCouponCount = orders.user.usedCoupon.length;
-    const maxCouponCount = orders.quantity;
+    const selectedCouponCount = orders.user.usedCoupon.length || 0;
+    const maxCouponCount = orders.quantity || 0;
 
     // 쿠폰 클릭 시, modal창 open
     const handleCouponOnClick = (couponId) => {
@@ -71,7 +71,7 @@ function PointPaymentPage() {
         let discountAmount = 0;
 
         // 사용된 쿠폰을 반복 -> 각 쿠폰에 사용 된 menuId 뽑아 옴, 
-        // orders에 저장된 prouct 순회하면서 뽑아온 menuId랑 같은거 products에 담음 
+        // orders에 저장된 product 순회하면서 뽑아온 menuId랑 같은거 products에 담음 
         for (let i = 0; i < orders.user.usedCoupon.length; i++) {
             const { menuId } = orders.user.usedCoupon[i];
             const products = orders.products.filter(p => p.menuId === menuId);

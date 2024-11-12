@@ -26,7 +26,7 @@ export const menuCategory = css`
 // 각 메뉴 버튼들 
 export const menuButtons = css`
     display: flex;
-    gap: 32px; // gap을 사용하면 행과 열 사이의 간격 쉽게 조절 가능
+    gap: 32px; 
 
     & > button { 
         border: none;

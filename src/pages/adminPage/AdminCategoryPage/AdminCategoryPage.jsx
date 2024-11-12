@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Switch } from "pretty-checkbox-react";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
@@ -33,7 +33,6 @@ function AdminCategoryPage(props) {
             }
         }
     )
-    console.log(categoryList);
 
     //카테고리 상태관리
     const categoryStatusUpdateMutation = useMutation(

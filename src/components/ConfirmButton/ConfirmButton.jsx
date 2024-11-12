@@ -51,7 +51,8 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                         phoneNumber: "010-",
                         coupons: []
                     }
-                }))
+                }));
+
                 Swal.fire({
                     title: e.response.data,
                     color: "#036635",
@@ -60,7 +61,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                     confirmButtonColor:"#459661"
                 }).then(result => {
                     navigate(-1)
-                })
+                });
             }
         }
     )    
@@ -78,7 +79,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                 confirmButtonColor: "#459661",
             });
             return;
-        }
+        };
 
         setOrders(order => ({
             ...order,
@@ -86,7 +87,7 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
                 ...order.user,
                 phoneNumber: inputValue
             }
-        }))
+        }));
 
         // 카드 결제로 들어온 거 
         if(orders.paymentType === 1){
@@ -94,8 +95,8 @@ function ConfirmButton({ inputValue, updateNewPhoneNumber }) {
             return;
         }
         // 쿠폰 결제로 들어온 거 
-        getUserInfo.refetch();
-    }
+        getUserInfo.refetch().catch(() => {});
+    };
 
     // 결제 완료 데이터 + 전화번호 담아서 전송 
     const orderData = () => {

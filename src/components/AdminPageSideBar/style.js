@@ -1,6 +1,5 @@
 import { css } from "@emotion/react";
 import { COLORS } from "../../constants/colors";
-import { Colors } from "chart.js";
 
 export const layout = css`
     position: absolute;
@@ -38,7 +37,6 @@ export const buttonContainer = css`
     gap: 20px;
     width: 100%;
     height: 100%;
-    
 
     & > button {
         box-sizing: border-box;

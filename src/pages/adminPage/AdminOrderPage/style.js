@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import { COLORS } from "../../../constants/colors";
 
 export const layout = css`
     box-sizing: border-box;

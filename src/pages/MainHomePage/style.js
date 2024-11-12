@@ -38,11 +38,11 @@ export const menuBox = css`
         overflow: hidden;
 
         & > img {
-        width: 100%;
-        transition: all 0.5s ease-in-out;
-        &:hover {
-            transform: scale(120%);
-        }
+            width: 100%;
+            transition: all 0.5s ease-in-out;
+            &:hover {
+                transform: scale(120%);
+            }
         }
     }
 

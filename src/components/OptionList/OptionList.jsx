@@ -20,8 +20,8 @@ function OptionList({ options, menuCart, setMenuCart }) {
                 }
                 : option
             )
-        }))
-    }
+        }));
+    };
 
     return (
         <div css={s.optionDetail}>

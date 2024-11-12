@@ -7,7 +7,9 @@ import { instance } from "../../../apis/util/instance";
 import { useNavigate } from "react-router-dom";
 
 function AdminCategoryAddPage(props) {
+
     const navigate = useNavigate();
+
     const [inputCategory, setInputCategory] = useState({
         categoryName: "",
         categoryStatus: 1
@@ -16,12 +18,12 @@ function AdminCategoryAddPage(props) {
     // 카테고리 추가
     const addCategoryMutation = useMutation(
         async () => await instance.post("/admin/category", inputCategory),
-        {
+        {   
+            retry: 0,
+            refetchOnWindowFocus: false,
             onSuccess: () => {
-                alert("등록되었습니다.")
-                navigate("/admin/category")
-            },
-            onError: (e) => {
+                alert("등록되었습니다.");
+                navigate("/admin/category");
             }
         }
     )

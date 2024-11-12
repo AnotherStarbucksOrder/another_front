@@ -38,7 +38,7 @@ function MainTopBar({ handleCategoryOnChange }) {
     const handleSelectedCategoryId = (categoryId) => {
         handleCategoryOnChange(categoryId);         
         setIsActiveCategory(categoryId);
-    }
+    };
 
 
     return (

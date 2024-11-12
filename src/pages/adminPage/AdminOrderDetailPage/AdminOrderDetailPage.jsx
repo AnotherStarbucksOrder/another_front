@@ -118,60 +118,59 @@ function AdminOrderDetailPage(props) {
         <>
             <div css={s.layout}>
                 <div css={s.titleBox}>
-                    <p>주문 관리( 수정 할 걸? )</p>
-                </div>
-                <div css={s.Container}>
-                    <div css={s.infoContainer}>
-                        <div css={s.order}>
-                            <div css={s.orderDetail}>
-                                <p>주문 날짜</p>
-                                {orderInfo.createDate.split("T")[0]}
-                            </div>
-                            <div css={s.orderDetail}>
-                                <p>주문 번호</p>
-                                {(orderInfo.orderId)}
-                            </div>
-                            <div css={s.orderDetail}>
-                                <p>주문 상태</p>
-                                {getOrderState(orderInfo.orderState)}
-                            </div>
-                            <div css={s.orderDetail}>
-                                <p>주문 방법</p>
-                                {getOrderType(orderInfo.orderType)}
-                            </div>
-                            <div css={s.orderDetail}>
-                                <p>주문 금액</p>
-                                {orderInfo.orderAmount.toLocaleString() + "원"}
-                            </div>
-                            <div css={s.orderMenu}>
-                                <p>주문 메뉴</p>
-                                {
-                                    order?.data?.data.orderDetail.map(order =>
-                                        <div css={s.orderList} key={order.orderDetailId}>
-                                            <div css={s.menuName}>
-                                                {order.orderComment}
+                    <div css={s.container}>
+                        <div css={s.infoContainer}>
+                            <div css={s.order}>
+                                <div css={s.orderDetail}>
+                                    <p>주문 날짜</p>
+                                    {orderInfo.createDate.split("T")[0]}
+                                </div>
+                                <div css={s.orderDetail}>
+                                    <p>주문 번호</p>
+                                    {(orderInfo.orderId)}
+                                </div>
+                                <div css={s.orderDetail}>
+                                    <p>주문 상태</p>
+                                    {getOrderState(orderInfo.orderState)}
+                                </div>
+                                <div css={s.orderDetail}>
+                                    <p>주문 방법</p>
+                                    {getOrderType(orderInfo.orderType)}
+                                </div>
+                                <div css={s.orderDetail}>
+                                    <p>주문 금액</p>
+                                    {orderInfo.orderAmount.toLocaleString() + "원"}
+                                </div>
+                                <div css={s.orderMenu}>
+                                    <p>주문 메뉴</p>
+                                    {
+                                        order?.data?.data.orderDetail.map(order =>
+                                            <div css={s.orderList} key={order.orderDetailId}>
+                                                <div css={s.menuName}>
+                                                    {order.orderComment}
+                                                </div>
+                                                {order.quantity}
                                             </div>
-                                            {order.quantity}
-                                        </div>
-                                    )
+                                        )
+                                    }
+                                </div>
+                                <div css={s.orderDetail}>
+                                    <p>결제 방식</p>
+                                    {getPaymentType(orderInfo.paymentType)}
+                                </div>
+                            </div>
+                            <div css={s.buttonBox}>
+                                {
+                                    orderInfo.orderState === 1
+                                        ?
+                                        <>
+                                            <button onClick={handleCancleOnClick}>취소</button>
+                                            <button onClick={handleBackOnClick}>확인</button>
+                                        </>
+                                        :
+                                        <button onClick={handleBackOnClick}>확인</button>
                                 }
                             </div>
-                            <div css={s.orderDetail}>
-                                <p>결제 방식</p>
-                                {getPaymentType(orderInfo.paymentType)}
-                            </div>
-                        </div>
-                        <div css={s.buttonBox}>
-                            {
-                                orderInfo.orderState === 1
-                                    ?
-                                    <>
-                                        <button onClick={handleCancleOnClick}>취소</button>
-                                        <button onClick={handleBackOnClick}>확인</button>
-                                    </>
-                                    :
-                                    <button onClick={handleBackOnClick}>확인</button>
-                            }
                         </div>
                     </div>
                 </div>

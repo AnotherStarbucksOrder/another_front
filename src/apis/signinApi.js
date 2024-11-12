@@ -8,7 +8,6 @@ export const signinApi = async (user) => {
 
     try {
         const response = await instance.post("/auth/signin", user);
-        console.log(response);
         signinData = {
             isSucess: true,
             token: response.data,

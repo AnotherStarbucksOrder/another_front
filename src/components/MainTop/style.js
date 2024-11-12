@@ -13,7 +13,6 @@ export const layout = css`
     border-left: 1px solid ${COLORS.lineColor};
     border-right: 1px solid ${COLORS.lineColor};
 
-    // icon이 svg임 
     & svg {
         font-size: 60px;
         color: ${COLORS.main};

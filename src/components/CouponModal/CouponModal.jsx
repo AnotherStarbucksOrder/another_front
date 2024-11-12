@@ -36,7 +36,7 @@ function CouponModal( {isOpenModal, setOpenModal, pointPaymentRef, selectedCoupo
                 timer: 1500
             });
             return;
-        }
+        };
 
         setSelectedProductId(productUniqueId);
         
@@ -66,69 +66,71 @@ function CouponModal( {isOpenModal, setOpenModal, pointPaymentRef, selectedCoupo
     return (
         <>
             <ReactModal
-            style={{
-                overlay: {
-                    position: "fixed",
-                    top: "0",
-                    left: "0",
-                    backgroundColor: "transparent",
-                    zIndex: "50",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                },
-                content: {
-                    position: "absolute",
-                    boxSizing: "border-box",
-                    borderRadius: "10px",
-                    padding: "20px",
-                    width: "max-content",
-                    height: "900px",
-                    top: "50%",   
-                    left: "50%",
-                    transform: "translate(-50%, -50%)"
-                },
-            }}
-            isOpen={isOpenModal}
-            ariaHideApp={false}
-            parentSelector={() => pointPaymentRef.current}
+                style={{
+                    overlay: {
+                        position: "fixed",
+                        top: "0",
+                        left: "0",
+                        backgroundColor: "transparent",
+                        zIndex: "50",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                    },
+                    content: {
+                        position: "absolute",
+                        boxSizing: "border-box",
+                        borderRadius: "10px",
+                        padding: "20px",
+                        width: "max-content",
+                        height: "900px",
+                        top: "50%",   
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
+                    },
+                }}
+                isOpen={isOpenModal}
+                ariaHideApp={false}
+                parentSelector={() => pointPaymentRef.current}
             >
                 <div css={s.layout}>
                     <p>적용할 음료 선택</p>
                     <div css={s.productContainer}>
-                        {orders.products.map((product, index) => {
-                            const items = [];
-                            const totalProductPrice = calculateTotalPrice(product);
-                            
-                            for (let i = 0; i < product.count; i++) {
-                                const productUniqueId = `${product.menuId}-${index}-${i}`;
+                        {
+                            orders.products.map((product, index) => {
+                                const items = [];
+                                const totalProductPrice = calculateTotalPrice(product);
                                 
-                                items.push(
-                                    <div 
-                                        key={`${product.menuId}-${i}`} 
-                                        css={s.productInfo} 
-                                        onClick={() => handleProductOnClick(product.menuId, product.menuName, productUniqueId)}
-                                    >
-                                        <div css={s.productDetailInfo}>
-                                            <div>
-                                                <p>{product.menuName}</p>
-                                                {product.options.map((option) => (
-                                                    <p key={option.optionId}>
-                                                        {option.optionName}({option.optionDetailValue})
-                                                    </p>
-                                                ))}
+                                for (let i = 0; i < product.count; i++) {
+                                    const productUniqueId = `${product.menuId}-${index}-${i}`;
+                                    
+                                    items.push(
+                                        <div 
+                                            key={`${product.menuId}-${i}`} 
+                                            css={s.productInfo} 
+                                            onClick={() => handleProductOnClick(product.menuId, product.menuName, productUniqueId)}
+                                        >
+                                            <div css={s.productDetailInfo}>
+                                                <div>
+                                                    <p>{product.menuName}</p>
+                                                    {product.options.map((option) => (
+                                                        <p key={option.optionId}>
+                                                            {option.optionName}({option.optionDetailValue})
+                                                        </p>
+                                                    ))}
+                                                </div>
                                             </div>
+                                                <p>{totalProductPrice.toLocaleString()} 원</p>
                                         </div>
-                                            <p>{totalProductPrice.toLocaleString()} 원</p>
-                                    </div>
-                                );
-                            }
-                            return items;
-                        })}
+                                        );
+                                    }
+                                    return items;
+                                }
+                            )
+                        }
                     </div>
                     <button onClick={() => setOpenModal(false)}>닫기</button>
                 </div>
-
             </ReactModal>
         </>
     )
