@@ -148,6 +148,7 @@ function AdminMenuPage(props) {
                         </div>
                         <div css={s.buttonBox}>
                             <button onClick={handleMenuAddOnClick}>등록</button>
+                            <div/>
                             <button onClick={handleDeleteMenuOnClick}>삭제</button>
                         </div>
                     </div>

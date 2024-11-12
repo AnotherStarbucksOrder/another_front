@@ -83,12 +83,12 @@ function AdminSalespage(props) {
                     <div css={s.functionBox}>
                         <div css={s.searchBox}>
                         <select onChange={handleDateTypeChange} value={dateMode}>
-                                <option value="day">일별</option>
-                                <option value="month" >월별</option>
-                            </select>
+                            <option value="day">일별</option>
+                            <option value="month" >월별</option>
+                        </select>
                         </div>
                         <div css={s.buttonBox}>
-                        <input
+                            <input
                                 type={dateMode === "month" ? "month" : "date"}
                                 value={searchStartDate}
                                 onChange={handleInputStartDate}
