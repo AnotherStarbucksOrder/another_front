@@ -74,6 +74,12 @@ export const totalPriceBox = css`
     }
 `;
 
+export const menus = css`
+    display: flex;
+    justify-content: space-between;
+    width: 500px;
+`;
+
 export const orderTypeBox = css`
     display: flex;
     flex-direction: column;

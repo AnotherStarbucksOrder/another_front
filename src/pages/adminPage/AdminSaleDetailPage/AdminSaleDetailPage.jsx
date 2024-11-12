@@ -10,10 +10,12 @@ function AdminSaleDetailPage(props) {
 
     const salesInfo = useQuery(
         ["salesInfoQuery"],
-        async () => await instance.get(`/admin/sales/${date}`),
+        async () => await instance.get(`/admin/sale?date=${date}`),
         {
+            retry: 0,
+            refetchOnWindowFocus: false,
             onSuccess: response => {
-                console.log(response);
+                console.log(response.data);
             }
         }
     )
@@ -34,35 +36,26 @@ function AdminSaleDetailPage(props) {
                             </div>
                             <div css={s.totalSales}>
                                 <div css={s.totalPriceBox}>
-                                    <p>총 매출: 1,200,000원</p>
+                                    <p>총 매출: {(salesInfo?.data?.data?.totalAmount).toLocaleString()} 원</p>
                                 </div>
                                 <div css={s.orderTypeBox}>
                                     <p>결제 수단 별 매출</p>
                                     <div css={s.priceBox}>
-                                        <p>카드 결제 : 1,000,000원</p>
-                                        <p>쿠폰 결제 : 1,000,000원</p>
+                                        <p>카드 결제 : {(salesInfo?.data?.data?.cardTotalAmount).toLocaleString()} 원</p>
+                                        <p>복합 결제 : {(salesInfo?.data?.data?.complexTotalAmount).toLocaleString()} 원</p>
                                     </div>
                                     <p>메뉴 별 매출</p>
-                                    <div>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                        <p>아메리카노 1잔</p>
-                                    </div>
+                                    {
+                                        salesInfo?.data?.data?.menus.map(menu => 
+                                            <div css={s.menus}>
+                                                <p>{menu.menuName}</p>
+                                                <p>{menu.totalQuantity} 개</p>
+                                            </div>
+                                        ) 
+                                    }
                                     <p>환불 금액</p>
                                     <div>
-                                        <p>카드 결제 : 1,000,000원</p>
+                                        <p>카드 결제 : {(salesInfo?.data?.data?.refundTotalAmount).toLocaleString()} 원</p>
                                     </div>
                                 </div>
                             </div>
