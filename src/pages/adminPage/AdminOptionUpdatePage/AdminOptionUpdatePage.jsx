@@ -118,12 +118,13 @@ function AdminOptionUpdatePage(props) {
         try {
             await modifyOptionMutation.mutateAsync(modifyOptionData);
         } catch (e) {
+            if(e.status === 500) {
+                alert("중복된 옵션 이름 입니다.");
+                return;
+            }
             if(e.response.data.defaultMessage.optionName) {
                 alert(e.response.data.defaultMessage.optionName);
-                return;
-            } else {
-                alert("중복된 옵션 이름 입니다.");
-            }
+            } 
         };
     }
 
