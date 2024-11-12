@@ -120,7 +120,7 @@ function AdminSalespage(props) {
                                             <td>{sales.totalOrderCount}</td>
                                             <td>{(sales.totalAmount.toLocaleString() || 0) + "원"}</td>
                                             <td>{sales.totalRefundCount}</td>
-                                            <td><Link to={`/admin/sale/detail/${sales.date}`}>상세보기</Link></td>
+                                            <td><Link to={`/admin/sale?date=${sales.date}`}>상세보기</Link></td>
                                         </tr>
                                     )
                                 }

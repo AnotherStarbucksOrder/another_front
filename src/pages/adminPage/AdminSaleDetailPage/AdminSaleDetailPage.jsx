@@ -5,12 +5,11 @@ import { useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
 
 function AdminSaleDetailPage(props) {
-
     const { date } = useParams();
 
     const salesInfo = useQuery(
         ["salesInfoQuery"],
-        async () => await instance.get(`/admin/sales/${date}`),
+        async () => await instance.get(`/admin/sale?date=${date}`),
         {
             onSuccess: response => {
                 console.log(response);
