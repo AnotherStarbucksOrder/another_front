@@ -202,4 +202,3 @@ function CardPaymentPage() {
 }
 
 export default CardPaymentPage;
-

@@ -61,6 +61,7 @@ export const buttonBox = css`
         padding: 10px;
         border: none;
         border-radius: 8px;
+        width: 70px;
         cursor: pointer;
 
         &:hover {

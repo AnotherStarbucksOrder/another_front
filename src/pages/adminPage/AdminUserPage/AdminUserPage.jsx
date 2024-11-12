@@ -119,6 +119,7 @@ function AdminUserPage(props) {
                         </div>
                         <div css={s.buttonBox}>
                             <button onClick={handleUserAddOnClick}>등록</button>
+                            <div/>
                             <button onClick={handleDeleteUserOnClick}>삭제</button>
                         </div> 
                     </div>

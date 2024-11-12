@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; 
+import { useParams } from "react-router-dom"; 
 import * as s from "./style";
 import {  useMutation, useQuery } from "react-query";
 import { instance } from "../../../apis/util/instance";
@@ -141,8 +141,8 @@ function AdminOrderDetailPage(props) {
                                     <p>주문 금액</p>
                                     {orderInfo.orderAmount.toLocaleString() + "원"}
                                 </div>
-                                <div css={s.orderMenu}>
                                     <p>주문 메뉴</p>
+                                <div css={s.orderMenu}>
                                     {
                                         order?.data?.data.orderDetail.map(order =>
                                             <div css={s.orderList} key={order.orderDetailId}>
@@ -154,7 +154,7 @@ function AdminOrderDetailPage(props) {
                                         )
                                     }
                                 </div>
-                                <div css={s.orderDetail}>
+                                <div>
                                     <p>결제 방식</p>
                                     {getPaymentType(orderInfo.paymentType)}
                                 </div>

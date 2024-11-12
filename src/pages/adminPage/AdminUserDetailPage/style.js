@@ -76,20 +76,22 @@ export const selectContainer = css`
 
 
 export const buttonBox = css`
-    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
+    gap: 50px;
 
     & button {
         margin-top: 20px;
-        background-color: #fff;
         border-radius: 4px;
-        width: 60px;
-        height: 35px;
+        border: none;
+        width: 100px;
+        height: 40px;
         font-size: 17px;
         font-weight: 600;
+        background-color: ${COLORS.buttonColor};
+        color: ${COLORS.buttonFontColor};
         cursor: pointer;
     }
 `;

@@ -9,19 +9,10 @@ export const layout = css`
 `;
 
 export const titleBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 125px;
-    border-bottom: 1px solid ${COLORS.lineColor};
-
-    & p {
-        padding-left: 100px;
-        font-size: 40px;
-        font-weight: 600;
-
-    }
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
 `;
 
 export const imgContainer = css`
@@ -55,47 +46,57 @@ export const option = css`
     display: flex;
     align-items: center;
     width: 100%; 
+    
+    & > input {
+        outline: none;
+        border: 1px solid ${COLORS.main};
+        border-radius: 5px;
+        height: 40px;
+    }
+
+    & > textarea {
+        outline: none;
+        border: 1px solid ${COLORS.main};
+        border-radius: 5px;
+        height: 60px;
+    }
 `;
 
 export const optionTitle = css`
     box-sizing: border-box;
     width: 75px;
+    text-align: center;
+
+    & > p {
+        font-size: 20px;
+        font-weight: 600;
+    }
 `;
 
 export const input = css`
-    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
-    margin-left: 10px; /* p 태그와의 간격 설정 */
+    flex-grow: 1; 
+    margin-left: 10px;
     padding-left: 10px;
     resize: none;
 `;
 
 export const buttonBox = css`
-    box-sizing: border-box;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    width: 100%;
+    margin: 0 auto;
+    width: 400px;
 
     & button {
         margin-top: 20px;
-        background-color: #fff;
         border-radius: 4px;
-        width: 60px;
-        height: 35px;
+        border: none;
+        width: 100px;
+        height: 40px;
         font-size: 17px;
         font-weight: 600;
+        background-color: ${COLORS.buttonColor};
+        color: ${COLORS.buttonFontColor};
         cursor: pointer;
-
-        &:hover {
-            background-color: #f0f0f0;
-        }
-
-        &:active{
-            background-color: #c0c0c0;
-        }
-
-        &:nth-of-type(1) {
-            margin-right: 30px;
-        }
     }
 `;

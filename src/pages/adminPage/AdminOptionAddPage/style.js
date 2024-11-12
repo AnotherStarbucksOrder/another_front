@@ -61,8 +61,14 @@ export const option = css`
 export const optionTitle = css`
     box-sizing: border-box;
     width: 90px;
+    text-align: center;
     font-size: 20px;
     font-weight: 600;
+    
+    & > p {
+        font-size: 20px;
+        font-weight: 600;
+    }
 `;
 
 export const selectContainer = css`
@@ -93,28 +99,34 @@ export const registerMenu = css`
     justify-content: space-between;
     margin-bottom: 5px;
     padding-bottom: 5px;
-    border-bottom: 3px solid ${COLORS.lineColor};
+    border-bottom: 2px solid ${COLORS.lineColor};
+    width: 800px;
 
-    & p {
+    & > p {
         margin: 0;
         font-size: 20px;
         font-weight: 600;
     }
 
-    & button {
-        font-size: 30px;
+    & > button {
         border: none;
         height: 35px;
         background-color: white;
+
+        & > svg {
+            font-size: 20px;
+            color: ${COLORS.lineColor};
+        }
     }
 `;
 
 export const menuContainer = css`
-    box-sizing: border-box;
-    border-bottom: 3px solid ${COLORS.lineColor};
+    border-bottom: 2px solid ${COLORS.lineColor};
+    margin: 0 auto;
+    width: 700px;
     height: 270px;
     overflow-y: auto;
-    ::-webkit-scrollbar {
+    &::-webkit-scrollbar {
         display: none;
     }
 `;
@@ -136,6 +148,7 @@ export const menuBox = css`
         background-color: inherit;
 
         & > svg {
+            color: ${COLORS.lineColor};
             width: 20px;
             height: 30px;
         }
@@ -168,32 +181,21 @@ export const inputBox = css`
 export const buttonBox = css`
     box-sizing: border-box;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    width: 100%;
+    margin: 0 auto;
+    width: 400px;
 
-    & button {
+    & > button {
         margin-top: 20px;
-        background-color: #fff;
         border-radius: 4px;
-        width: 60px;
-        height: 35px;
+        border: none;
+        width: 100px;
+        height: 40px;
         font-size: 17px;
         font-weight: 600;
+        background-color: ${COLORS.buttonColor};
+        color: ${COLORS.buttonFontColor};
         cursor: pointer;
-
-        &:hover {
-            background-color: #f0f0f0;
-        }
-        &:active{
-            background-color: #c0c0c0;
-        }
-
-        &:nth-of-type(1) {
-            margin-right: 30px;
-        }
-        &:nth-of-type(2) {
-            margin-right: 30px;
-        }
     }
 `;
