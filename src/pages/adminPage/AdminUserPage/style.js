@@ -53,27 +53,23 @@ export const buttonBox = css`
     display: flex;
     align-items: center;
     border-radius: 8px;
-    background-color: #f0f0f0;
 
-    & button {
+    & > button {
         padding: 10px;
         border: none;
         cursor: pointer;
 
-        &:hover {
-            background-color: #cecece;
-        }
-
-        &:active {
-            background-color: #bdbdbd;
-        }
-
         &:nth-of-type(1) {
+            background-color: ${COLORS.mainBackground};
+            border: 1px solid ${COLORS.main};
+            border-right: none;
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
         }
 
         &:nth-last-of-type(1) {
+            background-color: ${COLORS.mainBackground};
+            border: 1px solid ${COLORS.main};
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
         }
