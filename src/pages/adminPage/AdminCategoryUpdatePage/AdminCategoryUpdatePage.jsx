@@ -44,7 +44,7 @@ function AdminCategoryUpdatePage(props) {
         {
             onSuccess: () => {
                 alert("수정되었습니다.");
-                navigate("/admin/category");
+                navigate("/admin/category?page=1");
             }
         }
     )
