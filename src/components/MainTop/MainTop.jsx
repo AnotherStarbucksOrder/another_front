@@ -4,13 +4,13 @@ import * as s from './style';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaHome, FaStar } from "react-icons/fa";
 import { ordersAtom } from '../../atoms/ordersAtom';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 function MainTop() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const [ orders, setOrders ] = useRecoilState(ordersAtom);
+    const setOrders = useSetRecoilState(ordersAtom);
     const [ clickCount, setClickCount ] = useState(0);
 
     // 홈 버튼 작동 구간 제한 
@@ -43,8 +43,6 @@ function MainTop() {
         }));
         navigate("/")
     };
-
-    console.log(orders)
 
     // 상단에 별 버튼 3번 클릭 시, admin 페이지로 이동
     const handleFaStarOnClick = () => {
